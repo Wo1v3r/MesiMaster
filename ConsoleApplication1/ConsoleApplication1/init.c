@@ -49,7 +49,7 @@ Student* initStudents(){
 	return head;
 }
 
-Project* initProjects(Student* studhead, Task* taskhead){
+Project* initProjects(){
 	Project* head = NULL, *newProj;
 	FILE * read = fopen("projects.txt", "r");
 	if (read == NULL){
@@ -73,12 +73,14 @@ Project* initProjects(Student* studhead, Task* taskhead){
 			fscanf(read, "%s", &newProj->ProjectActivityLogs);
 			fscanf(read, "%d", &newProj->ProjectUsersAmount);
 			int i;
+			newProj->StudentsIDS = (int*)(malloc(newProj->ProjectUsersAmount * sizeof(int)));
 			for (i = 0; i < newProj->ProjectUsersAmount; i++){
-				
+				fscanf(read, "%d", &newProj->StudentsIDS[i]);
 			}
 			fscanf(read, "%d", &newProj->ProjectTasksAmount);
-			for (i = 0; i < newProj->ProjectUsersAmount; i++){
-
+			newProj->TasksIDS = (int*)(malloc(newProj->ProjectTasksAmount * sizeof(int)));
+			for (i = 0; i < newProj->ProjectTasksAmount; i++){
+				fscanf(read, "%d", &newProj->TasksIDS[i]);
 			}
 			fscanf(read, "%s", &newProj->ProjectMessages);
 			num++;
@@ -89,7 +91,7 @@ Project* initProjects(Student* studhead, Task* taskhead){
 	return head;
 }
 
-Watcher* initAdmins(Project* projhead){
+Watcher* initAdmins(){
 	Watcher* head = NULL, *newWatcher;
 	FILE * read = fopen("watchers.txt", "r");
 	if (read == NULL){
@@ -113,10 +115,14 @@ Watcher* initAdmins(Project* projhead){
 			fscanf(read, "%s", &newWatcher->WatcherName);
 			fscanf(read, "%s", &newWatcher->WatcherSurename);
 			fscanf(read, "%s", &newWatcher->WatcherEmail);
-			fscanf(read, "%s", &newWatcher->Group);
+			fscanf(read, "%d", &newWatcher->Group);
 			fscanf(read, "%d", &newWatcher->WatcherReceiveChanges);
-			fscanf(read, "%s", &newWatcher->WatcherProjectsAmount);
-
+			fscanf(read, "%d", &newWatcher->WatcherProjectsAmount);
+			int i;
+			newWatcher->ProjectIDS = (int*)malloc(newWatcher->WatcherProjectsAmount * sizeof(int));
+			for (i = 0; i < newWatcher->WatcherProjectsAmount; i++){
+				fscanf(read, "%d", &newWatcher->ProjectIDS[i]);
+			}
 			num++;
 		}
 		newWatcher->WatcherNext = NULL;

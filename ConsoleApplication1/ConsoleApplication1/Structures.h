@@ -18,7 +18,6 @@ typedef struct Student{
 	AccessGroup Group;
 	int StudentID, StudentProjectsAmount, StudentTasksAmount;
 	char StudentUsername[31], StudentPassword[31], StudentName[21], StudentEmail[50], StudentSurename[21], StudentDepartment[21], StudentYear[1];
-	Project *ProjectList;
 	int *ProjectIDS;
 	char StudentMessages[31], StudentActivityLog[31];
 	Student *StudentNext;
@@ -36,16 +35,15 @@ typedef struct Global{
 typedef struct Quote{
 	int QuoteID;
 	char Quote[256], QuoteAuthor[31];
-	struct Quote *QuoteNext;
+	Quote *QuoteNext;
 }Quote;
 
 
 typedef struct Project{
 	int ProjectID, ProjectUsersAmount, ProjectTasksAmount;
 	char ProjectName[128], ProjectCreatorName[31];
-	Watcher *WatchersList;
-	Student *StudentsList;
-	Task *TaskList;
+	int *StudentsIDS;
+	int *TasksIDS;
 	char ProjectMessages[31], ProjectActivityLogs[31];
 	BOOL ProgramChanges;
 	Project *ProjectNext;
@@ -62,7 +60,7 @@ typedef struct Watcher{
 	AccessGroup Group;
 	int WatcherID, WatcherProjectsAmount;
 	char WatcherUsername[31], WatcherPassword[31], WatcherName[21], WatcherSurename[21], WatcherEmail[50];
-	Project *ProjectsList;
+	int *ProjectIDS;
 	BOOL WatcherReceiveChanges;
 	Watcher *WatcherNext;
 }Watcher;
