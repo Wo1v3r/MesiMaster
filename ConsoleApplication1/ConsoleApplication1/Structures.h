@@ -70,6 +70,6 @@ typedef struct Watcher{
 typedef struct Task{
 	int TaskID;
 	char TaskName[256], TaskCreatorName[31];
-	AccessGroup Group;
+	STATUS TaskStatus;
 	Task* TaskNext;
 }Task;
