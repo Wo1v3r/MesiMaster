@@ -1,3 +1,4 @@
+/*LIRAN*/
 #define _CRT_SECURE_NO_WARNINGS_
 #include <stdio.h>
 #include <stdlib.h>
@@ -34,8 +35,9 @@ Student* initStudents(){
 			fscanf(read, "%d", &newStud->Group);
 			fscanf(read, "%d", &newStud->StudentProjectsAmount);
 			int i;
+			newStud->ProjectIDS = (int*)(malloc(newStud->StudentProjectsAmount * sizeof(int)));
 			for (i = 0; i < newStud->StudentProjectsAmount; i++){
-
+				fscanf(read, "%d", &newStud->ProjectIDS[i]);
 			}
 			fscanf(read, "%d", &newStud->StudentTasksAmount);
 			fscanf(read, "%s", &newStud->StudentMessages);
@@ -82,6 +84,42 @@ Project* initProjects(Student* studhead, Task* taskhead){
 			num++;
 		}
 		newProj->ProjectNext = NULL;
+	}
+	fclose(read);
+	return head;
+}
+
+Watcher* initAdmins(Project* projhead){
+	Watcher* head = NULL, *newWatcher;
+	FILE * read = fopen("watchers.txt", "r");
+	if (read == NULL){
+		printf("Error opening the admins file.\n");
+		return NULL;
+	}
+	else{
+		int num = 0;
+		while (!feof(read)){
+			if (num == 0){
+				newWatcher = (Watcher*)(malloc(sizeof(Watcher)));
+				head = newWatcher;
+			}
+			else{
+				newWatcher = newWatcher->WatcherNext;
+				newWatcher = (Watcher*)(malloc(sizeof(Watcher)));
+			}
+			fscanf(read, "%d", &newWatcher->WatcherID);
+			fscanf(read, "%s", &newWatcher->WatcherUsername);
+			fscanf(read, "%s", &newWatcher->WatcherPassword);
+			fscanf(read, "%s", &newWatcher->WatcherName);
+			fscanf(read, "%s", &newWatcher->WatcherSurename);
+			fscanf(read, "%s", &newWatcher->WatcherEmail);
+			fscanf(read, "%s", &newWatcher->Group);
+			fscanf(read, "%d", &newWatcher->WatcherReceiveChanges);
+			fscanf(read, "%s", &newWatcher->WatcherProjectsAmount);
+
+			num++;
+		}
+		newWatcher->WatcherNext = NULL;
 	}
 	fclose(read);
 	return head;
@@ -139,7 +177,7 @@ Task* initTasks(){
 			}
 			fscanf(read, "%d", &newTask->TaskID);
 			fscanf(read, "%s", &newTask->TaskName);
-			fscanf(read, "%d", &newTask->);
+			fscanf(read, "%d", &newTask->TaskStatus);
 			fscanf(read, "%s", &newTask->TaskCreatorName);
 			num++;
 		}
