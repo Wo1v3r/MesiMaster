@@ -22,23 +22,23 @@ Student* initStudents(){
 				newStud = newStud->StudentNext;
 				newStud = (Student*)(malloc(sizeof(Student)));
 			}
-			fscanf(read, "%d", newStud->StudentID);
-			fscanf(read, "%s", newStud->StudentUsername);
-			fscanf(read, "%s", newStud->StudentPassword);
-			fscanf(read, "%s", newStud->StudentName);
-			fscanf(read, "%s", newStud->StudentSurename);
-			fscanf(read, "%s", newStud->StudentEmail);
-			fscanf(read, "%s", newStud->StudentDepartment);
-			fscanf(read, "%c", newStud->StudentYear);
-			fscanf(read, "%s", newStud->StudentActivityLog);
-			fscanf(read, "%d", newStud->Group);
-			fscanf(read, "%d", newStud->StudentProjectsAmount);
+			fscanf(read, "%d", &newStud->StudentID);
+			fscanf(read, "%s", &newStud->StudentUsername);
+			fscanf(read, "%s", &newStud->StudentPassword);
+			fscanf(read, "%s", &newStud->StudentName);
+			fscanf(read, "%s", &newStud->StudentSurename);
+			fscanf(read, "%s", &newStud->StudentEmail);
+			fscanf(read, "%s", &newStud->StudentDepartment);
+			fscanf(read, "%c", &newStud->StudentYear);
+			fscanf(read, "%s", &newStud->StudentActivityLog);
+			fscanf(read, "%d", &newStud->Group);
+			fscanf(read, "%d", &newStud->StudentProjectsAmount);
 			int i;
 			for (i = 0; i < newStud->StudentProjectsAmount; i++){
 
 			}
-			fscanf(read, "%d", newStud->StudentTasksAmount);
-			fscanf(read, "%s", newStud->StudentMessages);
+			fscanf(read, "%d", &newStud->StudentTasksAmount);
+			fscanf(read, "%s", &newStud->StudentMessages);
 			num++;
 		}
 		newStud->StudentNext = NULL;
@@ -65,20 +65,20 @@ Project* initProjects(Student* studhead, Task* taskhead){
 				newProj = newProj->ProjectNext;
 				newProj = (Project*)(malloc(sizeof(Project)));
 			}
-			fscanf(read, "%d", newProj->ProjectID);
-			fscanf(read, "%s", newProj->ProjectName);
-			fscanf(read, "%s", newProj->ProjectCreatorName);
-			fscanf(read, "%s", newProj->ProjectActivityLogs);
-			fscanf(read, "%d", newProj->ProjectUsersAmount);
+			fscanf(read, "%d", &newProj->ProjectID);
+			fscanf(read, "%s", &newProj->ProjectName);
+			fscanf(read, "%s", &newProj->ProjectCreatorName);
+			fscanf(read, "%s", &newProj->ProjectActivityLogs);
+			fscanf(read, "%d", &newProj->ProjectUsersAmount);
 			int i;
 			for (i = 0; i < newProj->ProjectUsersAmount; i++){
-
+				
 			}
-			fscanf(read, "%d", newProj->ProjectTasksAmount);
+			fscanf(read, "%d", &newProj->ProjectTasksAmount);
 			for (i = 0; i < newProj->ProjectUsersAmount; i++){
 
 			}
-			fscanf(read, "%s", newProj->ProjectMessages);
+			fscanf(read, "%s", &newProj->ProjectMessages);
 			num++;
 		}
 		newProj->ProjectNext = NULL;
@@ -105,12 +105,12 @@ Admin* initAdmins(){
 				newAdmin = newAdmin->AdminNext;
 				newAdmin = (Admin*)(malloc(sizeof(Admin)));
 			}
-			fscanf(read, "%d", newAdmin->AdminID);
-			fscanf(read, "%s", newAdmin->AdminUsername);
-			fscanf(read, "%s", newAdmin->AdminPassword);
-			fscanf(read, "%s", newAdmin->AdminName);
-			fscanf(read, "%s", newAdmin->AdminSurename);
-			fscanf(read, "%d", newAdmin->Group);
+			fscanf(read, "%d", &newAdmin->AdminID);
+			fscanf(read, "%s", &newAdmin->AdminUsername);
+			fscanf(read, "%s", &newAdmin->AdminPassword);
+			fscanf(read, "%s", &newAdmin->AdminName);
+			fscanf(read, "%s", &newAdmin->AdminSurename);
+			fscanf(read, "%d", &newAdmin->Group);
 			num++;
 		}
 		newAdmin->AdminNext = NULL;
@@ -137,10 +137,10 @@ Task* initTasks(){
 				newTask = newTask->TaskNext;
 				newTask = (Task*)(malloc(sizeof(Task)));
 			}
-			fscanf(read, "%d", newTask->TaskID);
-			fscanf(read, "%s", newTask->TaskName);
-			fscanf(read, "%d", newTask->);
-			fscanf(read, "%s", newTask->TaskCreatorName);
+			fscanf(read, "%d", &newTask->TaskID);
+			fscanf(read, "%s", &newTask->TaskName);
+			fscanf(read, "%d", &newTask->);
+			fscanf(read, "%s", &newTask->TaskCreatorName);
 			num++;
 		}
 		newTask->TaskNext = NULL;
@@ -167,9 +167,9 @@ Quote* initQuotes(){
 				newQuote = newQuote->QuoteNext;
 				newQuote = (Quote*)(malloc(sizeof(Quote)));
 			}
-			fscanf(read, "%d", newQuote->QuoteID);
-			fscanf(read, "%s", newQuote->Quote);
-			fscanf(read, "%d", newQuote->QuoteAuthor);
+			fscanf(read, "%d", &newQuote->QuoteID);
+			fscanf(read, "%s", &newQuote->Quote);
+			fscanf(read, "%d", &newQuote->QuoteAuthor);
 			num++;
 		}
 		newQuote->QuoteNext = NULL;

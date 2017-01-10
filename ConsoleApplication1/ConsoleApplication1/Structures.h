@@ -11,6 +11,7 @@ typedef struct Student{
 	AccessGroup Group;
 	int StudentID, StudentProjectsAmount, StudentTasksAmount;
 	char StudentUsername[31], StudentPassword[31], StudentName[21], StudentEmail[50], StudentSurename[21], StudentDepartment[21], StudentYear[1];
+	int *ProjectIDS;
 	Project *ProjectList;
 	char StudentMessages[31], StudentActivityLog[31];
 	Student *StudentNext;
