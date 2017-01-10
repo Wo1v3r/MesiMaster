@@ -3,10 +3,9 @@
 #include <stdio.h>
 #include <string.h>
 
-typedef enum { STUDENT = 1, ADMIN, WATCHER }AccessGroup;
-typedef enum { NEW, ELICITATION, ANALYSIS, VandV, APPROVED, TRASH }STATUS;
+typedef enum { BAD, STUDENT, ADMIN, WATCHER }AccessGroup;
 typedef enum { FALSE, TRUE }BOOL;
-typedef enum {NEW,ELICITATION,ANALYSIS,VANDV,APPROVED,TRASH}STATUS;
+typedef enum { NEW, ELICITATION, ANALYSIS, VANDV, APPROVED, TRASH }STATUS;
 
 typedef struct Project Project;
 typedef struct Student Student;
@@ -30,6 +29,8 @@ typedef struct Global{
 	Student *StudentList;
 	Watcher *WatchersList;
 	Admin *AdminsList;
+	Project *ProjectList;
+	Quote *QuoteList;
 	char GlobalMessages[31];
 }Global;
 
