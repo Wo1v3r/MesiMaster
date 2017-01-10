@@ -26,7 +26,7 @@ typedef struct Student{
 
 
 typedef struct Global{
-	int QuoteRunID, StudentRunID, WatcherRunID, AdminRunID;
+	int ProjectID, QuoteRunID, StudentRunID, WatcherRunID, AdminRunID;
 	Student *StudentList;
 	Watcher *WatchersList;
 	Admin *AdminsList;

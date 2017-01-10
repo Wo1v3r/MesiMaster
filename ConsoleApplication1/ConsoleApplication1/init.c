@@ -1,4 +1,3 @@
-/*LIRAN*/
 #define _CRT_SECURE_NO_WARNINGS_
 #include <stdio.h>
 #include <stdlib.h>
@@ -220,4 +219,24 @@ Quote* initQuotes(){
 	}
 	fclose(read);
 	return head;
+}
+
+Global* initGlobal(){
+	Global* glob = NULL;
+	FILE * read = fopen("global.txt", "r");
+	if (read == NULL){
+		printf("Error opening the quotes file.\n");
+		return NULL;
+	}
+	else{
+		glob = (Global*)(malloc(sizeof(Global)));
+		fscanf(read, "%d", &glob->ProjectID);
+		fscanf(read, "%d", &glob->QuoteRunID);
+		fscanf(read, "%d", &glob->StudentRunID);
+		fscanf(read, "%d", &glob->WatcherRunID);
+		fscanf(read, "%d", &glob->AdminRunID);
+		fscanf(read, "%s", &glob->GlobalMessages);
+	}
+	fclose(read);
+	return glob;
 }
