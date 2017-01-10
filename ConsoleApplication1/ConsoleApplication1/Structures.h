@@ -6,6 +6,7 @@
 typedef enum { STUDENT = 1, ADMIN, WATCHER }AccessGroup;
 typedef enum { NEW, ELICITATION, ANALYSIS, VandV, APPROVED, TRASH }STATUS;
 typedef enum { FALSE, TRUE }BOOL;
+typedef enum {NEW,ELICITATION,ANALYSIS,VANDV,APPROVED,TRASH}STATUS;
 
 typedef struct Project Project;
 typedef struct Student Student;

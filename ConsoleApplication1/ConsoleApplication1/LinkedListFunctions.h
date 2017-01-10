@@ -1,5 +1,7 @@
-#include "Structures.h"
-/*sdsd*/
+#include "structures.h"
+
+
+// FIND IN LIST FUNCTIONS 
 Student *FindStudent(Student* head, int StudentID)
 {
 	Student *current = head;
@@ -12,7 +14,6 @@ Student *FindStudent(Student* head, int StudentID)
 
 	return NULL;
 }
-
 Admin *FindAdmin(Admin *head, int AdminID)
 {
 	Admin *current = head;
@@ -25,7 +26,6 @@ Admin *FindAdmin(Admin *head, int AdminID)
 
 	return NULL;
 }
-
 Watcher *FindWatcher(Watcher* head, int WatcherID)
 {
 	Watcher *current = head;
@@ -38,7 +38,6 @@ Watcher *FindWatcher(Watcher* head, int WatcherID)
 
 	return NULL;
 }
-
 Project *FindProject(Project* head, int ProjectID)
 {
 	Project *current = head;
@@ -50,4 +49,93 @@ Project *FindProject(Project* head, int ProjectID)
 	}
 
 	return NULL;
+}
+// search in list end
+// Add to lists
+Student *AddStudent(Student *studentHead, Student*addStudent)
+{
+	if (studentHead == NULL)
+	{
+		studentHead = addStudent;
+		studentHead->StudentNext = NULL;
+		return studentHead;
+	}
+	Student *current = studentHead, *Previous = NULL;
+	while (current)
+	{
+		Previous = current;
+		current = current->StudentNext;
+	}
+	Previous->StudentNext = addStudent;
+	addStudent->StudentNext = NULL;
+	return studentHead;
+}
+Admin *AddAdmin(Admin *adminHead, Admin*addAdmin)
+{
+	if (adminHead == NULL)
+	{
+		adminHead = addAdmin;
+		adminHead->AdminNext = NULL;
+		return adminHead;
+	}
+	Admin *current = adminHead, *Previous = NULL;
+	while (current)
+	{
+		Previous = current;
+		current = current->AdminNext;
+	}
+	Previous->AdminNext = addAdmin;
+	addAdmin->AdminNext = NULL;
+	return adminHead;
+}
+Watcher *AddWatcher(Watcher *watcherHead, Watcher *addWatcher)
+{
+	if (watcherHead == NULL)
+	{
+		watcherHead = addWatcher;
+		watcherHead->WatcherNext = NULL;
+		return watcherHead;
+	}
+	Watcher *current = watcherHead, *Previous = NULL;
+	while (current)
+	{
+		Previous = current;
+		current = current->WatcherNext;
+	}
+	Previous->WatcherNext = addWatcher;
+	addWatcher->WatcherNext = NULL;
+	return watcherHead;
+}
+Project *AddProject(Project *projectHead, Project *addProject)
+{
+	if (projectHead == NULL)
+	{
+		projectHead = addProject;
+		projectHead->ProjectNext = NULL;
+		return projectHead;
+	}
+	Project *current = projectHead, *Previous = NULL;
+	while (current)
+	{
+		Previous = current;
+		current = current->ProjectNext;
+	}
+	Previous->ProjectNext = addProject;
+	addProject->ProjectNext = NULL;
+	return projectHead;
+}
+// add functions end
+
+// Print List Functions
+void PrintStudentList(Student *StudentHead)
+{
+	Student *s = StudentHead;
+	printf("ID  Name\tSurename\tDepartment\tYear\tProjects\tTasks\n");
+	while (s)
+	{
+		// print all student fields
+		printf("%d   %s\t%s\t\t%s\t%s\t%d\t\t%d\n", s->StudentID, s->StudentName, s->StudentSurename, s->StudentDepartment, s->StudentYear, s->StudentProjectsAmount, s->StudentTasksAmount);
+		s = s->StudentNext;
+	}
+
 }
