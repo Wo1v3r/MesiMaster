@@ -1,24 +1,30 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 typedef enum { STUDENT = 1, ADMIN, WATCHER }AccessGroup;
+typedef enum { NEW, ELICITATION, ANALYSIS, VandV, APPROVED, TRASH }STATUS;
 typedef enum { FALSE, TRUE }BOOL;
 
 typedef struct Project Project;
 typedef struct Student Student;
+typedef struct Watcher Watcher;
+typedef struct Admin Admin;
+typedef struct Watcher Watcher;
+typedef struct Task Task;
+
 typedef struct Student{
 	AccessGroup Group;
 	int StudentID, StudentProjectsAmount, StudentTasksAmount;
 	char StudentUsername[31], StudentPassword[31], StudentName[21], StudentEmail[50], StudentSurename[21], StudentDepartment[21], StudentYear[1];
-	int *ProjectIDS;
 	Project *ProjectList;
+	int *ProjectIDS;
 	char StudentMessages[31], StudentActivityLog[31];
 	Student *StudentNext;
 }Student;
 
-typedef struct Watcher Watcher;
-typedef struct Admin Admin;
+
 typedef struct Global{
 	int QuoteRunID, StudentRunID, WatcherRunID, AdminRunID;
 	Student *StudentList;
@@ -33,8 +39,7 @@ typedef struct Quote{
 	struct Quote *QuoteNext;
 }Quote;
 
-typedef struct Watcher Watcher;
-typedef struct Task Task;
+
 typedef struct Project{
 	int ProjectID, ProjectUsersAmount, ProjectTasksAmount;
 	char ProjectName[128], ProjectCreatorName[31];

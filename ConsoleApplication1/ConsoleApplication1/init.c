@@ -34,8 +34,9 @@ Student* initStudents(){
 			fscanf(read, "%d", &newStud->Group);
 			fscanf(read, "%d", &newStud->StudentProjectsAmount);
 			int i;
+			newStud->ProjectIDS = (int*)(malloc(newStud->StudentProjectsAmount * sizeof(int)));
 			for (i = 0; i < newStud->StudentProjectsAmount; i++){
-
+				fscanf(read, "%d", &newStud->ProjectIDS[i]);
 			}
 			fscanf(read, "%d", &newStud->StudentTasksAmount);
 			fscanf(read, "%s", &newStud->StudentMessages);
