@@ -10,116 +10,109 @@ int main()
 }
 
 ////// Menus
-int ProjectMenu(int projectID, int accessGroup, int userID){
+int ProjectMenu(Global* GlobalFile , Project* project, int accessGroup, int userID){
 	//Showing project menu of projectID project based on the accessgroup of the user:
+	Student* student;
+	Admin* admin;
+	Watcher* watcher;
 	int opt = -1;
+	char* username;
+
+	//Saving user pointer based on accessgroup:
 
 	switch (accessGroup){
+	case STUDENT:
+		student = FindStudent(GlobalFile, userID);
+		username = student->StudentUsername;
+		break;
+	case ADMIN:
+		admin = FindAdmin(GlobalFile, userID);
+		username = admin->AdminUsername;
+	case WATCHER:
+		watcher = FindWatcher(GlobalFile, userID);
+		username = watcher->WatcherUsername;
+	default:
+		//Error
+		printf("ERROR\n\n"); //Should not happen because accessgroup is evaluated in login function
+	}
+
+	while (opt != -1){
+		//These options are shared among watcher,user and admin:
 		printf("0) Exit project menu\n");
 		printf("1) Create a new task\n");
 		printf("2) Print tasks list\n");
 		printf("3) Print activity log\n");
-		printf("4) Print project tasks\n");
-		printf("5) Print project details\n");
-		printf("6) Add users to Project\n");
+		printf("4) Print project details\n");
+		printf("5) Add users to Project\n");
+		printf("6) Change task status\n");
 
-	case STUDENT:
-		printf("7) Change task status\n");
-		printf("8) Show tasks by status\n");
-		break;
+		switch (accessGroup){
 
-		while (opt != -1){
-			switch (opt){
-			case 0:
-				//Exit to upper menu
-				return 1;
-			case 1:
-
-				break;
-			case 2:
-				break;
-			case 3:
-				break;
-			case 4:
-				break;
-			case 5:
-				break;
-			case 6:
-				break;
-			default:
-				//Dosomething
-				opt = -1;
-			}
+		case ADMIN://This option is for admin only:
+			printf("7) Remove Project\n");
+			break;
+		case WATCHER: //These options are for watcher only:
+			printf("7) Leave a message to a student\n");
+			printf("8) Add a project message\n");
+			break;
 		}
-	case ADMIN:
+		
+		scanf("%d", &opt);
 
-		printf("7) Remove Project\n");
-		while (opt != -1){
-			switch (opt){
-			case 0:
-				//Exit to upper menu
-				return 1;
-			case 1:
+		switch (opt){
+
+		case 0:
+			//Exit to upper menu
+			return 1;
+		case 1:
+			CreateNewTask(project, username);
+			break;
+		case 2:
+			PrintTasksList(project);
+			break;
+		case 3:
+			PrintActivityLog(project);
+			break;
+		case 4:
+			PrintProjectDetails(project);
+			break;
+		case 5:
+			AddUsersToProject(GlobalFile, project);
+			break;
+		case 6:
+			ChangeTaskStatus(project);
+			break;
+
+		case 7:
+			switch (accessGroup){
+
+			case ADMIN:
+				RemoveProject(project);
 				break;
-			case 2:
+			case WATCHER:
+				LeaveMessageToStudent(project, watcher);
 				break;
-			case 3:
-				break;
-			case 4:
-				break;
-			case 5:
-				break;
-			case 6:
-				break;
-			case 7:
-				break;
-			case 8:
-				break;
-			default:
-				//Dosomething
-				opt = -1;
 			}
 			break;
 
-	case WATCHER:
-		printf("7) Change Task Status\n");
-		printf("8) Leave a message to a student\n");
-
-		while (opt != -1){
-			switch (opt){
-			case 0:
-				//Exit to upper menu
-				return 1;
-			case 1:
+		case 8:
+			if (accessGroup == WATCHER){ //The last option is only for watcher
+				AddProjectMessage(project, watcher);
 				break;
-			case 2:
-				break;
-			case 3:
-				break;
-			case 4:
-				break;
-			case 5:
-				break;
-			case 6:
-				break;
-			case 7:
-				break;
-			case 8:
-				break;
-			default:
-				//Dosomething
-				opt = -1;
 			}
-			break;
+		default:
+			//Dosomething
 		}
-		return 0;
-		}
+		opt = -1; //Reseting option before relaunching project menu
+		system("cls");  //Clearing screen before relaunhing project menu
 	}
+	return 0;
 }
 
-int StudentMenu(Global *GlobalFile, Student *studentID){
+int StudentMenu(Global *GlobalFile, int studentID){
 	int status = 0, opt = -1, projectID = 0;
-
+	Student* student = FindStudent(GlobalFile->StudentList, studentID);
+	Project* project = NULL;
 	while (opt != -1){
 
 		printf("Welcome Student:\n");
@@ -133,21 +126,26 @@ int StudentMenu(Global *GlobalFile, Student *studentID){
 		printf("6) Print last actions\n");
 		printf("7) Exit Mesimaster\n");
 
-
 		opt = getchar();
 		switch (opt){
 
 		case 1:
-			CreateNewProject(GlobalFile,studentID); //3 - edited by alexey
+			CreateNewProject(GlobalFile,student); //3
 			break;
 		case 2:
-			PrintProjectsList(studentID); // 13
+			PrintProjectsList(student); // 13
 			break;
 
 		case 3:
 			printf("Enter Project ID:\n");
 			scanf("%d\n", &projectID);
-			ProjectMenu(projectID, STUDENT, studentID);
+			project = FindProject(GlobalFile->ProjectsList, projectID);
+			if (project == NULL){
+				//Project not found 
+				printf("No project of that ID\n");
+				break;
+			}
+			ProjectMenu(GlobalFile,project, STUDENT, studentID);
 			break;
 		case 4:
 			printf("Available Status:\n");
@@ -157,10 +155,10 @@ int StudentMenu(Global *GlobalFile, Student *studentID){
 			ShowTasksByStatus(studentID, status);
 			break;
 		case 5:
-			UpdateDetails(studentID); // 19
+			UpdateDetails(student); // 19
 			break;
 		case 6:
-			PrintStudentLog(studentID); // 11
+			PrintStudentLog(student); // 11
 			break;
 		case 7:
 			return 1;
@@ -178,18 +176,25 @@ int StudentMenu(Global *GlobalFile, Student *studentID){
 
 int AdminMenu(int ID){
 
-	printf("X) Delete User\n");
-	printf("X) Add a new User\n");
-	printf("X) Promote user to admin\n");
-	printf("X) Show user details\n");
-	printf("X) Update details\n");
+	printf("1) Delete User\n");
+	printf("2) Add a new User\n");
+	printf("3) Promote user to admin\n");
+	printf("4) Show user details\n");
+	printf("5) Update details\n");
+	printf("6) Print Projects List\n");
+	printf("7) Enter Project Menu\n");
+	printf("8) Add a global message\n");
+	printf("9) Add a global random quote\n");
+	printf("10) View Quotes\n");
 
 	return 0;
 }
 
 int WatcherMenu(int ID){
-
-	printf("X) Update details\n");
+	printf("1) Print list of projects you're watching\n");
+	printf("2) Print list of all projects\n");
+	printf("3) Enter Project menu of a Project you're watching\n");
+	printf("4) Update details\n");
 
 	return 0;
 }
@@ -203,15 +208,10 @@ int MainMenu(int ID){
 	else if (ID > 1000 && ID <= 2000) return AdminMenu(ID);
 	else if (ID > 2000 && ID <= 3000) return WatcherMenu(ID);
 	else printf("\n\nError Evaluating Access Group\n\n");
-	//Save();
-	//Exit();
+	Exit();
 
 }
 
-int Login(){
-
-	return 1;
-}
 void LoginMenu(){
 
 	int ID = 0, opt = -1;
