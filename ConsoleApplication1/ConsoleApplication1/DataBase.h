@@ -1,4 +1,4 @@
-
+//Liran
 #include "Structures.h"
 /// Define path's
 #define StudentsFilePath "./Databases/students.txt"
@@ -230,11 +230,14 @@ Global *InitDataBases()
 	fscanf(globalFile, "%d", &GlobalDB->AdminRunID);
 	fscanf(globalFile, "%d", &GlobalDB->WatcherRunID);
 	fscanf(globalFile, "%d", &GlobalDB->ProjectRunID);
-	fscanf(globalFile, "%d",& GlobalDB->QuoteRunID);
+	fscanf(globalFile, "%d", &GlobalDB->QuoteRunID);
 	
 
 	return GlobalDB;
 }
+/*
+THIS SECTION WON'T BE HERE!!!!!!!
+
 
 // Functions
 void CreateNewProject(Student *sender, Global* GlobalFile)
@@ -299,7 +302,7 @@ void CreateNewProject(Student *sender, Global* GlobalFile)
 		StudentMenu(sender->StudentID);
 	}
 }
-
+*/
 
 // this functions will save all databases to files, deallocate memory and close program
 void Exit()
