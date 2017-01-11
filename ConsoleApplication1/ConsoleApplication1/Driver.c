@@ -5,11 +5,13 @@ int main()
 {
 	Global *GlobalFile = (Global*)malloc(sizeof(Global));
 	GlobalFile = InitDataBases();
-	CreateNewProject(NULL, GlobalFile);
+	//CreateNewProject(NULL, GlobalFile); TODO: WHO ADDED THIS LINE??
 	return 1;
 }
 
 ////// Menus
+
+//Project Menu : Finished ,Ready for testing - Jonathan
 int ProjectMenu(Global* GlobalFile , Project* project, int accessGroup, int userID){
 	//Showing project menu of projectID project based on the accessgroup of the user:
 	Student* student;
@@ -109,6 +111,7 @@ int ProjectMenu(Global* GlobalFile , Project* project, int accessGroup, int user
 	return 0;
 }
 
+//Finished - Ready for testing - Jonathan
 int StudentMenu(Global *GlobalFile, int studentID){
 	int status = 0, opt = -1, projectID = 0;
 	Student* student = FindStudent(GlobalFile->StudentList, studentID);
@@ -126,7 +129,7 @@ int StudentMenu(Global *GlobalFile, int studentID){
 		printf("6) Print last actions\n");
 		printf("7) Exit Mesimaster\n");
 
-		opt = getchar();
+		scanf("%d",&opt);
 		switch (opt){
 
 		case 1:
@@ -148,6 +151,7 @@ int StudentMenu(Global *GlobalFile, int studentID){
 			ProjectMenu(GlobalFile,project, STUDENT, studentID);
 			break;
 		case 4:
+			//Might be good to transfer that part into ShowTasksByStatus, leaving it that way for now
 			printf("Available Status:\n");
 			printf("[0] New , [1] Elicitation, [2] Analysis, [3] VandV, [4] Approved\n ");
 			printf("Enter an integer of your choice:\n");
@@ -174,7 +178,7 @@ int StudentMenu(Global *GlobalFile, int studentID){
 
 }
 
-int AdminMenu(int ID){
+int AdminMenu(Global* GlobalFile ,int adminID){
 
 	printf("1) Delete User\n");
 	printf("2) Add a new User\n");
@@ -190,7 +194,7 @@ int AdminMenu(int ID){
 	return 0;
 }
 
-int WatcherMenu(int ID){
+int WatcherMenu(Global* GlobalFile ,int watcherID){
 	printf("1) Print list of projects you're watching\n");
 	printf("2) Print list of all projects\n");
 	printf("3) Enter Project menu of a Project you're watching\n");
@@ -200,19 +204,19 @@ int WatcherMenu(int ID){
 }
 
 
-int MainMenu(int ID){
+int MainMenu(Global* GlobalFile , int ID){
 
 	//According to the access group, launching relevant menu:
 	int accessGroup = 0;
-	if (ID > 0 && ID <= 1000) return StudentMenu(ID);
-	else if (ID > 1000 && ID <= 2000) return AdminMenu(ID);
-	else if (ID > 2000 && ID <= 3000) return WatcherMenu(ID);
+	if (ID > 0 && ID <= 1000) return StudentMenu(GlobalFile, ID);
+	else if (ID > 1000 && ID <= 2000) return AdminMenu(GlobalFile,ID);
+	else if (ID > 2000 && ID <= 3000) return WatcherMenu(GlobalFile, ID);
 	else printf("\n\nError Evaluating Access Group\n\n");
 	Exit();
 
 }
 
-void LoginMenu(){
+void LoginMenu(Global* GlobalFile){
 
 	int ID = 0, opt = -1;
 
@@ -241,6 +245,6 @@ void LoginMenu(){
 			opt = -1;
 		}
 		system("cls");
-		if (MainMenu(ID)) LoginMenu();
+		if (MainMenu(GlobalFile,ID)) LoginMenu(GlobalFile);
 	}
 }
