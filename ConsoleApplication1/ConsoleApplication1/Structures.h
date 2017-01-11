@@ -4,11 +4,12 @@
 #include <stdio.h>
 #include <string.h>
 
+// enum declarations
 typedef enum { BAD, STUDENT, ADMIN, WATCHER }AccessGroup;
 typedef enum { NEW, ELICITATION, ANALYSIS, VandV, APPROVED, TRASH }STATUS;
 typedef enum { FALSE, TRUE }BOOL;
 typedef enum { FILE_READ_ERROR, FILE_WRITE_ERROR } ERRORS;
-
+//structures declarations
 typedef struct Project Project;
 typedef struct Student Student;
 typedef struct Watcher Watcher;
@@ -17,7 +18,7 @@ typedef struct Watcher Watcher;
 typedef struct Task Task;
 typedef struct Quote Quote;
 typedef struct Global Global;
-
+// structures 
 typedef struct Student{
 	AccessGroup Group;
 	int StudentID, StudentProjectsAmount, StudentTasksAmount;
@@ -26,7 +27,6 @@ typedef struct Student{
 	char StudentMessages[31], StudentActivityLog[31];
 	Student *StudentNext;
 }Student;
-
 typedef struct Quote{
 	int QuoteID;
 	char Quote [256], QuoteAuthor[31];
@@ -71,7 +71,10 @@ typedef struct Global{
 	Quote *QuotesList;
 	char GlobalMessages[31];
 }Global;
-
+//
+//	Linked list functions start
+//
+// Find element by id
 Student *FindStudent(Student* head, int StudentID)
 {
 	Student *current = head;
@@ -230,9 +233,8 @@ Task *AddTask(Task *TasksHead, Task *addTask)
 	addTask->TaskNext = NULL;
 	return TasksHead;
 }
-// add functions end
-
-// Print List Functions
+// 
+// Print List's Functions
 void PrintStudentList(Student *StudentHead)
 {
 	Student *s = StudentHead;
@@ -245,3 +247,6 @@ void PrintStudentList(Student *StudentHead)
 	}
 
 }
+//
+//	Linked list functions end
+//

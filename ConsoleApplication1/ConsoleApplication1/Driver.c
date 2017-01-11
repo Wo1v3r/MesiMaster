@@ -5,7 +5,7 @@ int main()
 {
 	Global *GlobalFile = (Global*)malloc(sizeof(Global));
 	GlobalFile = InitDataBases();
-	CreateProject(NULL, GlobalFile);
+	CreateNewProject(NULL, GlobalFile);
 	return 1;
 }
 
@@ -117,7 +117,7 @@ int ProjectMenu(int projectID, int accessGroup, int userID){
 	}
 }
 
-int StudentMenu(int studentID){
+int StudentMenu(Global *GlobalFile, Student *studentID){
 	int status = 0, opt = -1, projectID = 0;
 
 	while (opt != -1){
@@ -138,7 +138,7 @@ int StudentMenu(int studentID){
 		switch (opt){
 
 		case 1:
-			CreateNewProject(studentID); //3
+			CreateNewProject(GlobalFile,studentID); //3 - edited by alexey
 			break;
 		case 2:
 			PrintProjectsList(studentID); // 13
