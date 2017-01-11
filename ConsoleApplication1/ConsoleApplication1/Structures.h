@@ -2,11 +2,13 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include "MinUnit.h"		// header for Unit test
 
-typedef enum { STUDENT = 1, ADMIN, WATCHER }AccessGroup;
+typedef enum { BAD, STUDENT, ADMIN, WATCHER }AccessGroup;
 typedef enum { NEW, ELICITATION, ANALYSIS, VandV, APPROVED, TRASH }STATUS;
-typedef enum { FALSE, TRUE }BOOL;
-typedef enum {NEW,ELICITATION,ANALYSIS,VANDV,APPROVED,TRASH}STATUS;
+typedef enum { False, True }BOOL;
+
+
 
 typedef struct Project Project;
 typedef struct Student Student;
@@ -26,13 +28,6 @@ typedef struct Student{
 }Student;
 
 
-typedef struct Global{
-	int QuoteRunID, StudentRunID, WatcherRunID, AdminRunID;
-	Student *StudentList;
-	Watcher *WatchersList;
-	Admin *AdminsList;
-	char GlobalMessages[31];
-}Global;
 
 typedef struct Quote{
 	int QuoteID;
@@ -74,3 +69,16 @@ typedef struct Task{
 	STATUS TaskStatus;
 	Task* TaskNext;
 }Task;
+
+
+
+
+typedef struct Global{
+	int QuoteRunID, StudentRunID, WatcherRunID, AdminRunID;
+	Student *StudentList;
+	Watcher *WatchersList;
+	Admin *AdminsList;
+	Project *ProjectsList;
+	Quote *QuotesList;
+	char GlobalMessages[31];
+}Global;

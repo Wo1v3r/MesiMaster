@@ -1,13 +1,46 @@
 /*LIRAN*/
-#define _CRT_SECURE_NO_WARNINGS_
+#define _CRT_SECURE_NO_WARNINGS
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "structures.h"
+/// Define path's
+#define StudentsFilePath "/Databases/students.txt"
+#define AdminsFilePath "/Databases/admins.txt"
+#define WatchersFilePath "/Databases/watchers.txt"
+#define GlobalFilePath "/Databases/global.txt"
+#define QuotesFilePath "/Databases/quotes.txt"
+#define ProjectsFilePath "/Databases/projects.txt"
+
+/// FUnctions predeclarations
+Student* initStudents();
+Project* initProjects(Student* studhead, Task* taskhead);
+Watcher* initWatchers();
+Admin* initAdmins();
+Task* initTasks();
+Quote* initQuotes();
+
+
+Global *InitDataBases(Global *GlobalDB)
+{
+	FILE *globalFile = fopen(GlobalFilePath, "r");
+	if (!globalFile){
+		printf("Warning ! File %s can't be opened.\n", GlobalFilePath);
+		exit()
+	}
+	GlobalDB->AdminsList = initAdmins();
+	GlobalDB->StudentList = initStudents();
+	GlobalDB->WatchersList = initWatchers();
+	GlobalDB->QuotesList = initQuotes();
+	GlobalDB->ProjectsList->TaskList = initTasks();
+	GlobalDB->ProjectsList = initProjects(GlobalDB->StudentList, GlobalDB->ProjectsList->TaskList);
+	return GlobalDB;
+}
 
 Student* initStudents(){
 	Student* head = NULL, *newStud;
-	FILE * read = fopen("students.txt", "r");
+	FILE * read = fopen(StudentsFilePath, "r");
 	if (read == NULL){
 		printf("Error opening the students file.\n");
 		return NULL;
@@ -15,7 +48,8 @@ Student* initStudents(){
 	else{
 		int num = 0;
 		while (!feof(read)){
-			if (num == 0){
+			if (num == 0)
+			{
 				newStud = (Student*)(malloc(sizeof(Student)));
 				head = newStud;
 			}
@@ -51,7 +85,7 @@ Student* initStudents(){
 
 Project* initProjects(Student* studhead, Task* taskhead){
 	Project* head = NULL, *newProj;
-	FILE * read = fopen("projects.txt", "r");
+	FILE * read = fopen(ProjectsFilePath, "r");
 	if (read == NULL){
 		printf("Error opening the projects file.\n");
 		return NULL;
@@ -73,11 +107,13 @@ Project* initProjects(Student* studhead, Task* taskhead){
 			fscanf(read, "%s", &newProj->ProjectActivityLogs);
 			fscanf(read, "%d", &newProj->ProjectUsersAmount);
 			int i;
-			for (i = 0; i < newProj->ProjectUsersAmount; i++){
+			for (i = 0; i < newProj->ProjectUsersAmount; i++)
+			{
 				
 			}
 			fscanf(read, "%d", &newProj->ProjectTasksAmount);
-			for (i = 0; i < newProj->ProjectUsersAmount; i++){
+			for (i = 0; i < newProj->ProjectUsersAmount; i++)
+			{
 
 			}
 			fscanf(read, "%s", &newProj->ProjectMessages);
@@ -89,9 +125,9 @@ Project* initProjects(Student* studhead, Task* taskhead){
 	return head;
 }
 
-Watcher* initAdmins(Project* projhead){
+Watcher* initWatchers(){
 	Watcher* head = NULL, *newWatcher;
-	FILE * read = fopen("watchers.txt", "r");
+	FILE * read = fopen(WatchersFilePath, "r");
 	if (read == NULL){
 		printf("Error opening the admins file.\n");
 		return NULL;
@@ -127,7 +163,7 @@ Watcher* initAdmins(Project* projhead){
 
 Admin* initAdmins(){
 	Admin* head = NULL, *newAdmin;
-	FILE * read = fopen("admins.txt", "r");
+	FILE * read = fopen(AdminsFilePath, "r");
 	if (read == NULL){
 		printf("Error opening the admins file.\n");
 		return NULL;
@@ -189,7 +225,7 @@ Task* initTasks(){
 
 Quote* initQuotes(){
 	Quote* head = NULL, *newQuote;
-	FILE * read = fopen("quotes.txt", "r");
+	FILE * read = fopen(QuotesFilePath, "r");
 	if (read == NULL){
 		printf("Error opening the quotes file.\n");
 		return NULL;
