@@ -8,12 +8,37 @@
 typedef enum Access{ BAD = 0, STUDENT, ADMIN, WATCHER };
 
 int ProjectMenu(int projectID, int accessGroup, int userID){
+	//Showing project menu of projectID project based on the accessgroup of the user:
+	int opt = -1;
 
+	switch (accessGroup){
+		printf("X) Create a new task\n");
+		printf("X) Print tasks list\n");
+		printf("X) Print activity log\n");
+		printf("X) Print project details\n");
+		printf("X) Add users to Project\n");
+
+	case STUDENT:
+		printf("X) Show tasks by status\n");
+		break;
+
+	case ADMIN:
+		printf("X) Remove Project\n");
+
+		break;
+
+	case WATCHER:
+		printf("X) Change Task Status\n");
+		printf("X) Leave a message to a student\n");
+
+
+		break;
+	}
 	return 0;
 }
 
 int StudentMenu(int studentID){
-	int opt = -1, projectID = 0;
+	int status = 0 ,opt = -1, projectID = 0;
 
 	while (opt != -1){
 
@@ -23,9 +48,10 @@ int StudentMenu(int studentID){
 		printf("1) Create new project\n");
 		printf("2) Print existing projects\n");
 		printf("3) Enter Project menu\n");
-		printf("4) Update details\n");
-		printf("5) Print last actions\n");
-		printf("6) Exit Mesimaster\n");
+		printf("4) Show tasks by status\n");
+		printf("5) Update details\n");
+		printf("6) Print last actions\n");
+		printf("7) Exit Mesimaster\n");
 
 
 		opt = getchar();
@@ -44,13 +70,19 @@ int StudentMenu(int studentID){
 			ProjectMenu(projectID, STUDENT, studentID);
 			break;
 		case 4:
+			printf("Available Status:\n");
+			printf("[0] New , [1] Elicitation, [2] Analysis, [3] VandV, [4] Approved\n ");
+			printf("Enter an integer of your choice:\n");
+			scanf("%d\n", &status);
+			ShowTasksByStatus(studentID, status);
+			break;
+		case 5:
 			UpdateDetails(studentID); // 19
 			break;
-
-		case 5:
+		case 6:
 			PrintStudentLog(studentID); // 11
 			break;
-		case 6:
+		case 7:
 			return 1;
 		default:
 			//Dosomething
@@ -66,12 +98,16 @@ int StudentMenu(int studentID){
 
 void AdminMenu(int ID){
 
-
+	printf("X) Delete User\n");
+	printf("X) Add a new User\n");
+	printf("X) Promote user to admin\n");
+	printf("X) Show user details\n");
+	printf("X) Update details\n");
 }
 
 void WatcherMenu(int ID){
 
-
+	printf("X) Update details\n");
 }
 
 
