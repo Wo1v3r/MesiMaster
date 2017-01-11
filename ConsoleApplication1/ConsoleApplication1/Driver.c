@@ -4,9 +4,12 @@
 int main()
 {
 	Global *GlobalFile = (Global*)malloc(sizeof(Global));
-
+	GlobalFile = InitDataBases();
+	CreateProject(NULL, GlobalFile);
 	return 1;
 }
+
+////// Menus
 int ProjectMenu(int projectID, int accessGroup, int userID){
 	//Showing project menu of projectID project based on the accessgroup of the user:
 	int opt = -1;

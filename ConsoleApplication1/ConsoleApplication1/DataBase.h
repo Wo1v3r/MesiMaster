@@ -1,12 +1,12 @@
 
 #include "Structures.h"
 /// Define path's
-#define StudentsFilePath "/Databases/students.txt"
-#define AdminsFilePath "/Databases/admins.txt"
-#define WatchersFilePath "/Databases/watchers.txt"
-#define GlobalFilePath "/Databases/global.txt"
-#define QuotesFilePath "/Databases/quotes.txt"
-#define ProjectsFilePath "/Databases/projects.txt"
+#define StudentsFilePath "./Databases/students.txt"
+#define AdminsFilePath "./Databases/admins.txt"
+#define WatchersFilePath "./Databases/watchers.txt"
+#define GlobalFilePath "./Databases/global.txt"
+#define QuotesFilePath "./Databases/quotes.txt"
+#define ProjectsFilePath "./Databases/projects.txt"
 /// end defines & includes 
 
 // initializations from files
@@ -226,6 +226,54 @@ Global *InitDataBases()
 	GlobalDB->StudentList = initStudents();
 	GlobalDB->WatchersList = initWatchers();
 	GlobalDB->QuotesList = initQuotes();
+	fscanf(globalFile, "%d", &GlobalDB->StudentRunID);
+	fscanf(globalFile, "%d", &GlobalDB->AdminRunID);
+	fscanf(globalFile, "%d", &GlobalDB->WatcherRunID);
+	fscanf(globalFile, "%d", &GlobalDB->ProjectRunID);
+	fscanf(globalFile, "%d",& GlobalDB->QuoteRunID);
+	
 
 	return GlobalDB;
+}
+
+// Functions
+void CreateProject(Student *sender, Global* GlobalFile)
+{
+	puts("Input Name of your project (maximum 127 characters) : ");
+	char buffer[128];		// get name
+	gets(buffer);
+
+	Project *newProject = (Project*)malloc(sizeof(Project));
+	newProject->ProjectID = GlobalFile->ProjectRunID;		// set runID
+	GlobalFile->ProjectRunID++;								// increase runID
+
+	strcpy(newProject->ProjectName,buffer);	// copy name
+	strcpy(newProject->ProjectCreatorName, sender->StudentName);	// set creator
+	newProject->ProjectUsersAmount = 0;
+	newProject->ProjectTasksAmount = 0;
+	newProject->TasksList = NULL;
+	newProject->StudentsIDS = NULL;
+	newProject->TasksIDS = NULL;
+	newProject->ProgramChanges = FALSE;
+	newProject->ProjectNext = NULL;
+
+
+	char ActivityFileName[50];		// create file name ID_ProjectActivityLog.txt and put name to ProjectActivityLog field
+	sprintf(ActivityFileName, "%d_ProjectActivityLog.txt", newProject->ProjectID);
+	FILE *ProjActivityLog = fopen(ActivityFileName, "w");
+	fclose(ProjActivityLog);
+	strcpy(newProject->ProjectActivityLogs, ActivityFileName);
+	puts(newProject->ProjectActivityLogs);
+
+	char MessagesFileName[50];		// create file name ID_ProjectMessages.txt and put name to ProjectMessages field
+	sprintf(MessagesFileName, "%d_Project.Messages.txt", newProject->ProjectID);
+	FILE *ProjMsgs = fopen(MessagesFileName, "w");
+	fclose(ProjMsgs);
+	strcpy(newProject->ProjectMessages, MessagesFileName);
+	puts(newProject->ProjectMessages);
+
+
+
+	GlobalFile->ProjectsList = AddProject(GlobalFile->ProjectsList, newProject);
+
 }
