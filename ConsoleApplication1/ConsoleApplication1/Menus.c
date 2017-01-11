@@ -12,29 +12,106 @@ int ProjectMenu(int projectID, int accessGroup, int userID){
 	int opt = -1;
 
 	switch (accessGroup){
-		printf("X) Create a new task\n");
-		printf("X) Print tasks list\n");
-		printf("X) Print activity log\n");
-		printf("X) Print project details\n");
-		printf("X) Add users to Project\n");
+		printf("0) Exit project menu\n");
+		printf("1) Create a new task\n");
+		printf("2) Print tasks list\n");
+		printf("3) Print activity log\n");
+		printf("4) Print project tasks\n");
+		printf("5) Print project details\n");
+		printf("6) Add users to Project\n");
 
 	case STUDENT:
-		printf("X) Show tasks by status\n");
+		printf("7) Change task status\n");
+		printf("8) Show tasks by status\n");
 		break;
 
+		while (opt != -1){
+			switch (opt){
+			case 0:
+				//Exit to upper menu
+				return 1;
+			case 1:
+				
+				break;
+			case 2:
+				break;
+			case 3:
+				break;
+			case 4:
+				break;
+			case 5:
+				break;
+			case 6:
+				break;
+			default:
+				//Dosomething
+				opt = -1;
+			}
+		}
 	case ADMIN:
-		printf("X) Remove Project\n");
 
-		break;
+		printf("7) Remove Project\n");
+		while (opt != -1){
+			switch (opt){
+			case 0:
+				//Exit to upper menu
+				return 1;
+			case 1:
+				break;
+			case 2:
+				break;
+			case 3:
+				break;
+			case 4:
+				break;
+			case 5:
+				break;
+			case 6:
+				break;
+			case 7:
+				break;
+			case 8:
+				break;
+			default:
+				//Dosomething
+				opt = -1;
+			}
+			break;
 
 	case WATCHER:
-		printf("X) Change Task Status\n");
-		printf("X) Leave a message to a student\n");
+		printf("7) Change Task Status\n");
+		printf("8) Leave a message to a student\n");
 
-
-		break;
+		while (opt != -1){
+			switch (opt){
+			case 0:
+				//Exit to upper menu
+				return 1;
+			case 1:
+				break;
+			case 2:
+				break;
+			case 3:
+				break;
+			case 4:
+				break;
+			case 5:
+				break;
+			case 6:
+				break;
+			case 7:
+				break;
+			case 8:
+				break;
+			default:
+				//Dosomething
+				opt = -1;
+			}
+			break;
+		}
+		return 0;
+		}
 	}
-	return 0;
 }
 
 int StudentMenu(int studentID){
@@ -96,18 +173,22 @@ int StudentMenu(int studentID){
 
 }
 
-void AdminMenu(int ID){
+int AdminMenu(int ID){
 
 	printf("X) Delete User\n");
 	printf("X) Add a new User\n");
 	printf("X) Promote user to admin\n");
 	printf("X) Show user details\n");
 	printf("X) Update details\n");
+
+	return 0;
 }
 
-void WatcherMenu(int ID){
+int WatcherMenu(int ID){
 
 	printf("X) Update details\n");
+
+	return 0; 
 }
 
 
@@ -123,11 +204,14 @@ int MainMenu(int ID){
 	//Exit();
 
 }
+
+int Login(){
+
+	return 1;
+}
 void LoginMenu(){
 
 	int ID = 0, opt = -1;
-
-
 
 	while (opt != -1){
 
@@ -154,6 +238,6 @@ void LoginMenu(){
 			opt = -1;
 		}
 		system("cls");
-		MainMenu(ID);
+		if (MainMenu(ID)) LoginMenu();
 	}
 }
