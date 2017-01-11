@@ -1,6 +1,5 @@
-//#include "./LinkedListFunctions.c"
-#include "Structures.h"
 
+#include "Structures.h"
 
 int main()
 {
