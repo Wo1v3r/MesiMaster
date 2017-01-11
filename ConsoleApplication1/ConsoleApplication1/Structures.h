@@ -26,10 +26,11 @@ typedef struct Student{
 	char StudentMessages[31], StudentActivityLog[31];
 	Student *StudentNext;
 }Student;
+
 typedef struct Quote{
 	int QuoteID;
-	char Quote[256], QuoteAuthor[31];
-	Quote *QuoteNext;
+	char Quote [256], QuoteAuthor[31];
+	struct Quote *QuoteNext;
 }Quote;
 typedef struct Project{
 	int ProjectID, ProjectUsersAmount, ProjectTasksAmount;

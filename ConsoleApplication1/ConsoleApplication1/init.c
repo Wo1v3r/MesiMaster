@@ -1,6 +1,6 @@
 /*LIRAN*/
 #define _CRT_SECURE_NO_WARNINGS
-#include "LinkedListFunctions.c"
+#include "LinkedList.c"
 /// Define path's
 #define StudentsFilePath "/Databases/students.txt"
 #define AdminsFilePath "/Databases/admins.txt"

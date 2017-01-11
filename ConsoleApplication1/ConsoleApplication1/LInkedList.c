@@ -1,6 +1,4 @@
-
-#include "structures.h"
-// FIND IN LIST FUNCTIONS 
+#include "Structures.h"
 Student *FindStudent(Student* head, int StudentID)
 {
 	Student *current = head;
