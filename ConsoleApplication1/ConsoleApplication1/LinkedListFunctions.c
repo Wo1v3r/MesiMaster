@@ -1,6 +1,5 @@
+
 #include "structures.h"
-
-
 // FIND IN LIST FUNCTIONS 
 Student *FindStudent(Student* head, int StudentID)
 {
@@ -123,6 +122,42 @@ Project *AddProject(Project *projectHead, Project *addProject)
 	Previous->ProjectNext = addProject;
 	addProject->ProjectNext = NULL;
 	return projectHead;
+}
+Quote *AddQuote(Quote *QuoteHead, Quote *addQuote)
+{
+	if (QuoteHead == NULL)
+	{
+		QuoteHead = addQuote;
+		QuoteHead->QuoteNext = NULL;
+		return QuoteHead;
+	}
+	Quote *current = QuoteHead, *Previous = NULL;
+	while (current)
+	{
+		Previous = current;
+		current = current->QuoteNext;
+	}
+	Previous->QuoteNext = addQuote;
+	addQuote->QuoteNext = NULL;
+	return QuoteHead;
+}
+Task *AddTask(Task *TasksHead, Task *addTask)
+{
+	if (TasksHead == NULL)
+	{
+		TasksHead = addTask;
+		TasksHead->TaskNext = NULL;
+		return TasksHead;
+	}
+	Task *current = TasksHead, *Previous = NULL;
+	while (current)
+	{
+		Previous = current;
+		current = current->TaskNext;
+	}
+	Previous->TaskNext = addTask;
+	addTask->TaskNext = NULL;
+	return TasksHead;
 }
 // add functions end
 

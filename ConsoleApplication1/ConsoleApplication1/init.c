@@ -1,10 +1,6 @@
 /*LIRAN*/
 #define _CRT_SECURE_NO_WARNINGS
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include "structures.h"
+#include "LinkedListFunctions.c"
 /// Define path's
 #define StudentsFilePath "/Databases/students.txt"
 #define AdminsFilePath "/Databases/admins.txt"
@@ -12,31 +8,8 @@
 #define GlobalFilePath "/Databases/global.txt"
 #define QuotesFilePath "/Databases/quotes.txt"
 #define ProjectsFilePath "/Databases/projects.txt"
+/// end defines & includes 
 
-/// FUnctions predeclarations
-Student* initStudents();
-Project* initProjects(Student* studhead, Task* taskhead);
-Watcher* initWatchers();
-Admin* initAdmins();
-Task* initTasks();
-Quote* initQuotes();
-
-
-Global *InitDataBases(Global *GlobalDB)
-{
-	FILE *globalFile = fopen(GlobalFilePath, "r");
-	if (!globalFile){
-		printf("Warning ! File %s can't be opened.\n", GlobalFilePath);
-		exit()
-	}
-	GlobalDB->AdminsList = initAdmins();
-	GlobalDB->StudentList = initStudents();
-	GlobalDB->WatchersList = initWatchers();
-	GlobalDB->QuotesList = initQuotes();
-	GlobalDB->ProjectsList->TaskList = initTasks();
-	GlobalDB->ProjectsList = initProjects(GlobalDB->StudentList, GlobalDB->ProjectsList->TaskList);
-	return GlobalDB;
-}
 
 Student* initStudents(){
 	Student* head = NULL, *newStud;
@@ -54,8 +27,8 @@ Student* initStudents(){
 				head = newStud;
 			}
 			else{
-				newStud = newStud->StudentNext;
 				newStud = (Student*)(malloc(sizeof(Student)));
+				head = AddStudent(head, newStud);					// use linked list func's to add new element to end of linked list
 			}
 			fscanf(read, "%d", &newStud->StudentID);
 			fscanf(read, "%s", &newStud->StudentUsername);
@@ -77,7 +50,7 @@ Student* initStudents(){
 			fscanf(read, "%s", &newStud->StudentMessages);
 			num++;
 		}
-		newStud->StudentNext = NULL;
+
 	}
 	fclose(read);
 	return head;
@@ -98,8 +71,8 @@ Project* initProjects(Student* studhead, Task* taskhead){
 				head = newProj;
 			}
 			else{
-				newProj = newProj->ProjectNext;
 				newProj = (Project*)(malloc(sizeof(Project)));
+				head = AddProject(head, newProj);
 			}
 			fscanf(read, "%d", &newProj->ProjectID);
 			fscanf(read, "%s", &newProj->ProjectName);
@@ -119,7 +92,6 @@ Project* initProjects(Student* studhead, Task* taskhead){
 			fscanf(read, "%s", &newProj->ProjectMessages);
 			num++;
 		}
-		newProj->ProjectNext = NULL;
 	}
 	fclose(read);
 	return head;
@@ -140,8 +112,9 @@ Watcher* initWatchers(){
 				head = newWatcher;
 			}
 			else{
-				newWatcher = newWatcher->WatcherNext;
 				newWatcher = (Watcher*)(malloc(sizeof(Watcher)));
+				head = AddWatcher(head,newWatcher);
+
 			}
 			fscanf(read, "%d", &newWatcher->WatcherID);
 			fscanf(read, "%s", &newWatcher->WatcherUsername);
@@ -155,7 +128,6 @@ Watcher* initWatchers(){
 
 			num++;
 		}
-		newWatcher->WatcherNext = NULL;
 	}
 	fclose(read);
 	return head;
@@ -176,8 +148,8 @@ Admin* initAdmins(){
 				head = newAdmin;
 			}
 			else{
-				newAdmin = newAdmin->AdminNext;
 				newAdmin = (Admin*)(malloc(sizeof(Admin)));
+				head = AddAdmin(head, newAdmin);
 			}
 			fscanf(read, "%d", &newAdmin->AdminID);
 			fscanf(read, "%s", &newAdmin->AdminUsername);
@@ -187,7 +159,6 @@ Admin* initAdmins(){
 			fscanf(read, "%d", &newAdmin->Group);
 			num++;
 		}
-		newAdmin->AdminNext = NULL;
 	}
 	fclose(read);
 	return head;
@@ -208,8 +179,8 @@ Task* initTasks(){
 				head = newTask;
 			}
 			else{
-				newTask = newTask->TaskNext;
 				newTask = (Task*)(malloc(sizeof(Task)));
+				head = AddTask(head, newTask);
 			}
 			fscanf(read, "%d", &newTask->TaskID);
 			fscanf(read, "%s", &newTask->TaskName);
@@ -217,7 +188,6 @@ Task* initTasks(){
 			fscanf(read, "%s", &newTask->TaskCreatorName);
 			num++;
 		}
-		newTask->TaskNext = NULL;
 	}
 	fclose(read);
 	return head;
@@ -238,16 +208,30 @@ Quote* initQuotes(){
 				head = newQuote;
 			}
 			else{
-				newQuote = newQuote->QuoteNext;
 				newQuote = (Quote*)(malloc(sizeof(Quote)));
+				head = AddQuote(head, newQuote);
 			}
 			fscanf(read, "%d", &newQuote->QuoteID);
 			fscanf(read, "%s", &newQuote->Quote);
 			fscanf(read, "%d", &newQuote->QuoteAuthor);
 			num++;
 		}
-		newQuote->QuoteNext = NULL;
 	}
 	fclose(read);
 	return head;
+}
+Global *InitDataBases()
+{
+	FILE *globalFile = fopen(GlobalFilePath, "r");
+	if (!globalFile){
+		printf("Warning ! File %s can't be opened.\n", GlobalFilePath);
+		exit(1);
+	}
+	Global *GlobalDB = (Global*)malloc(sizeof(Global));
+	GlobalDB->AdminsList = initAdmins();
+	GlobalDB->StudentList = initStudents();
+	GlobalDB->WatchersList = initWatchers();
+	GlobalDB->QuotesList = initQuotes();
+
+	return GlobalDB;
 }
