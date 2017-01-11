@@ -21,10 +21,33 @@
     <ClInclude Include="DataBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MinUnit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Driver.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Databases\admins.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="Databases\global.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="Databases\projects.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="Databases\quotes.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="Databases\students.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="Databases\watchers.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

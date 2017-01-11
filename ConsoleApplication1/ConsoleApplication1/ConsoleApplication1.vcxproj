@@ -79,6 +79,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="DataBase.h" />
+    <ClInclude Include="MinUnit.h" />
     <ClInclude Include="Structures.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
@@ -86,6 +87,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Driver.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Databases\admins.txt" />
+    <Text Include="Databases\global.txt" />
+    <Text Include="Databases\projects.txt" />
+    <Text Include="Databases\quotes.txt" />
+    <Text Include="Databases\students.txt" />
+    <Text Include="Databases\watchers.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
