@@ -54,7 +54,7 @@ typedef struct Watcher{
 	char WatcherUsername[31], WatcherPassword[31], WatcherName[21], WatcherSurename[21], WatcherEmail[50];
 	int *ProjectIDS;
 	BOOL WatcherReceiveChanges;
-	Watcher *WatcherNext;
+	struct Watcher *WatcherNext;
 }Watcher;
 typedef struct Task{
 	int TaskID;
