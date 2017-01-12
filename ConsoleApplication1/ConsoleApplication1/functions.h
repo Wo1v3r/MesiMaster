@@ -3,7 +3,7 @@
 
 /////// functions decalrations
 void addUserToProject(Global *GlobalFile, Project *newProject);		//46
-
+void CreateNewTask(Global *GlobalFile, int projectID);
 
 /////// declarations end
 
@@ -132,7 +132,7 @@ void CreateNewProject(Global* GlobalFile,int userID, AccessGroup userGroup)
 		puts("Incorrect input, you will be returned to Menu");
 }
 
-// add user to project ,func : 42, done
+// add user to project ,func : 42, done, ready for testing
 void addUserToProject(Global *GlobalFile, Project *newProject)
 {
 	BOOL flag = TRUE;
@@ -227,4 +227,14 @@ void addUserToProject(Global *GlobalFile, Project *newProject)
 		}
 
 	}
+}
+
+// create new task from project menu
+void CreateNewTask(Global *GlobalFile, Project *project)
+{
+	Task *newTask = (Task*)malloc(sizeof(Task));	//new task pointer
+	newTask->TaskID = GlobalFile->TaskRunID;		// set Task Run ID
+	GlobalFile->TaskRunID++;						// increase run id by 1
+
+
 }

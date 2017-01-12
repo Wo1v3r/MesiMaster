@@ -63,7 +63,7 @@ typedef struct Task{
 	Task* TaskNext;
 }Task;
 typedef struct Global{
-	int QuoteRunID, StudentRunID, WatcherRunID, AdminRunID,ProjectRunID;
+	int QuoteRunID, StudentRunID, WatcherRunID, AdminRunID,ProjectRunID,TaskRunID;
 	Student *StudentList;
 	Watcher *WatchersList;
 	Admin *AdminsList;
@@ -176,6 +176,7 @@ void PrintStudentList(Student *StudentHead)
 	}
 
 }
+
 //
 //	Linked list functions end
 //
