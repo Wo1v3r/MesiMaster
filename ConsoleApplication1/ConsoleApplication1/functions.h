@@ -2,8 +2,9 @@
 #include "DataBase.h"
 
 /////// functions decalrations
-void addUserToProject(Global *GlobalFile, Project *newProject);		//46
-void CreateNewTask(Global *GlobalFile, int projectID);
+void addUserToProject(Global *GlobalFile, Project *newProject);									//42
+void CreateNewTask(Global *GlobalFile, Project *project, int UserID, AccessGroup group);		//53
+void PrintProjectsList(Global *GlobalFile, int UserID, AccessGroup group);						//44
 
 /////// declarations end
 
@@ -132,12 +133,12 @@ void CreateNewProject(Global* GlobalFile,int userID, AccessGroup userGroup)
 		puts("Incorrect input, you will be returned to Menu");
 }
 
-// add user to project ,func : 42, done, ready for testing
+// 42 - Add user to project  , done, ready for testing
 void addUserToProject(Global *GlobalFile, Project *newProject)
 {
 	BOOL flag = TRUE;
-	Student *student;
-	Watcher *watcher;
+	Student *student=NULL;
+	Watcher *watcher= NULL;
 	char choice;
 	int StudentProjectsIDSNewSize, WatcherProjectsIDSNewSize, i, ProjectUsersIDNewSize, ID;
 	int* ProjectsIDs,*UsersID;	//create new increased array
@@ -229,12 +230,82 @@ void addUserToProject(Global *GlobalFile, Project *newProject)
 	}
 }
 
-// create new task from project menu
-void CreateNewTask(Global *GlobalFile, Project *project)
+// 53 - create new task from project menu, done, ready for testing
+void CreateNewTask(Global *GlobalFile, Project *project,int UserID,AccessGroup group)
 {
+	Student *student = NULL;
+	Watcher *watcher = NULL;
+
 	Task *newTask = (Task*)malloc(sizeof(Task));	//new task pointer
+
 	newTask->TaskID = GlobalFile->TaskRunID;		// set Task Run ID
+
 	GlobalFile->TaskRunID++;						// increase run id by 1
 
+	puts("Enter your task (up to 255 chars) :");
+	gets(newTask->TaskName);
+	if (group == STUDENT)
+		student = FindStudent(GlobalFile->StudentList, UserID);
+	else if (group == WATCHER)
+		watcher = FindWatcher(GlobalFile->WatchersList, UserID);
+	else
+	{
+		puts("Incorrect access group");
+		return;
+	}
 
+	if (group == STUDENT)
+	{
+		strcpy(newTask->TaskCreatorName, student->StudentName);			// copy creator name to task
+		student->StudentTasksAmount++;
+	}
+	else if (group == WATCHER)
+		strcpy(newTask->TaskCreatorName, watcher->WatcherName);			// copy creator name to task
+
+	newTask->TaskStatus = NEW;								// initialize status
+
+	AddTask(project->TasksList, newTask);		// add new task to tasks list of choosen project
+
+
+}
+
+
+void PrintProjectsList(Global *GlobalFile, int UserID, AccessGroup group)
+{
+	int i;
+	Student* student=NULL;
+	Watcher *watcher = NULL;
+	Project *current = NULL;
+	int *ProjectsIDS;
+
+	// find user
+	if (group == STUDENT)
+	{
+		student = FindStudent(GlobalFile->StudentList, UserID);
+		ProjectsIDS = student->ProjectIDS;
+
+		int arraySize = sizeof(ProjectsIDS) / sizeof(int);
+		puts("List of your projects :");
+		printf("ID\tName\tUsers\tTasks");
+		for (i = 0; i < arraySize; i++)
+		{
+			current = FindProject(GlobalFile->ProjectsList, student->ProjectIDS[i]);
+			if (current)
+			{
+				printf("%d\t%s\t%d\t%d",current->ProjectID,current->ProjectName,current->ProjectUsersAmount,current->ProjectTasksAmount);
+			}
+
+		}
+	}
+	else if (group == WATCHER)
+	{
+		watcher = FindWatcher(GlobalFile->WatchersList, UserID);
+		ProjectsIDS = watcher->ProjectIDS;
+	}
+	else
+	{
+		puts("Incorrect access group");
+		return;
+	}
+	
 }
