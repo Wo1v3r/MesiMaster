@@ -77,7 +77,7 @@ int ProjectMenu(Global* GlobalFile , Project* project, int accessGroup, int user
 			PrintActivityLog(GlobalFile, project);
 			break;
 		case 4:
-			PrintProjectDetails(GlobalFile, project);
+			//PrintProjectDetails(GlobalFile, project);
 			break;
 		case 5:
 			AddUsersToProject(GlobalFile, project);
