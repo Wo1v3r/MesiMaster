@@ -38,7 +38,7 @@ int ProjectMenu(Global* GlobalFile , Project* project, int accessGroup, int user
 		printf("ERROR\n\n"); //Should not happen because accessgroup is evaluated in login function
 	}
 
-	while (opt != -1){
+	while (opt == -1){
 		//These options are shared among watcher,user and admin:
 		printf("0) Exit project menu\n");
 		printf("1) Create a new task\n");
@@ -116,7 +116,7 @@ int StudentMenu(Global *GlobalFile, int studentID){
 	int status = 0, opt = -1, projectID = 0;
 	Student* student = FindStudent(GlobalFile->StudentList, studentID);
 	Project* project = NULL;
-	while (opt != -1){
+	while (opt == -1){
 
 		printf("Welcome Student:\n");
 		printf("##########################\n");
@@ -179,26 +179,89 @@ int StudentMenu(Global *GlobalFile, int studentID){
 }
 
 int AdminMenu(Global* GlobalFile ,int adminID){
+	Admin* admin = FindAdmin(GlobalFile->AdminsList, adminID);
+	int opt = -1, projectID;
+	Project* project = NULL;
+	while (opt == -1){
+		printf("0) Exit Admin Menu\n");
+		printf("1) Delete User\n");
+		printf("2) Add a new User\n");
+		printf("3) Print all users information\n");
+		printf("4) Promote user to admin\n");
+		printf("5) Show user details\n");
+		printf("6) Update details\n");
+		printf("7) Print Projects List\n");
+		printf("8) Enter Project Menu\n");
+		printf("9) Add a global message\n");
+		printf("10) Add a global random quote\n");
+		printf("11) View Quotes\n");
+		scanf("%d", &opt);
+		switch (opt){
+		case 0:
+			return 1;
+		case 1:
+			DeleteUser(GlobalFile);
+			break;
+		case 2:
+			AddNewUser(GlobalFile);
+			break;
+		case 3:
+			PrintAllUsers(GlobalFile);
+		case 4: 
+			PromoteUserToAdmin(GlobalFile);
+			break;
+		case 5:
+			ShowUserDetails(GlobalFile);
+		case 6:
+			UpdateDetails(GlobalFile, admin);
+		case 7:
+			PrintProjectsList(GlobalFile, adminID, ADMIN);
+			break;
+		case 8:
+			printf("Enter Project ID:\n");
+			scanf("%d\n", &projectID);
+			project = FindProject(GlobalFile->ProjectsList, projectID);
+			if (project == NULL){
+				//Project not found 
+				printf("No project of that ID\n");
+				break;
+			}
+			ProjectMenu(GlobalFile, project, ADMIN, adminID);
+			break;
+		case 9: 
+			AddGlobalMessage(GlobalFile, admin);
+			break;
+		case 10:
+			AddNewQuote(GlobalFile); //An Add quote function exists, need to write one that uses it from the menu 
+			break;
+		case 11:
+			PrintQuotes(GlobalFile);
+		default:
+			printf("No such option\n");
+		}
+		system("cls");
+		opt = -1;
+	}
 
-	printf("1) Delete User\n");
-	printf("2) Add a new User\n");
-	printf("3) Promote user to admin\n");
-	printf("4) Show user details\n");
-	printf("5) Update details\n");
-	printf("6) Print Projects List\n");
-	printf("7) Enter Project Menu\n");
-	printf("8) Add a global message\n");
-	printf("9) Add a global random quote\n");
-	printf("10) View Quotes\n");
 
 	return 0;
 }
 
 int WatcherMenu(Global* GlobalFile ,int watcherID){
-	printf("1) Print list of projects you're watching\n");
-	printf("2) Print list of all projects\n");
-	printf("3) Enter Project menu of a Project you're watching\n");
-	printf("4) Update details\n");
+	Watcher* watcher = FindWatcher(GlobalFile->WatchersList, watcherID);
+
+	int opt = -1, projectID;
+
+	while (opt == -1){
+		printf("1) Print list of projects you're watching\n");
+		printf("2) Print list of all projects\n");
+		printf("3) Enter Project menu of a Project you're watching\n");
+		printf("4) Update details\n");
+
+		switch (opt){
+		}
+	}
+
 
 	return 0;
 }
