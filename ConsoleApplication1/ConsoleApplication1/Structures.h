@@ -80,7 +80,7 @@ Student *FindStudent(Student* head, int StudentID)
 	Student *current = head;
 	while (current)
 	{
-		if ((current)->StudentID = StudentID)
+		if ((current)->StudentID == StudentID)
 			return current;
 		current = (current)->StudentNext;
 	}
@@ -91,7 +91,7 @@ Admin *FindAdmin(Admin *head, int AdminID)
 	Admin *current = head;
 	while (current)
 	{
-		if ((current)->AdminID = AdminID)
+		if ((current)->AdminID == AdminID)
 			return current;
 		current = (current)->AdminNext;
 	}
@@ -102,7 +102,7 @@ Watcher *FindWatcher(Watcher* head, int WatcherID)
 	Watcher *current = head;
 	while (current)
 	{
-		if ((current)->WatcherID = WatcherID)
+		if ((current)->WatcherID == WatcherID)
 			return current;
 		current = (current)->WatcherNext;
 	}
@@ -113,7 +113,7 @@ Project *FindProject(Project* head, int ProjectID)
 	Project *current = head;
 	while (current)
 	{
-		if ((current)->ProjectID = ProjectID)
+		if ((current)->ProjectID == ProjectID)
 			return current;
 		current = (current)->ProjectNext;
 	}
@@ -150,16 +150,14 @@ Project* AddProject(Project *projectHead, Project *addProject)
 
 Quote* AddQuote(Quote *QuoteHead, Quote *addQuote)
 {
-
 	addQuote->QuoteNext = QuoteHead;			// head pointer will now be head->next Node
 	QuoteHead = addQuote;						 // new node will become Head Node
 	return QuoteHead;
 }
 Task *AddTask(Task *TasksHead, Task *addTask)
 {
-
 	addTask->TaskNext = TasksHead;			// head pointer will now be head->next Node
-	TasksHead = addTask;						 // new node will become Head Node
+	TasksHead = addTask;					// new node will become Head Node
 	return TasksHead;
 }
 // 

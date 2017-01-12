@@ -108,7 +108,8 @@ void CreateNewProject(Global* GlobalFile,int userID, AccessGroup userGroup)
 
 
 	char choice;
-	printf("Project %s created! Want to add collaborators to this project? (y / n) :", newProject->ProjectName);
+	printf("Project \"%s\" created!\nWant to add collaborators to this project? (y / n) :", newProject->ProjectName);
+	fflush(stdin);
 	choice = getchar();
 	switch (choice)
 	{
@@ -122,8 +123,9 @@ void CreateNewProject(Global* GlobalFile,int userID, AccessGroup userGroup)
 		puts("Incorrect Symbol inputed");
 		break;
 	}
-	puts("1 . Return to previous StudentMenu");
+	puts("1 .Return to previous StudentMenu");
 	puts("2. Exit");
+	fflush(stdin);
 	choice = getchar();
 	if (choice == '1')
 		puts("Returning to main menu...");
@@ -131,6 +133,7 @@ void CreateNewProject(Global* GlobalFile,int userID, AccessGroup userGroup)
 		Exit();
 	else
 		puts("Incorrect input, you will be returned to Menu");
+
 }
 
 // 42 - Add user to project  , done, ready for testing
@@ -155,7 +158,7 @@ void addUserToProject(Global *GlobalFile, Project *newProject)
 		{
 		case '1':
 			fflush(stdin);
-			printf("Student ID :");
+			printf("\nStudent ID :");
 			scanf("%d", &ID);
 			student = FindStudent(GlobalFile->StudentList, ID);
 			if (student)	// student found
@@ -171,7 +174,7 @@ void addUserToProject(Global *GlobalFile, Project *newProject)
 				free(student->ProjectIDS);											// free old array memory
 				student->ProjectIDS = ProjectsIDs;									// set new array pointer to student
 
-				printf("Student with ID : %d was added to project!", ID);
+				printf("\nStudent with ID : %d was added to project!\n", ID);
 				
 				// add student to project
 				ProjectUsersIDNewSize = newProject->ProjectUsersAmount + 1;
@@ -188,7 +191,7 @@ void addUserToProject(Global *GlobalFile, Project *newProject)
 
 		case '2':
 			fflush(stdin);
-			printf("Watcher ID :");
+			printf("\nWatcher ID :");
 			scanf("%d", &ID);
 			watcher = FindWatcher(GlobalFile->WatchersList, ID);
 			if (watcher)	// student found
@@ -204,7 +207,7 @@ void addUserToProject(Global *GlobalFile, Project *newProject)
 				free(watcher->ProjectIDS);											// free old array memory
 				watcher->ProjectIDS = ProjectsIDs;									// set new array pointer to student
 
-				printf("Watcher with ID : %d was added to project!", ID);
+				printf("Watcher with ID : %d was added to project!\n", ID);
 
 				// add student to project
 				ProjectUsersIDNewSize = newProject->ProjectUsersAmount + 1;
@@ -241,7 +244,7 @@ void CreateNewTask(Global *GlobalFile, Project *project,int UserID,AccessGroup g
 	newTask->TaskID = GlobalFile->TaskRunID;		// set Task Run ID
 
 	GlobalFile->TaskRunID++;						// increase run id by 1
-
+	fflush(stdin);
 	puts("Enter your task (up to 255 chars) :");
 	gets(newTask->TaskName);
 	if (group == STUDENT)
@@ -264,8 +267,11 @@ void CreateNewTask(Global *GlobalFile, Project *project,int UserID,AccessGroup g
 
 	newTask->TaskStatus = NEW;								// initialize status
 
-	AddTask(project->TasksList, newTask);		// add new task to tasks list of choosen project
+	project->TasksList = AddTask(project->TasksList, newTask);		// add new task to tasks list of choosen project
+	printf("New Task \"%s\" was created in project \"%s\"\n",newTask->TaskName,project->ProjectName);
 
+
+	/// to complete saving ID to TASKSID array
 
 }
 
@@ -296,11 +302,24 @@ void PrintProjectsList(Global *GlobalFile, int UserID, AccessGroup group)
 			}
 
 		}
-	}
+	}// in case of watcher
 	else if (group == WATCHER)
 	{
 		watcher = FindWatcher(GlobalFile->WatchersList, UserID);
 		ProjectsIDS = watcher->ProjectIDS;
+
+		int arraySize = sizeof(ProjectsIDS) / sizeof(int);
+		puts("List of your projects :");
+		printf("ID\tName\tUsers\tTasks");
+		for (i = 0; i < arraySize; i++)
+		{
+			current = FindProject(GlobalFile->ProjectsList, watcher->ProjectIDS[i]);
+			if (current)
+			{
+				printf("%d\t%s\t%d\t%d", current->ProjectID, current->ProjectName, current->ProjectUsersAmount, current->ProjectTasksAmount);
+			}
+
+		}
 	}
 	else
 	{
