@@ -80,11 +80,10 @@ Student *FindStudent(Student* head, int StudentID)
 	Student *current = head;
 	while (current)
 	{
-		if (current->StudentID == StudentID)
+		if ((current)->StudentID = StudentID)
 			return current;
-		current = current->StudentNext;
+		current = (current)->StudentNext;
 	}
-
 	return NULL;
 }
 Admin *FindAdmin(Admin *head, int AdminID)
@@ -92,11 +91,10 @@ Admin *FindAdmin(Admin *head, int AdminID)
 	Admin *current = head;
 	while (current)
 	{
-		if (current->AdminID == AdminID)
+		if ((current)->AdminID = AdminID)
 			return current;
-		current = current->AdminNext;
+		current = (current)->AdminNext;
 	}
-
 	return NULL;
 }
 Watcher *FindWatcher(Watcher* head, int WatcherID)
@@ -104,11 +102,10 @@ Watcher *FindWatcher(Watcher* head, int WatcherID)
 	Watcher *current = head;
 	while (current)
 	{
-		if (current->WatcherID == WatcherID)
+		if ((current)->WatcherID = WatcherID)
 			return current;
-		current = current->WatcherNext;
+		current = (current)->WatcherNext;
 	}
-
 	return NULL;
 }
 Project *FindProject(Project* head, int ProjectID)
@@ -116,121 +113,53 @@ Project *FindProject(Project* head, int ProjectID)
 	Project *current = head;
 	while (current)
 	{
-		if (current->ProjectID == ProjectID)
+		if ((current)->ProjectID = ProjectID)
 			return current;
-		current = current->ProjectNext;
+		current = (current)->ProjectNext;
 	}
-
 	return NULL;
 }
 // search in list end
 // Add to lists
-Student *AddStudent(Student *studentHead, Student*addStudent)
+Student* AddStudent(Student *studentHead, Student *addStudent)
 {
-	if (studentHead == NULL)
-	{
-		studentHead = addStudent;
-		studentHead->StudentNext = NULL;
-		return studentHead;
-	}
-	Student *current = studentHead, *Previous = NULL;
-	while (current)
-	{
-		Previous = current;
-		current = current->StudentNext;
-	}
-	Previous->StudentNext = addStudent;
-	addStudent->StudentNext = NULL;
+	addStudent->StudentNext = studentHead;			// head pointer will now be head->next Node
+	studentHead = addStudent;						 // new node will become Head Node
 	return studentHead;
 }
-Admin *AddAdmin(Admin *adminHead, Admin*addAdmin)
+Admin* AddAdmin(Admin *adminHead, Admin *addAdmin)
 {
-	if (adminHead == NULL)
-	{
-		adminHead = addAdmin;
-		adminHead->AdminNext = NULL;
-		return adminHead;
-	}
-	Admin *current = adminHead, *Previous = NULL;
-	while (current)
-	{
-		Previous = current;
-		current = current->AdminNext;
-	}
-	Previous->AdminNext = addAdmin;
-	addAdmin->AdminNext = NULL;
+	addAdmin->AdminNext = adminHead;			// head pointer will now be head->next Node
+	adminHead = addAdmin;						 // new node will become Head Node
 	return adminHead;
+
 }
-Watcher *AddWatcher(Watcher *watcherHead, Watcher *addWatcher)
+Watcher* AddWatcher(Watcher *watcherHead, Watcher *addWatcher)
 {
-	if (watcherHead == NULL)
-	{
-		watcherHead = addWatcher;
-		watcherHead->WatcherNext = NULL;
-		return watcherHead;
-	}
-	Watcher *current = watcherHead, *Previous = NULL;
-	while (current)
-	{
-		Previous = current;
-		current = current->WatcherNext;
-	}
-	Previous->WatcherNext = addWatcher;
-	addWatcher->WatcherNext = NULL;
+	addWatcher->WatcherNext = watcherHead;			// head pointer will now be head->next Node
+	watcherHead = addWatcher;						 // new node will become Head Node
 	return watcherHead;
 }
-Project *AddProject(Project *projectHead, Project *addProject)
+
+Project* AddProject(Project *projectHead, Project *addProject)
 {
-	if (projectHead == NULL)
-	{
-		projectHead = addProject;
-		projectHead->ProjectNext = NULL;
-		return projectHead;
-	}
-	Project *current = projectHead, *Previous = NULL;
-	while (current)
-	{
-		Previous = current;
-		current = current->ProjectNext;
-	}
-	Previous->ProjectNext = addProject;
-	addProject->ProjectNext = NULL;
+	addProject->ProjectNext = projectHead;			// head pointer will now be head->next Node
+	projectHead = addProject;						 // new node will become Head Node
 	return projectHead;
 }
-Quote *AddQuote(Quote *QuoteHead, Quote *addQuote)
+
+Quote* AddQuote(Quote *QuoteHead, Quote *addQuote)
 {
-	if (QuoteHead == NULL)
-	{
-		QuoteHead = addQuote;
-		QuoteHead->QuoteNext = NULL;
-		return QuoteHead;
-	}
-	Quote *current = QuoteHead, *Previous = NULL;
-	while (current)
-	{
-		Previous = current;
-		current = current->QuoteNext;
-	}
-	Previous->QuoteNext = addQuote;
-	addQuote->QuoteNext = NULL;
+
+	addQuote->QuoteNext = QuoteHead;			// head pointer will now be head->next Node
+	QuoteHead = addQuote;						 // new node will become Head Node
 	return QuoteHead;
 }
 Task *AddTask(Task *TasksHead, Task *addTask)
 {
-	if (TasksHead == NULL)
-	{
-		TasksHead = addTask;
-		TasksHead->TaskNext = NULL;
-		return TasksHead;
-	}
-	Task *current = TasksHead, *Previous = NULL;
-	while (current)
-	{
-		Previous = current;
-		current = current->TaskNext;
-	}
-	Previous->TaskNext = addTask;
-	addTask->TaskNext = NULL;
+
+	addTask->TaskNext = TasksHead;			// head pointer will now be head->next Node
+	TasksHead = addTask;						 // new node will become Head Node
 	return TasksHead;
 }
 // 

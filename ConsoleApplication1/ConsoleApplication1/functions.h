@@ -1,17 +1,14 @@
+// Alexey
 #include "DataBase.h"
 
-
-
-
-
-
-
 // Functions
-void CreateNewProject(Student *sender, Global* GlobalFile)
+void CreateNewProject(Global* GlobalFile,int StudentID)
 {
 	puts("Input Name of your project (maximum 127 characters) : ");
 	char buffer[128];		// get name
 	gets(buffer);
+
+	Student *sender = FindStudent(GlobalFile->StudentList, StudentID);
 
 	Project *newProject = (Project*)malloc(sizeof(Project));
 	newProject->ProjectID = GlobalFile->ProjectRunID;		// set runID
@@ -39,7 +36,7 @@ void CreateNewProject(Student *sender, Global* GlobalFile)
 	fclose(ProjMsgs);
 	strcpy(newProject->ProjectMessages, MessagesFileName);
 
-	GlobalFile->ProjectsList = AddProject(GlobalFile->ProjectsList, newProject);
+	AddProject(GlobalFile->ProjectsList, newProject);
 
 	char choice;
 	printf("Project %s created! Want to add collaborators to this project? (y / n) :", newProject->ProjectName);
@@ -47,7 +44,7 @@ void CreateNewProject(Student *sender, Global* GlobalFile)
 	switch (choice)
 	{
 	case 'y':
-//		addUserToProject(newProject);
+		//addUserToProject(newProject);
 		break;
 	case 'n':
 		puts("Ok!");
@@ -59,7 +56,9 @@ void CreateNewProject(Student *sender, Global* GlobalFile)
 	puts("1 . Return to previous StudentMenu");
 	puts("2. Exit");
 	choice = getchar();
-	if (choice == '2')
+	if (choice == '1')
+		puts("Returning to main menu...");
+	else if (choice == '2')
 		Exit();
 	else
 		puts("Incorrect input, you will be returned to Menu");
