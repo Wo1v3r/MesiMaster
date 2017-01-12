@@ -6,6 +6,7 @@ int main()
 	Global *GlobalFile = (Global*)malloc(sizeof(Global));
 	GlobalFile = InitDataBases();
 	//CreateNewProject(NULL, GlobalFile); TODO: WHO ADDED THIS LINE??
+	LoginMenu(GlobalFile);
 	return 1;
 }
 
@@ -67,43 +68,45 @@ int ProjectMenu(Global* GlobalFile , Project* project, int accessGroup, int user
 			//Exit to upper menu
 			return 1;
 		case 1:
-			CreateNewTask(project, username);
+			CreateNewTask(GlobalFile,project,userID,accessGroup);
 			break;
 		case 2:
-			PrintTasksList(project);
+			PrintTasksList(GlobalFile, project);
 			break;
 		case 3:
-			PrintActivityLog(project);
+			PrintActivityLog(GlobalFile, project);
 			break;
 		case 4:
-			PrintProjectDetails(project);
+			PrintProjectDetails(GlobalFile, project);
 			break;
 		case 5:
 			AddUsersToProject(GlobalFile, project);
 			break;
 		case 6:
-			ChangeTaskStatus(project);
+			ChangeTaskStatus(GlobalFile, project, userID, accessGroup);
 			break;
 
 		case 7:
 			switch (accessGroup){
 
 			case ADMIN:
-				RemoveProject(project);
+				RemoveProject(GlobalFile, project, userID, accessGroup);
 				break;
 			case WATCHER:
-				LeaveMessageToStudent(project, watcher);
+				LeaveMessageToStudent(GlobalFile,project, watcher);
 				break;
 			}
 			break;
 
 		case 8:
 			if (accessGroup == WATCHER){ //The last option is only for watcher
-				AddProjectMessage(project, watcher);
+				AddProjectMessage(GlobalFile, project, watcher);
 				break;
 			}
 		default:
-			//Dosomething
+			printf("No such option!\n");
+			system("pause");
+			opt = -1;
 		}
 		opt = -1; //Reseting option before relaunching project menu
 		system("cls");  //Clearing screen before relaunhing project menu
@@ -121,6 +124,7 @@ int StudentMenu(Global *GlobalFile, int studentID){
 		printf("Welcome Student:\n");
 		printf("##########################\n");
 		printf("Choose an option: (Int)\n\n");
+		printf("0) Exit Student Menu\n");
 		printf("1) Create new project\n");
 		printf("2) Print existing projects\n");
 		printf("3) Enter Project menu\n");
@@ -131,12 +135,13 @@ int StudentMenu(Global *GlobalFile, int studentID){
 
 		scanf("%d",&opt);
 		switch (opt){
-
+		case 0:
+			return 1;
 		case 1:
-			CreateNewProject(GlobalFile,student); //3
+			CreateNewProject(GlobalFile,studentID,STUDENT); //3
 			break;
 		case 2:
-			PrintProjectsList(student); // 13
+			PrintProjectsList(GlobalFile,studentID,STUDENT); // 13
 			break;
 
 		case 3:
@@ -165,10 +170,11 @@ int StudentMenu(Global *GlobalFile, int studentID){
 			PrintStudentLog(student); // 11
 			break;
 		case 7:
-			return 1;
+			return 0;
 		default:
 			//Dosomething
-			system("cls");
+			printf("No such option!\n");
+			system("pause");
 			opt = -1;
 		}
 		system("cls");
@@ -195,6 +201,7 @@ int AdminMenu(Global* GlobalFile ,int adminID){
 		printf("9) Add a global message\n");
 		printf("10) Add a global random quote\n");
 		printf("11) View Quotes\n");
+		printf("12) Exit Mesimaster\n");
 		scanf("%d", &opt);
 		switch (opt){
 		case 0:
@@ -223,7 +230,7 @@ int AdminMenu(Global* GlobalFile ,int adminID){
 			project = FindProject(GlobalFile->ProjectsList, projectID);
 			if (project == NULL){
 				//Project not found 
-				printf("No project of that ID\n");
+				printf("No project of that ID!\n");
 				break;
 			}
 			ProjectMenu(GlobalFile, project, ADMIN, adminID);
@@ -236,8 +243,12 @@ int AdminMenu(Global* GlobalFile ,int adminID){
 			break;
 		case 11:
 			PrintQuotes(GlobalFile);
+		case 12:
+			return 0;
 		default:
-			printf("No such option\n");
+			printf("No such option!\n");
+			system("pause");
+			opt = -1;
 		}
 		system("cls");
 		opt = -1;
@@ -247,53 +258,83 @@ int AdminMenu(Global* GlobalFile ,int adminID){
 	return 0;
 }
 
-int WatcherMenu(Global* GlobalFile ,int watcherID){
+int WatcherMenu(Global* GlobalFile, int watcherID){
 	Watcher* watcher = FindWatcher(GlobalFile->WatchersList, watcherID);
-
+	Project* project;
 	int opt = -1, projectID;
 
 	while (opt == -1){
+		printf("0) Exit watcher menu\n");
 		printf("1) Print list of projects you're watching\n");
 		printf("2) Print list of all projects\n");
 		printf("3) Enter Project menu of a Project you're watching\n");
 		printf("4) Update details\n");
+		printf("5) Exit Watcher Menu\n");
 
+		scanf("%d", &opt);
 		switch (opt){
+		case 0:
+			return 1;
+		case 1:
+			PrintProjectsList(GlobalFile, watcherID, WATCHER);
+			break;
+		case 2:
+			PrintProjectsList(GlobalFile, 2001, ADMIN); //Needs to print all options either by admin like this or another project
+			break;
+		case 3:
+			printf("Enter Project ID:\n");
+			scanf("%d\n", &projectID);
+			project = FindProject(GlobalFile->ProjectsList, projectID);
+			if (project == NULL){
+				//Project not found 
+				printf("No project of that ID\n");
+				break;
+		case 4:
+			UpdateDetails(GlobalFile, watcher);\
+		case 5:
+			return 0;
+		default:
+			printf("No such option!\n");
+			system("pause");
+			opt = -1;
+			}
 		}
 	}
-
-
 	return 0;
+
 }
 
 
-int MainMenu(Global* GlobalFile , int ID){
-
-	//According to the access group, launching relevant menu:
+int FindAccessGroup(int ID){
+	//Should be in Functions, I wrote it for the meantime here
 	int accessGroup = 0;
-	if (ID > 0 && ID <= 1000) return StudentMenu(GlobalFile, ID);
-	else if (ID > 1000 && ID <= 2000) return AdminMenu(GlobalFile,ID);
-	else if (ID > 2000 && ID <= 3000) return WatcherMenu(GlobalFile, ID);
+	if (ID > 0 && ID <= 1000) return STUDENT;
+	else if (ID > 1000 && ID <= 2000) return ADMIN;
+	else if (ID > 2000 && ID <= 3000) return WATCHER;
+	
 	else printf("\n\nError Evaluating Access Group\n\n");
 	Exit();
-
 }
 
 void LoginMenu(Global* GlobalFile){
 
-	int ID = 0, opt = -1;
+	int menuReturn = 0 , accessGroup = 0, ID = 0, opt = -1;
 
 	while (opt != -1){
 
 		printf("Welcome to the MesiMaster:\n");
 		printf("##########################\n");
 		printf("Choose an option: (Int)\n\n");
+		printf("0) Exit MesiMaster\n");
 		printf("1) Login with an existing user\n");
 		printf("2) Register a new user\n");
 
 		opt = getchar();
 		switch (opt){
-
+		case 0:
+			printf("Thank you for using MesiMaster, have a fruitful day!\n\n");
+			system("pause");
+			Exit();
 		case 1:
 			printf("Executing Login function");
 			ID = Login();
@@ -302,12 +343,40 @@ void LoginMenu(Global* GlobalFile){
 			printf("Exexcuting Register function");
 			ID = Register();
 			break;
+
 		default:
 			//Dosomething
-			system("cls");
+			printf("No such option!");
+			system("pause");
 			opt = -1;
 		}
+
+		//If an ID was found, launching the relevant menu, if it returns 1 it means user exited back to login menu, doing the loop again.
 		system("cls");
-		if (MainMenu(GlobalFile,ID)) LoginMenu(GlobalFile);
+		if (!ID) accessGroup = FindAccessGroup(ID);
+		switch (accessGroup){
+		case 0: //This should not run but here for safety reasons for the meantime
+			opt = -1;
+			break;
+		case 1:
+			menuReturn = StudentMenu(GlobalFile, ID);
+		case 2:
+			menuReturn = AdminMenu(GlobalFile, ID);
+		case 3:
+			menuReturn = WatcherMenu(GlobalFile, ID);
+		}
+		if (menuReturn){
+			//If user chose to exit to upper menu,Setting opt to -1 to reset the menu
+			system("cls");
+			opt = -1;
+			system("pause");
+		}
+		else{
+			//If user chose to exit completely, exiting mesimaster:
+			printf("Thank you for using MesiMaster, have a fruitful day!\n\n");
+			system("pause");
+			Exit();
+		}
+
 	}
 }
