@@ -215,10 +215,11 @@ void saveAdmins(Admin *AdminList){
 			AdminList->AdminPassword, AdminList->AdminName, AdminList->AdminSurename, AdminList->Group);
 		AdminList = AdminList->AdminNext;
 	}
+	fclose(saveFile);
 }
 
 void saveStudents(Student *StudentList){
-	FILE *saveFile = fopen(StudentsFilePath, "r");
+	FILE *saveFile = fopen(StudentsFilePath, "w");
 	if (!saveFile){
 		printf("Warning ! File %s can't be opened.\n", StudentsFilePath);
 		exit(1);
@@ -235,31 +236,95 @@ void saveStudents(Student *StudentList){
 		fprintf(saveFile, "%d %s\n", StudentList->StudentTasksAmount, StudentList->StudentMessages);
 		StudentList = StudentList->StudentNext;
 	}
+	fclose(saveFile);
 }
 
 void saveWatchers(Watcher *WatchersList){
-	FILE *saveFile = fopen(WatchersFilePath, "r");
+	FILE *saveFile = fopen(WatchersFilePath, "w");
 	if (!saveFile){
-		printf("Warning ! File %s can't be opened.\n", StudentsFilePath);
+		printf("Warning ! File %s can't be opened.\n", WatchersFilePath);
 		exit(1);
 	}
-
+	while (WatchersList){
+		fprintf(saveFile, "%d %s %s %s %s %s %d %d %d ", WatchersList->WatcherID, WatchersList->WatcherUsername, WatchersList->WatcherPassword,
+			WatchersList->WatcherName, WatchersList->WatcherSurename, WatchersList->WatcherEmail, WatchersList->Group,
+			WatchersList->WatcherReceiveChanges, WatchersList->WatcherProjectsAmount);
+		int i;
+		for (i = 0; i < WatchersList->WatcherProjectsAmount; i++){
+			if (i == WatchersList->WatcherProjectsAmount - 1)
+				fprintf(saveFile, "%d\n", WatchersList->ProjectIDS[i]);
+			else
+				fprintf(saveFile, "%d ", WatchersList->ProjectIDS[i]);
+		}
+		WatchersList = WatchersList->WatcherNext;
+	}
+	fclose(saveFile);
 }
 
 void saveProjects(Project *ProjectsList){
-
+	FILE *saveFile = fopen(ProjectsFilePath, "w");
+	if (!saveFile){
+		printf("Warning ! File %s can't be opened.\n", ProjectsFilePath);
+		exit(1);
+	}
+	while (ProjectsList){
+		fprintf(saveFile, "%d %s %s %s %d ", ProjectsList->ProjectID, ProjectsList->ProjectName, ProjectsList->ProjectCreatorName,
+			ProjectsList->ProjectActivityLogs, ProjectsList->ProjectUsersAmount);
+		int i;
+		for (i = 0; i < ProjectsList->ProjectUsersAmount; i++){
+			fprintf(saveFile, "%d ", ProjectsList->StudentsIDS[i]);
+		}
+		fprintf(saveFile, "%d ", ProjectsList->ProjectTasksAmount);
+		for (i = 0; i < ProjectsList->ProjectTasksAmount; i++){
+			fprintf(saveFile, "%d ", ProjectsList->TasksIDS[i]);
+		}
+		fprintf(saveFile, "%s\n", ProjectsList->ProjectMessages);
+		ProjectsList = ProjectsList->ProjectNext;
+	}
+	fclose(saveFile);
 }
 
 void saveQuotes(Quote *QuotesList){
-
+	FILE *saveFile = fopen(QuotesFilePath, "w");
+	if (!saveFile){
+		printf("Warning ! File %s can't be opened.\n", QuotesFilePath);
+		exit(1);
+	}
+	while (QuotesList){
+		fprintf(saveFile, "%d\n%s\n%s\n", QuotesList->QuoteID, QuotesList->Quote, QuotesList->QuoteAuthor);
+		QuotesList = QuotesList->QuoteNext;
+	}
+	fclose(saveFile);
 }
 
 void saveTasks(Task *TaskList){
-
+	FILE *saveFile = fopen(TasksFilePath, "w");
+	if (!saveFile){
+		printf("Warning ! File %s can't be opened.\n", TasksFilePath);
+		exit(1);
+	}
+	while (TaskList){
+		fprintf(saveFile, "%d %s %d %s\n", TaskList->TaskID, TaskList->TaskName,
+			TaskList->TaskStatus, TaskList->TaskCreatorName);
+		TaskList = TaskList->TaskNext;
+	}
+	fclose(saveFile);
 }
 
 void saveGlobal(Global *GlobalDB){
-
+	FILE *saveFile = fopen(GlobalFilePath, "w");
+	if (!saveFile){
+		printf("Warning ! File %s can't be opened.\n", GlobalFilePath);
+		exit(1);
+	}
+	fprintf(saveFile, "%d\n", GlobalDB->StudentRunID);
+	fprintf(saveFile, "%d\n", GlobalDB->AdminRunID);
+	fprintf(saveFile, "%d\n", GlobalDB->WatcherRunID);
+	fprintf(saveFile, "%d\n", GlobalDB->ProjectRunID);
+	fprintf(saveFile, "%d\n", GlobalDB->QuoteRunID);
+	fprintf(saveFile, "%d\n", GlobalDB->TaskRunID);
+	fprintf(saveFile, "%s", GlobalDB->GlobalMessages);
+	fclose(saveFile);
 }
 
 // this functions will save all databases to files, deallocate memory and close program
