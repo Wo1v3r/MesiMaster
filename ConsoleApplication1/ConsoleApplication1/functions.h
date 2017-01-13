@@ -27,7 +27,7 @@ int CreateNewProject(Global* GlobalFile,int userID, AccessGroup userGroup)
 	else
 	{
 		puts("Incorrect acess group received.");
-		return;		// incorrect access group
+		return 1;		// incorrect access group
 	}
 
 	// allocate memory
@@ -380,7 +380,7 @@ void printProjectDetails(Global* GlobalFile, Project* project){
 }
 
 void ChangeTaskStatus(Global* GlobalFile, Project* project, int userID, int accessGroup){
-	int taskID, i, status;
+	int taskID, status;
 	Task* task;
 	//Getting a task from the user:
 

@@ -15,14 +15,14 @@ int ProjectMenu(Global* GlobalFile , Project* project, int accessGroup, int user
 
 	switch (accessGroup){
 	case STUDENT:
-		student = FindStudent(GlobalFile, userID);
+		student = FindStudent(GlobalFile->StudentList, userID);
 		username = student->StudentUsername;
 		break;
 	case ADMIN:
-		admin = FindAdmin(GlobalFile, userID);
+		admin = FindAdmin(GlobalFile->AdminsList, userID);
 		username = admin->AdminUsername;
 	case WATCHER:
-		watcher = FindWatcher(GlobalFile, userID);
+		watcher = FindWatcher(GlobalFile->WatchersList, userID);
 		username = watcher->WatcherUsername;
 	default:
 		//Error
@@ -294,13 +294,6 @@ int WatcherMenu(Global* GlobalFile, int watcherID){
 	}
 	return 0;
 
-}
-
-int Login(){
-	int choice = 0;
-	printf("Enter ID of user"); //THIS IS FOR A TEST ONLY
-	scanf("%d", &choice);
-	return choice;
 }
 
 int FindAccessGroup(int ID){
