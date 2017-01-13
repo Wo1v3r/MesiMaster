@@ -1,15 +1,15 @@
 #include "functions.h"
 
 //FUNCTION DECLERATIONS
-BOOL CheckIfExists(Global, char*);
+BOOL CheckIfExists(Global*, char*);
 BOOL CheckPassword(char*);
-int Register(Global);
-int StudentRegister(Global);
-int WatcherRegister(Global);
-int Login(Global);
-Student* FindStudentByUN(Global, char*);
-Watcher* FindWatcherByUN(Global, char*);
-Admin* FindAdminByUN(Global, char*);
+int Register(Global*);
+int StudentRegister(Global*);
+int WatcherRegister(Global*);
+int Login(Global*);
+Student* FindStudentByUN(Global*, char*);
+Watcher* FindWatcherByUN(Global*, char*);
+Admin* FindAdminByUN(Global*, char*);
 //END OF DECLARATIONS
 
 //HELP FUNCTION for Register(Global)
@@ -50,8 +50,8 @@ BOOL CheckIfUserExists(Global *g, char *username)
 BOOL CheckPassword(char* pass)
 {
 	BOOL lowerFlag = FALSE, upperFlag = FALSE, digitFlag = FALSE;
-	int i;
-	for (i = 0; i < strlen(pass); i++)
+	int i , size = strlen(pass);
+	for (i = 0; i < size; i++)
 	{
 		if (pass[i] >= 'A' && pass[i] <= 'Z')
 		{
