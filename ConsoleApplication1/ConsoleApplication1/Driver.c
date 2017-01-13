@@ -168,7 +168,6 @@ int StudentMenu(Global *GlobalFile, int studentID){
 		}
 		system("cls");
 		opt = -1;
-
 	}
 
 	return 0;
@@ -260,7 +259,7 @@ int WatcherMenu(Global* GlobalFile, int watcherID){
 		printf("2) Print list of all projects\n");
 		printf("3) Enter Project menu of a Project you're watching\n");
 		printf("4) Update details\n");
-		printf("5) Exit Watcher Menu\n");
+		printf("5) Exit MesiMaster \n");
 
 		scanf("%d", &opt);
 		switch (opt){
@@ -368,8 +367,6 @@ void LoginMenu(Global* GlobalFile){
 
 	}
 }
-
-
 
 ///////////MAIN//////////
 
