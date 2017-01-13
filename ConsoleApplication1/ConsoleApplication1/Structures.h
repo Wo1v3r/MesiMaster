@@ -119,6 +119,18 @@ Project *FindProject(Project* head, int ProjectID)
 	}
 	return NULL;
 }
+
+Task *FindTask(Task* head, int TaskID)
+{
+	Task *current = head;
+	while (current)
+	{
+		if ((current)->TaskID == TaskID)
+			return current;
+		current = (current)->TaskNext;
+	}
+	return NULL;
+}
 // search in list end
 // Add to lists
 Student* AddStudent(Student *studentHead, Student *addStudent)
