@@ -327,6 +327,75 @@ void saveGlobal(Global *GlobalDB){
 	fclose(saveFile);
 }
 
+//free all allocated memory of the lists and global itself
+void freeAdmins(Admin *AdminsList){
+	Admin *pointer = AdminsList;
+	while (AdminsList != 0){
+		AdminsList = AdminsList->AdminNext;
+		free(pointer);
+		pointer = AdminsList;
+	}
+}
+
+void freeStudents(Student *StudentsList){
+	Student *pointer = StudentsList;
+	while (StudentsList != 0){
+		free(StudentsList->ProjectIDS);
+		StudentsList = StudentsList->StudentNext;
+		free(pointer);
+		pointer = StudentsList;
+	}
+}
+
+void freeWatchers(Watcher *WatchersList){
+	Watcher *pointer = WatchersList;
+	while (WatchersList != 0){
+		free(WatchersList->ProjectIDS);
+		WatchersList = WatchersList->WatcherNext;
+		free(pointer);
+		pointer = WatchersList;
+	}
+}
+
+void freeProjects(Project *ProjectsList){
+	Project *pointer = ProjectsList;
+	while (ProjectsList != 0){
+		free(ProjectsList->StudentsIDS);
+		free(ProjectsList->TasksIDS);
+		ProjectsList = ProjectsList->ProjectNext;
+		free(pointer);
+		pointer = ProjectsList;
+	}
+}
+
+void freeQuotes(Quote *QuotesList){
+	Quote *pointer = QuotesList;
+	while (QuotesList != 0){
+		QuotesList = QuotesList->QuoteNext;
+		free(pointer);
+		pointer = QuotesList;
+	}
+}
+
+void freeTasks(Task *TasksList){
+	Task *pointer = TasksList;
+	while (TasksList != 0){
+		TasksList = TasksList->TaskNext;
+		free(pointer);
+		pointer = TasksList;
+	}
+}
+
+void freeMemory(Global *GlobalDB){
+	freeAdmins(GlobalDB->AdminsList);
+	freeStudents(GlobalDB->StudentList);
+	freeWatchers(GlobalDB->WatchersList);
+	freeProjects(GlobalDB->ProjectsList);
+	freeQuotes(GlobalDB->QuotesList);
+	freeTasks(GlobalDB->TaskList);
+	free(GlobalDB);
+}
+
 // this functions will save all databases to files, deallocate memory and close program
 void Exit(Global *GlobalDB){
 	saveAdmins(GlobalDB->AdminsList);
@@ -336,4 +405,5 @@ void Exit(Global *GlobalDB){
 	saveQuotes(GlobalDB->QuotesList);
 	saveTasks(GlobalDB->TaskList);
 	saveGlobal(GlobalDB);
+	freeMemory(GlobalDB);
 }
