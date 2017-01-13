@@ -310,9 +310,6 @@ int FindAccessGroup(int ID){
 	if (ID > 0 && ID <= 1000) return STUDENT;
 	else if (ID > 1000 && ID <= 2000) return ADMIN;
 	else if (ID > 2000 && ID <= 3000) return WATCHER;
-	
-	else printf("\n\nError Evaluating Access Group\n\n");
-	Exit();
 }
 
 void LoginMenu(Global* GlobalFile){
@@ -333,14 +330,14 @@ void LoginMenu(Global* GlobalFile){
 		case 0:
 			printf("Thank you for using MesiMaster, have a fruitful day!\n\n");
 			system("pause");
-			Exit();
+			Exit(GlobalFile);
 		case 1:
 			printf("Executing Login function");
-			ID = Login();
+			ID = Login(GlobalFile); //If ID = 0 means there was a problem with the login
 			break;
 		case 2:
 			printf("Exexcuting Register function");
-			//ID = Register();
+			ID = Register(GlobalFile); //If ID = 0 means there was problem with the register
 			break;
 
 		default:
@@ -377,7 +374,7 @@ void LoginMenu(Global* GlobalFile){
 			//If user chose to exit completely, exiting mesimaster:
 			printf("Thank you for using MesiMaster, have a fruitful day!\n\n");
 			system("pause");
-			Exit();
+			Exit(GlobalFile);
 		}
 
 	}
