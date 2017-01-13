@@ -10,7 +10,7 @@ void PrintProjectsList(Global *GlobalFile, int UserID, AccessGroup group);						
 
 // Functions
 // 46 - Create new project by STUDENT or WATCHER only , done, ready for testing
-void CreateNewProject(Global* GlobalFile,int userID, AccessGroup userGroup)
+int CreateNewProject(Global* GlobalFile,int userID, AccessGroup userGroup)
 {
 	Student *Student;
 	Watcher *Watcher;
@@ -331,10 +331,6 @@ void PrintProjectsList(Global *GlobalFile, int UserID, AccessGroup group)
 }
 
 
-
-
-
-
 void PrintTasksList(Global* GlobalFile, Project* Project){
 	int i, j, status, taskID;
 	Task* task;
@@ -353,7 +349,7 @@ void PrintTasksList(Global* GlobalFile, Project* Project){
 
 		printf("---\n");
 		printf("%d) ID: %d Creator: %s Status: %d\n", j, taskID, creator, status);
-		print("Task: %s\n\n", taskName);
+		printf("Task: %s\n\n", taskName);
 		j++;
 	}
 }
@@ -372,7 +368,7 @@ void printProjectDetails(Global* GlobalFile, Project* project){
 	int projectID = project->ProjectID,
 		numOfTasks = project->ProjectTasksAmount,
 		numOfUsers = project->ProjectUsersAmount;
-	char* creator = project->ProjectCreatorName, projectName = project->ProjectName;
+	char* creator = project->ProjectCreatorName, *projectName = project->ProjectName;
 
 	printf("Project Details:\n");
 	printf("-------------------");
@@ -408,5 +404,5 @@ void ChangeTaskStatus(Global* GlobalFile, Project* project, int userID, int acce
 		printf("Student cannot set status to approved, please contact your watcher or admin\n");
 		return;
 	}
-	task->TaskStatus = status;
+	task->TaskStatus = (STATUS)status;
 }
