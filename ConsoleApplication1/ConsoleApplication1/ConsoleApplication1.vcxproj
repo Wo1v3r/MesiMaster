@@ -86,6 +86,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
     </ClInclude>
+    <ClInclude Include="wo1v3r.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Driver.c" />
