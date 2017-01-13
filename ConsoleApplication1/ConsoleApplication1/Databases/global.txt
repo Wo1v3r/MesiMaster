@@ -4,3 +4,4 @@
 4000
 5000
 6000
+globalMsg.txt

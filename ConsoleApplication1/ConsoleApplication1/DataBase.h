@@ -179,8 +179,7 @@ Quote* initQuotes(){
 	return head;
 }
 
-Global *InitDataBases()
-{
+Global *InitDataBases(){
 	FILE *globalFile = fopen(GlobalFilePath, "r");
 	if (!globalFile){
 		printf("Warning ! File %s can't be opened.\n", GlobalFilePath);
@@ -191,15 +190,85 @@ Global *InitDataBases()
 	GlobalDB->StudentList = initStudents();
 	GlobalDB->WatchersList = initWatchers();
 	GlobalDB->QuotesList = initQuotes();
+	GlobalDB->TaskList = initTasks();
+	GlobalDB->ProjectsList = initProjects();
 	fscanf(globalFile, "%d", &GlobalDB->StudentRunID);
 	fscanf(globalFile, "%d", &GlobalDB->AdminRunID);
 	fscanf(globalFile, "%d", &GlobalDB->WatcherRunID);
 	fscanf(globalFile, "%d", &GlobalDB->ProjectRunID);
 	fscanf(globalFile, "%d", &GlobalDB->QuoteRunID);
+	fscanf(globalFile, "%d", &GlobalDB->TaskRunID);
+	fscanf(globalFile, "%s", &GlobalDB->GlobalMessages);
+	fclose(globalFile);
 	return GlobalDB;
 }
-// this functions will save all databases to files, deallocate memory and close program
-void Exit()
-{
 
+//save to file functions
+void saveAdmins(Admin *AdminList){
+	FILE *saveFile = fopen(AdminsFilePath, "w");
+	if (!saveFile){
+		printf("Warning ! File %s can't be opened.\n", AdminsFilePath);
+		exit(1);
+	}
+	while (AdminList){
+		fprintf(saveFile, "%d %s %s %s %s %d\n", AdminList->AdminID, AdminList->AdminUsername,
+			AdminList->AdminPassword, AdminList->AdminName, AdminList->AdminSurename, AdminList->Group);
+		AdminList = AdminList->AdminNext;
+	}
+}
+
+void saveStudents(Student *StudentList){
+	FILE *saveFile = fopen(StudentsFilePath, "r");
+	if (!saveFile){
+		printf("Warning ! File %s can't be opened.\n", StudentsFilePath);
+		exit(1);
+	}
+	while (StudentList){
+		fprintf(saveFile, "%d %s %s %s %s %s %s %c %s %d %d ", StudentList->StudentID, StudentList->StudentUsername,
+			StudentList->StudentPassword, StudentList->StudentName, StudentList->StudentSurename,
+			StudentList->StudentEmail, StudentList->StudentDepartment, StudentList->StudentYear, 
+			StudentList->StudentActivityLog, StudentList->Group, StudentList->StudentProjectsAmount);
+		int i;
+		for (i = 0; i < StudentList->StudentProjectsAmount; i++){
+			fprintf(saveFile, "%d ", StudentList->ProjectIDS[i]);
+		}
+		fprintf(saveFile, "%d %s\n", StudentList->StudentTasksAmount, StudentList->StudentMessages);
+		StudentList = StudentList->StudentNext;
+	}
+}
+
+void saveWatchers(Watcher *WatchersList){
+	FILE *saveFile = fopen(WatchersFilePath, "r");
+	if (!saveFile){
+		printf("Warning ! File %s can't be opened.\n", StudentsFilePath);
+		exit(1);
+	}
+
+}
+
+void saveProjects(Project *ProjectsList){
+
+}
+
+void saveQuotes(Quote *QuotesList){
+
+}
+
+void saveTasks(Task *TaskList){
+
+}
+
+void saveGlobal(Global *GlobalDB){
+
+}
+
+// this functions will save all databases to files, deallocate memory and close program
+void Exit(Global *GlobalDB){
+	saveAdmins(GlobalDB->AdminsList);
+	saveStudents(GlobalDB->StudentList);
+	saveWatchers(GlobalDB->WatchersList);
+	saveProjects(GlobalDB->ProjectsList);
+	saveQuotes(GlobalDB->QuotesList);
+	saveTasks(GlobalDB->TaskList);
+	saveGlobal(GlobalDB);
 }

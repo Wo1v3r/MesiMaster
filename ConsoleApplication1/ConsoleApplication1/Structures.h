@@ -22,7 +22,7 @@ typedef struct Global Global;
 typedef struct Student{
 	AccessGroup Group;
 	int StudentID, StudentProjectsAmount, StudentTasksAmount;
-	char StudentUsername[31], StudentPassword[31], StudentName[21], StudentEmail[50], StudentSurename[21], StudentDepartment[21], StudentYear[1];
+	char StudentUsername[31], StudentPassword[31], StudentName[21], StudentEmail[50], StudentSurename[21], StudentDepartment[21], StudentYear;
 	int *ProjectIDS;
 	char StudentMessages[31], StudentActivityLog[31];
 	Student *StudentNext;
@@ -40,7 +40,6 @@ typedef struct Project{
 	char ProjectMessages[31], ProjectActivityLogs[31];
 	BOOL ProgramChanges;
 	struct Project *ProjectNext;
-	struct Task *TasksList;
 }Project;
 typedef struct Admin{
 	int AdminID;
@@ -69,6 +68,7 @@ typedef struct Global{
 	Admin *AdminsList;
 	Project *ProjectsList;
 	Quote *QuotesList;
+	Task *TaskList;
 	char GlobalMessages[31];
 }Global;
 //
