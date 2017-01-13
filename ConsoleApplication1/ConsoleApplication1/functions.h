@@ -10,7 +10,7 @@ void PrintProjectsList(Global *GlobalFile, int UserID, AccessGroup group);						
 
 // Functions
 // 46 - Create new project by STUDENT or WATCHER only , done, ready for testing
-void CreateNewProject(Global* GlobalFile,int userID, AccessGroup userGroup)
+int CreateNewProject(Global* GlobalFile,int userID, AccessGroup userGroup)
 {
 	Student *Student;
 	Watcher *Watcher;
@@ -51,7 +51,6 @@ void CreateNewProject(Global* GlobalFile,int userID, AccessGroup userGroup)
 	newProject->StudentsIDS[0] = userID;
 
 	newProject->ProjectTasksAmount = 0;
-	newProject->TasksList = NULL;
 	newProject->TasksIDS = NULL;
 	newProject->ProgramChanges = FALSE;
 	newProject->ProjectNext = NULL;
@@ -123,14 +122,14 @@ void CreateNewProject(Global* GlobalFile,int userID, AccessGroup userGroup)
 		puts("Incorrect Symbol inputed");
 		break;
 	}
-	puts("1 .Return to previous StudentMenu");
+	puts("1 .Return to previous menu");
 	puts("2. Exit");
 	fflush(stdin);
 	choice = getchar();
 	if (choice == '1')
-		puts("Returning to main menu...");
+		return 1; //returns to menu
 	else if (choice == '2')
-		Exit();
+		Exit(GlobalFile);
 	else
 		puts("Incorrect input, you will be returned to Menu");
 
@@ -266,8 +265,10 @@ void CreateNewTask(Global *GlobalFile, Project *project,int UserID,AccessGroup g
 		strcpy(newTask->TaskCreatorName, watcher->WatcherName);			// copy creator name to task
 
 	newTask->TaskStatus = NEW;								// initialize status
+	
 
-	project->TasksList = AddTask(project->TasksList, newTask);		// add new task to tasks list of choosen project
+	///////THERES AN ERROR HERE  //////
+	//project->TasksList = AddTask(project->TasksList, newTask);		// add new task to tasks list of choosen project
 	printf("New Task \"%s\" was created in project \"%s\"\n",newTask->TaskName,project->ProjectName);
 
 
@@ -330,6 +331,79 @@ void PrintProjectsList(Global *GlobalFile, int UserID, AccessGroup group)
 }
 
 
+void PrintTasksList(Global* GlobalFile, Project* Project){
+	int i, j, status, taskID;
+	Task* task;
+	char* creator;
+	char* taskName;
 
+	printf("Tasks in project:\n");
+	for (j = 1, i = 0; i < Project->ProjectTasksAmount; i++){
+		task = FindTask(GlobalFile->TaskList, Project->TasksIDS[i]);
+		status = task->TaskStatus;
+		if (status == 5) //Trash and won't show it
+			continue;
+		taskID = task->TaskID;
+		creator = task->TaskCreatorName;
+		taskName = task->TaskName;
 
+		printf("---\n");
+		printf("%d) ID: %d Creator: %s Status: %d\n", j, taskID, creator, status);
+		printf("Task: %s\n\n", taskName);
+		j++;
+	}
+}
 
+void printActivityLog(Global* GlobalFile, Project* project){
+	char BUFFER[400], *fileName = project->ProjectActivityLogs;
+	FILE* file = fopen(fileName, "r");
+	if (!file) return;
+
+	while (fgets(BUFFER, 400, file)) printf("%s\n", BUFFER);
+	fclose(file);
+}
+
+void printProjectDetails(Global* GlobalFile, Project* project){
+	int projectID = project->ProjectID,
+		numOfTasks = project->ProjectTasksAmount,
+		numOfUsers = project->ProjectUsersAmount;
+	char* creator = project->ProjectCreatorName, *projectName = project->ProjectName;
+
+	printf("Project Details:\n");
+	printf("-------------------");
+	printf("ID: %d , Number of tasks: %d , Number of users: %d , Creator: %s", projectID, numOfTasks, numOfUsers, creator);
+
+	//Need to print details of student here too.
+	printf("Students in project:\n");
+	printf("----------------------");
+	//Need to add a helper function for that
+}
+
+void ChangeTaskStatus(Global* GlobalFile, Project* project, int userID, int accessGroup){
+	int taskID, i, status;
+	Task* task;
+	//Getting a task from the user:
+
+	printf("Enter Task ID:\n");
+	scanf("%d", &taskID);
+	//Making sure that task is in the relevant project:
+	task = findTaskInProject(GlobalFile, project, taskID);
+	if (!task){
+		printf("Task does not belong to this project\n");
+		return;
+	}
+
+	printf("Current status is: %s\n", convertStatusToString(task->TaskStatus));
+	printf("Choose status to change into:\n");
+	printf("Available Status:\n");
+	printf("[0] New , [1] Elicitation, [2] Analysis, [3] VandV ");
+	if (accessGroup != 1) printf(" [4] Approved"); //Student can't change to approved
+	printf("\n");
+	printf("Enter an integer of your choice:\n");
+	scanf("%d", &status);
+	if (accessGroup == STUDENT && status == APPROVED) {
+		printf("Student cannot set status to approved, please contact your watcher or admin\n");
+		return;
+	}
+	task->TaskStatus = (STATUS)status;
+}

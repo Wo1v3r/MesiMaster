@@ -1,7 +1,5 @@
 //Jonathan
-#include "functions.h"
-
-
+#include "Register.h"
 ////// Menus
 
 //Project Menu : Finished ,Ready for testing - Jonathan
