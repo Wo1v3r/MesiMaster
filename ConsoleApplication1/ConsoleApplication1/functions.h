@@ -363,7 +363,6 @@ void printActivityLog(Global* GlobalFile, Project* project){
 	fclose(file);
 }
 
-//UNFINISHED
 void printProjectDetails(Global* GlobalFile, Project* project){
 	int projectID = project->ProjectID,
 		numOfTasks = project->ProjectTasksAmount,
@@ -375,7 +374,9 @@ void printProjectDetails(Global* GlobalFile, Project* project){
 	printf("ID: %d , Number of tasks: %d , Number of users: %d , Creator: %s", projectID, numOfTasks, numOfUsers, creator);
 
 	//Need to print details of student here too.
-
+	printf("Students in project:\n");
+	printf("----------------------");
+	//Need to add a helper function for that
 }
 
 void ChangeTaskStatus(Global* GlobalFile, Project* project, int userID, int accessGroup){
