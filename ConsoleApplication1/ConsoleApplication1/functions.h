@@ -51,7 +51,6 @@ void CreateNewProject(Global* GlobalFile,int userID, AccessGroup userGroup)
 	newProject->StudentsIDS[0] = userID;
 
 	newProject->ProjectTasksAmount = 0;
-	newProject->TasksList = NULL;
 	newProject->TasksIDS = NULL;
 	newProject->ProgramChanges = FALSE;
 	newProject->ProjectNext = NULL;
@@ -123,14 +122,14 @@ void CreateNewProject(Global* GlobalFile,int userID, AccessGroup userGroup)
 		puts("Incorrect Symbol inputed");
 		break;
 	}
-	puts("1 .Return to previous StudentMenu");
+	puts("1 .Return to previous menu");
 	puts("2. Exit");
 	fflush(stdin);
 	choice = getchar();
 	if (choice == '1')
-		puts("Returning to main menu...");
+		return 1; //returns to menu
 	else if (choice == '2')
-		Exit();
+		Exit(GlobalFile);
 	else
 		puts("Incorrect input, you will be returned to Menu");
 
