@@ -22,24 +22,27 @@ BOOL CheckIfUserExists(Global *g, char *username)
 	Admin *tempAdm = g->AdminsList;
 	while (tempStud != NULL)																		//Checking if the username exists in the student list																																
 	{
-		if (strcmp(tempStud->StudentUsername, username))
+		if (strcmp(tempStud->StudentUsername, username) == 0)
 		{
 			return TRUE;
 		}
+		tempStud = tempStud->StudentNext;
 	}
 	while (tempWatch != NULL)														                //Checking if the username exists in the watcher list
 	{
-		if (strcmp(tempWatch->WatcherUsername, username))
+		if (strcmp(tempWatch->WatcherUsername, username) == 0)
 		{
 			return TRUE;
 		}
+		tempWatch = tempWatch->WatcherNext;
 	}
 	while (tempAdm != NULL)														                    //Checking if the username exists in the admins list
 	{
-		if (strcmp(tempAdm->AdminUsername, username))
+		if (strcmp(tempAdm->AdminUsername, username) == 0)
 		{
 			return TRUE;
 		}
+		tempAdm = tempAdm->AdminNext;
 	}
 	return FALSE;
 }
@@ -119,7 +122,7 @@ int StudentRegister(Global *g)
 		_flushall();
 		printf("Enter your desired username: (Has to be less then 30 characters!)\n");
 		scanf("%s", newStudent->StudentUsername);
-
+		getchar();
 		if (CheckIfUserExists(g, newStudent->StudentUsername) == TRUE)
 		{
 			printf("This username already exists in the system. \n Press 1 to try again, press 2 to go back to the next menu.\n");
@@ -127,7 +130,7 @@ int StudentRegister(Global *g)
 		}
 	} while (CheckIfUserExists(g, newStudent->StudentUsername) == TRUE && choice == 1);
 
-	if (choice != 1)
+	if (choice != 1 && choice != 0)
 	{
 		printf("You did not press 1 to continue. Going back to last menu.\n");
 		return 0;
@@ -169,13 +172,14 @@ int StudentRegister(Global *g)
 	strcat(newStudent->StudentMessages, "_SMess.txt"); // cat the rest of the file name
 
 	newStudent->StudentNext = g->StudentList;
+	g->StudentList = newStudent;
 	return newStudent->StudentID;
 }
 
 int WatcherRegister(Global *g)
 {
 	Watcher* newWatcher = NULL;
-	int choice;
+	int choice = 0;
 	newWatcher = (Watcher*)malloc(sizeof(Watcher));													//Allocating memory for the new watcher
 
 	if (newWatcher == NULL)                                                                         //Allocation check
@@ -190,7 +194,7 @@ int WatcherRegister(Global *g)
 		_flushall();
 		printf("Enter your desired username: (Has to be less then 30 characters!)\n");
 		scanf("%s", newWatcher->WatcherUsername);
-
+		getchar();
 		if (CheckIfUserExists(g, newWatcher->WatcherUsername) == TRUE)
 		{
 			printf("This username already exists in the system. \n Press 1 to try again, press 2 to go back to the next menu.\n");
@@ -198,7 +202,7 @@ int WatcherRegister(Global *g)
 		}
 	} while (CheckIfUserExists(g, newWatcher->WatcherUsername) == TRUE && choice == 1);
 
-	if (choice != 1)
+	if (choice != 1 && choice != 0)
 	{
 		printf("You did not press 1 to continue. Going back to last menu.\n");
 		return 0;
@@ -228,6 +232,7 @@ int WatcherRegister(Global *g)
 	newWatcher->WatcherReceiveChanges = FALSE;
 
 	newWatcher->WatcherNext = g->WatchersList;
+	g->WatchersList = newWatcher;
 	return newWatcher->WatcherID;
 }
 
@@ -238,10 +243,11 @@ Student* FindStudentByUN(Global *g, char *username)
 	Student *tempStud = g->StudentList;
 	while (tempStud != NULL)																		//Checking if the username exists in the student list																																
 	{
-		if (strcmp(tempStud->StudentUsername, username))
+		if (strcmp(tempStud->StudentUsername, username) == 0)
 		{
 			return tempStud;
 		}
+		tempStud = tempStud->StudentNext;
 	}
 	return NULL;
 }
@@ -253,10 +259,11 @@ Watcher* FindWatcherByUN(Global *g, char *username)
 	Watcher *tempW = g->WatchersList;
 	while (tempW != NULL)																		//Checking if the username exists in the student list																																
 	{
-		if (strcmp(tempW->WatcherUsername, username))
+		if (strcmp(tempW->WatcherUsername, username) == 0)
 		{
 			return tempW;
 		}
+		tempW = tempW->WatcherNext;
 	}
 	return NULL;
 }
@@ -268,10 +275,11 @@ Admin* FindAdminByUN(Global *g, char *username)
 	Admin *tempA = g->AdminsList;
 	while (tempA != NULL)																		//Checking if the username exists in the student list																																
 	{
-		if (strcmp(tempA->AdminUsername, username))
+		if (strcmp(tempA->AdminUsername, username) == 0)
 		{
 			return tempA;
 		}
+		tempA = tempA->AdminNext;
 	}
 	return NULL;
 }
@@ -304,7 +312,7 @@ int Login(Global *g)
 			_flushall();
 			printf("Please enter you password.\n");
 			scanf("%s", pass);
-			if (strcmp(studLogin->StudentPassword, pass))
+			if (strcmp(studLogin->StudentPassword, pass) == 0)
 				return studLogin->StudentID;
 		}
 	}
@@ -315,7 +323,7 @@ int Login(Global *g)
 			_flushall();
 			printf("Please enter you password.\n");
 			scanf("%s", pass);
-			if (strcmp(watchLogin->WatcherPassword, pass))
+			if (strcmp(watchLogin->WatcherPassword, pass) == 0)
 				return watchLogin->WatcherID;
 		}
 	}
@@ -326,7 +334,7 @@ int Login(Global *g)
 			_flushall();
 			printf("Please enter you password.\n");
 			scanf("%s", pass);
-			if (strcmp(admLogin->AdminPassword, pass))
+			if (strcmp(admLogin->AdminPassword, pass) == 0)
 				return admLogin->AdminID;
 		}
 	}
