@@ -380,4 +380,5 @@ int main()
 	//CreateNewProject(NULL, GlobalFile); TODO: WHO ADDED THIS LINE??
 	LoginMenu(GlobalFile);
 	return 1;
+	//justforpush
 }
