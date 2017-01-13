@@ -13,6 +13,7 @@
 // initializations from files
 Student* initStudents(){
 	Student* head = NULL, *newStud;
+	int emptyline;
 	FILE * read = fopen(StudentsFilePath, "r");
 	if (read == NULL){
 		printf("Error opening the students file.\n");
@@ -21,8 +22,11 @@ Student* initStudents(){
 	else{
 		while (!feof(read)){
 			newStud = (Student*)(malloc(sizeof(Student)));
-			head = AddStudent(head, newStud);
-			fscanf(read, "%d", &newStud->StudentID);
+			emptyline = fscanf(read, "%d", &newStud->StudentID);
+			if (emptyline < 1){
+				free(newStud);
+				break;
+			}
 			fscanf(read, "%s", &newStud->StudentUsername);
 			fscanf(read, "%s", &newStud->StudentPassword);
 			fscanf(read, "%s", &newStud->StudentName);
@@ -40,6 +44,7 @@ Student* initStudents(){
 			}
 			fscanf(read, "%d", &newStud->StudentTasksAmount);
 			fscanf(read, "%s", &newStud->StudentMessages);
+			head = AddStudent(head, newStud);
 		}
 	}
 	fclose(read);
@@ -48,6 +53,7 @@ Student* initStudents(){
 
 Project* initProjects(){
 	Project* head = NULL, *newProj;
+	int emptyline;
 	FILE * read = fopen(ProjectsFilePath, "r");
 	if (read == NULL){
 		printf("Error opening the projects file.\n");
@@ -56,8 +62,11 @@ Project* initProjects(){
 	else{
 		while (!feof(read)){
 			newProj = (Project*)(malloc(sizeof(Project)));
-			head = AddProject(head, newProj);
-			fscanf(read, "%d", &newProj->ProjectID);
+			emptyline = fscanf(read, "%d", &newProj->ProjectID);
+			if (emptyline < 1){
+				free(newProj);
+				break;
+			}
 			fscanf(read, "%s", &newProj->ProjectName);
 			fscanf(read, "%s", &newProj->ProjectCreatorName);
 			fscanf(read, "%s", &newProj->ProjectActivityLogs);
@@ -73,6 +82,7 @@ Project* initProjects(){
 				fscanf(read, "%d", &newProj->TasksIDS[i]);
 			}
 			fscanf(read, "%s", &newProj->ProjectMessages);
+			head = AddProject(head, newProj);
 		}
 	}
 	fclose(read);
@@ -81,6 +91,7 @@ Project* initProjects(){
 
 Watcher* initWatchers(){
 	Watcher* head = NULL, *newWatcher;
+	int emptyline;
 	FILE * read = fopen(WatchersFilePath, "r");
 	if (read == NULL){
 		printf("Error opening the admins file.\n");
@@ -89,8 +100,11 @@ Watcher* initWatchers(){
 	else{
 		while (!feof(read)){
 			newWatcher = (Watcher*)(malloc(sizeof(Watcher)));
-			head = AddWatcher(head, newWatcher);
-			fscanf(read, "%d", &newWatcher->WatcherID);
+			emptyline = fscanf(read, "%d", &newWatcher->WatcherID);
+			if (emptyline < 1){
+				free(newWatcher);
+				break;
+			}
 			fscanf(read, "%s", &newWatcher->WatcherUsername);
 			fscanf(read, "%s", &newWatcher->WatcherPassword);
 			fscanf(read, "%s", &newWatcher->WatcherName);
@@ -104,6 +118,7 @@ Watcher* initWatchers(){
 			for (i = 0; i < newWatcher->WatcherProjectsAmount; i++){
 				fscanf(read, "%d", &newWatcher->ProjectIDS[i]);
 			}
+			head = AddWatcher(head, newWatcher);
 		}
 	}
 	fclose(read);
@@ -113,6 +128,7 @@ Watcher* initWatchers(){
 Admin* initAdmins(){
 	Admin* head = NULL, *newAdmin;
 	FILE * read = fopen(AdminsFilePath, "r");
+	int emptyline;
 	if (read == NULL){
 		printf("Error opening the admins file.\n");
 		return NULL;
@@ -120,13 +136,17 @@ Admin* initAdmins(){
 	else{
 		while (!feof(read)){
 			newAdmin = (Admin*)(malloc(sizeof(Admin)));
-			head = AddAdmin(head, newAdmin);
-			fscanf(read, "%d", &newAdmin->AdminID);
+			emptyline = fscanf(read, "%d", &newAdmin->AdminID);
+			if (emptyline < 1){
+				free(newAdmin);
+				break;
+			}
 			fscanf(read, "%s", &newAdmin->AdminUsername);
 			fscanf(read, "%s", &newAdmin->AdminPassword);
 			fscanf(read, "%s", &newAdmin->AdminName);
 			fscanf(read, "%s", &newAdmin->AdminSurename);
 			fscanf(read, "%d", &newAdmin->Group);
+			head = AddAdmin(head, newAdmin);
 		}
 	}
 	fclose(read);
@@ -135,6 +155,7 @@ Admin* initAdmins(){
 
 Task* initTasks(){
 	Task* head = NULL, *newTask;
+	int emptyline;
 	FILE * read = fopen(TasksFilePath, "r");
 	if (read == NULL){
 		printf("Error opening the tasks file.\n");
@@ -143,11 +164,15 @@ Task* initTasks(){
 	else{
 		while (!feof(read)){
 			newTask = (Task*)(malloc(sizeof(Task)));
-			head = AddTask(head, newTask);
-			fscanf(read, "%d", &newTask->TaskID);
+			emptyline = fscanf(read, "%d", &newTask->TaskID);
+			if (emptyline < 1){
+				free(newTask);
+				break;
+			}
 			fscanf(read, "%s", &newTask->TaskName);
 			fscanf(read, "%d", &newTask->TaskStatus);
 			fscanf(read, "%s", &newTask->TaskCreatorName);
+			head = AddTask(head, newTask);
 		}
 	}
 	fclose(read);
@@ -156,7 +181,7 @@ Task* initTasks(){
 
 Quote* initQuotes(){
 	Quote* head = NULL, *newQuote;
-	int i;
+	int i, emptyline;
 	FILE * read = fopen(QuotesFilePath, "r");
 	if (read == NULL){
 		printf("Error opening the quotes file.\n");
@@ -165,14 +190,18 @@ Quote* initQuotes(){
 	else{
 		while (!feof(read)){
 			newQuote = (Quote*)(malloc(sizeof(Quote)));
-			head = AddQuote(head, newQuote);
 			i = 0;
-			fscanf(read, "%d", &newQuote->QuoteID);
+			emptyline = fscanf(read, "%d", &newQuote->QuoteID);
+			if (emptyline < 1){
+				free(newQuote);
+				break;
+			}
 			fgetc(read);
 			fgets(newQuote->Quote, sizeof(newQuote->Quote), read);
 			while (newQuote->Quote[i++] != '\n');
 			newQuote->Quote[i - 1] = '\0';
 			fscanf(read, "%s", &newQuote->QuoteAuthor);
+			head = AddQuote(head, newQuote);
 		}
 	}
 	fclose(read);
@@ -227,7 +256,7 @@ void saveStudents(Student *StudentList){
 	while (StudentList){
 		fprintf(saveFile, "%d %s %s %s %s %s %s %c %s %d %d ", StudentList->StudentID, StudentList->StudentUsername,
 			StudentList->StudentPassword, StudentList->StudentName, StudentList->StudentSurename,
-			StudentList->StudentEmail, StudentList->StudentDepartment, StudentList->StudentYear, 
+			StudentList->StudentEmail, StudentList->StudentDepartment, StudentList->StudentYear,
 			StudentList->StudentActivityLog, StudentList->Group, StudentList->StudentProjectsAmount);
 		int i;
 		for (i = 0; i < StudentList->StudentProjectsAmount; i++){
