@@ -323,11 +323,9 @@ void LoginMenu(Global* GlobalFile){
 			system("pause");
 			Exit(GlobalFile);
 		case 1:
-			printf("Executing Login function");
 			ID = Login(GlobalFile); //If ID = 0 means there was a problem with the login
 			break;
 		case 2:
-			printf("Exexcuting Register function");
 			ID = Register(GlobalFile); //If ID = 0 means there was problem with the register
 			break;
 
