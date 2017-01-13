@@ -186,7 +186,27 @@ void PrintStudentList(Student *StudentHead)
 	}
 
 }
-
 //
 //	Linked list functions end
 //
+
+//Utilities:
+char* convertStatusToString(STATUS status){
+	switch (status){
+	case 0 :
+		return "New";
+	case 1:
+		return "Elicitation";
+	case 2:
+		return "Analysis";
+	case 3:
+		return "VandV";
+	case 4:
+		return "Approved";
+	case 5:
+		return "Trash";
+
+	default:
+		return NULL;
+	}
+}
