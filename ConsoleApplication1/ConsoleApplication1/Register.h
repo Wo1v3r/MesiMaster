@@ -1,12 +1,13 @@
 #include "DataBase.h"
 
-BOOL isInSystem(Global, char*);
+BOOL ChaeckIfExists(Global, char*);
+BOOL CheckPassword(char*);
 int Register(Global);
 int StudentRegister(Global);
 int WatcherRegister(Global);
 
 //HELP FUNCTION for Register(Global)
-BOOL isInSystem(Global *g, char *username)
+BOOL CheckIfUserExists(Global *g, char *username)
 {
 	//The function receives a username and a global pointer, and checks if the given username 
 	//already exists in the system's databases.
@@ -41,6 +42,36 @@ BOOL isInSystem(Global *g, char *username)
 	return FALSE;
 }
 
+BOOL CheckPassword(char* pass)
+{
+	//A valid password must contain at least: a digit, an upper case letter, a lower case letter.
+	BOOL lowerFlag = FALSE, upperFlag = FALSE, digitFlag = FALSE;
+	int i;
+	for (i = 0; i < strlen(pass); i++)
+	{
+		if (pass[i] >= 'A' && pass[i] <= 'Z')
+		{
+			upperFlag = TRUE;
+		}
+		if (pass[i] >= 'a' && pass[i] <= 'z')
+		{
+			lowerFlag = TRUE;
+		}
+		if (pass[i] >= '0' && pass[i] <= '9')
+		{
+			digitFlag = TRUE;
+		}
+	}
+	if (upperFlag == TRUE && lowerFlag == TRUE && digitFlag == TRUE)
+	{
+		return TRUE;
+	}
+	else
+	{
+		return FALSE;
+	}
+}
+
 int Register(Global *g)
 {
 	int choice;                                                                                     //Action menu - choosing user type or action (student, watcher, back)
@@ -66,6 +97,7 @@ int Register(Global *g)
 int StudentRegister(Global *g)
 {
 	char stringID[31];
+	int choice = 0;
 	Student* newStudent = NULL;																		//Allocating memory for the new student
 	newStudent = (Student*)malloc(sizeof(Student));
 
@@ -77,19 +109,37 @@ int StudentRegister(Global *g)
 
 	newStudent->StudentID = g->StudentRunID;														//ID allocation
 	(g->StudentRunID)++;
-																									//CS - Initializing attributes that require user input
-	printf("Enter your desired username: (Has to be less then 30 characters!)\n");
-	scanf("%s", newStudent->StudentUsername);
 
-	if (isInSystem(g, newStudent->StudentUsername) == TRUE)
+	//Initializing username
+	do{																								//CS - Initializing attributes that require user input
+		_flushall();
+		printf("Enter your desired username: (Has to be less then 30 characters!)\n");
+		scanf("%s", newStudent->StudentUsername);
+
+		if (CheckIfUserExists(g, newStudent->StudentUsername) == TRUE)
+		{
+			printf("This username already exists in the system. \n Press 1 to try again, press 2 to go back to the next menu.\n");
+			scanf("%d", &choice);
+		}
+	} while (CheckIfUserExists(g, newStudent->StudentUsername) == TRUE && choice == 1);
+
+	if (choice != 1)
 	{
-		//If the chosen username exists - back to login screen 
-		printf("This username already exists in the system.\n");
+		printf("You did not press 1 to continue. Going back to last menu.\n");
 		return 0;
 	}
+	 //Initializing password
+	do{
+		_flushall();
+		printf("Enter your desired password: (Has to be less then 30 characters, and contain\n");
+		printf("at least one digit, one upper case letter, one lower case letter)\n");
+		scanf("%s", newStudent->StudentPassword);
+		if (CheckPassword(newStudent->StudentPassword) == FALSE)
+		{
+			printf("This password is invalid.\n You need to try again.\n");
+		}
+	} while (CheckPassword(newStudent->StudentPassword) == FALSE);
 
-	printf("Enter your desired password: (Has to be less then 30 characters!)\n");
-	scanf("%s", newStudent->StudentPassword);
 	printf("Enter your email address: (Has to be less then 50 characters!)\n");
 	scanf("%s", newStudent->StudentEmail);
 	printf("Enter your first name: (Has to be less then 20 characters!)\n");
@@ -121,6 +171,7 @@ int StudentRegister(Global *g)
 int WatcherRegister(Global *g)
 {
 	Watcher* newWatcher = NULL;
+	int choice;
 	newWatcher = (Watcher*)malloc(sizeof(Watcher));													//Allcating memory for the new watcher
 
 	if (newWatcher == NULL)                                                                         //Allocation check
@@ -128,22 +179,38 @@ int WatcherRegister(Global *g)
 		printf("Error allocating memory for the new watcher.\n");
 		return 0;
 	}
-
 	newWatcher->WatcherID = g->WatcherRunID;														//Id allocation
 	(g->WatcherRunID)++;
-																									//CS - Initializing attributes that require user input
-	printf("Enter your desired username: (Has to be less then 30 characters!)\n");
-	scanf("%s", newWatcher->WatcherUsername);
 
-	if (isInSystem(g, newWatcher->WatcherUsername) == TRUE)
+	do{																								//CS - Initializing attributes that require user input
+		_flushall();
+		printf("Enter your desired username: (Has to be less then 30 characters!)\n");
+		scanf("%s", newWatcher->WatcherUsername);
+
+		if (CheckIfUserExists(g, newWatcher->WatcherUsername) == TRUE)
+		{
+			printf("This username already exists in the system. \n Press 1 to try again, press 2 to go back to the next menu.\n");
+			scanf("%d", &choice);
+		}
+	} while (CheckIfUserExists(g, newWatcher->WatcherUsername) == TRUE && choice == 1);
+
+	if (choice != 1)
 	{
-		//If the chosen username exists - back to login screen 
-		printf("This username already exists in the system.\n");
+		printf("You did not press 1 to continue. Going back to last menu.\n");
 		return 0;
 	}
+	//Initializing password
+	do{
+		_flushall();
+		printf("Enter your desired password: (Has to be less then 30 characters, and contain\n");
+		printf("at least one digit, one upper case letter, one lower case letter)\n");
+		scanf("%s", newWatcher->WatcherPassword);
+		if (CheckPassword(newWatcher->WatcherPassword) == FALSE)
+		{
+			printf("This password is invalid.\n You need to try again.\n");
+		}
+	} while (CheckPassword(newWatcher->WatcherPassword) == FALSE);
 
-	printf("Enter your desired password: (Has to be less then 30 characters!)\n");
-	scanf("%s", newWatcher->WatcherPassword);
 	printf("Enter your email address: (Has to be less then 50 characters!)\n");
 	scanf("%s", newWatcher->WatcherEmail);
 	printf("Enter your first name: (Has to be less then 20 characters!)\n");
