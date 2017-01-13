@@ -32,6 +32,43 @@ void printActivityLog(Global* GlobalFile, Project* project){
 	fclose(file);
 }
 
+//UNFINISHED
+void printProjectDetails(Global* GlobalFile, Project* project){
+	int projectID = project->ProjectID,
+		numOfTasks = project->ProjectTasksAmount,
+		numOfUsers = project->ProjectUsersAmount;
+	char* creator = project->ProjectCreatorName, projectName = project->ProjectName;
 
+	printf("Project Details:\n");
+	printf("-------------------");
+	printf("ID: %d , Number of tasks: %d , Number of users: %d , Creator: %s", projectID, numOfTasks, numOfUsers, creator);
+
+	//Need to print details of student here too.
+	
+}
+
+void ChangeTaskStatus(Global* GlobalFile, Project* project, int userID, int accessGroup){
+	int taskID, i,status;
+	Task* task;
+	//Getting a task from the user:
+
+	printf("Enter Task ID:\n");
+	scanf("%d", &taskID);
+	//Making sure that task is in the relevant project:
+	task = findTaskInProject(GlobalFile, project, taskID);
+	if (!task){
+		printf("Task does not belong to this project\n");
+		return;
+	}
+
+	printf("Current status is: %s\n", convertStatusToString(task->TaskStatus));
+	printf("Choose status to change into:\n");
+	printf("Available Status:\n");
+	printf("[0] New , [1] Elicitation, [2] Analysis, [3] VandV ");
+	if (accessGroup != 1) printf(" [4] Approved"); //Student can't change to approved
+	printf("\n");
+	printf("Enter an integer of your choice:\n");
+	scanf("%d", &status);
+}
 
 

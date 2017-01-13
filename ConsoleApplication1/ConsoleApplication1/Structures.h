@@ -210,3 +210,12 @@ char* convertStatusToString(STATUS status){
 		return NULL;
 	}
 }
+
+Task* findTaskInProject(Global* globalFile , Project* project, int taskID){
+	int i;
+	for (i = 0; i < project->ProjectTasksAmount && taskID != project->TasksIDS[i]; i++);
+
+	if (i == project->ProjectTasksAmount) return NULL;
+
+	return FindTask(globalFile->TaskList, taskID);
+}

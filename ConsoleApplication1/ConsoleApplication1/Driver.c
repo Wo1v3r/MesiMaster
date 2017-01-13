@@ -1,6 +1,6 @@
 //Jonathan
 #include "wo1v3r.h"
-
+#include "Register.h"
 ////// Menus
 
 //Project Menu : Finished ,Ready for testing - Jonathan
