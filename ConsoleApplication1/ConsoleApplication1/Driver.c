@@ -290,12 +290,7 @@ int WatcherMenu(Global* GlobalFile, int watcherID){
 
 }
 
-int FindAccessGroup(int ID){
-	//Should be in Functions, I wrote it for the meantime here
-	if (ID > 0 && ID <= 1000) return STUDENT;
-	else if (ID > 1000 && ID <= 2000) return ADMIN;
-	else if (ID > 2000 && ID <= 3000) return WATCHER;
-}
+
 
 void LoginMenu(Global* GlobalFile){
 
