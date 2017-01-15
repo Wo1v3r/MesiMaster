@@ -353,9 +353,7 @@ void PrintTasksList(Global* GlobalFile, Project* Project){
 		j++;
 	}
 }
-/////////////////////
-///Need to check what thats supposed to do////
-/////////////////////
+
 void printActivityLog(Global* GlobalFile, Project* project){
 	
 	char BUFFER[400], *fileName = project->ProjectActivityLogs;
@@ -365,8 +363,7 @@ void printActivityLog(Global* GlobalFile, Project* project){
 	while (fgets(BUFFER, 400, file)) printf("%s\n", BUFFER);
 	fclose(file);
 }
-///////////////////
-/////////////////////
+
 
 
 
@@ -496,5 +493,10 @@ void ShowTasksByStatus(Global* GlobalFile, int studentID ){
 }
 
 void PrintStudentLog(Student* student){
-	printf("%s\n", student->StudentActivityLog);
+	char BUFFER[400], *fileName = student->StudentActivityLog;
+	FILE* file = fopen(fileName, "r");
+	if (!file) return;
+
+	while (fgets(BUFFER, 400, file)) printf("%s\n", BUFFER);
+	fclose(file);
 }
