@@ -440,9 +440,11 @@ void LeaveMessageToStudent(Global* GlobalFile, Project* project, Watcher* watche
 	if (isStudentInProject(project, studentID)){
 		student = FindStudent(GlobalFile->StudentList, studentID);
 		if (!student) return //If for some reason student is not in the global file, exiting function
-		printf("Enter the message you want to leave:\n");
-		scanf("%s", &Message);
-		//Need to add proper place for messages in the struct to continue this function (More than one messages from different watchers?)
+		printf("Enter the message you want to leave (Between 5 to 30):\n");
+		do
+			scanf("%s", &Message);
+		while (strlen(Message) < 5 || strlen(Message) > 30);
+		strcpy(student->StudentMessages, Message);
 	}
 }
 
