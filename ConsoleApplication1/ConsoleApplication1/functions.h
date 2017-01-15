@@ -458,3 +458,32 @@ void AddProjectMessage(Global* GlobalFile, Project* project, Watcher* watcher){
 	strcpy(project->ProjectMessages, Message);
 }
 
+void ShowTasksByStatus(Global* GlobalFile, int studentID ){
+	int tasksCount = 1 , i,j, status = -1 , projectID, taskID;
+	Student* student = FindStudent(GlobalFile->StudentList, studentID);
+	Project* project;
+	Task* task;
+	int* projectIDs = student->ProjectIDS;
+
+	printf("Available Status:\n");
+	printf("[0] New , [1] Elicitation, [2] Analysis, [3] VandV, [4] Approved\n ");
+	printf("Enter an integer of your choice:\n");
+	do
+	scanf("%d", &status);
+	while (status < 0 || status > 4);
+
+	//Finding all the projects this student belongs to and printing the tasks:
+	for (i = 0; i < student->StudentProjectsAmount; i++){
+		projectID = projectIDs[i];
+		project = FindProject(GlobalFile->ProjectsList, projectID);
+		for (j = 0; j < project->TasksIDS; j++){
+			taskID = project->TasksIDS[j];
+			task = findTaskInProject(GlobalFile, project, taskID);
+			if (task->TaskStatus == status){
+				printf("%d.)ID: %d , Creator: %s , Task: %s \n", tasksCount,task->TaskID, task->TaskCreatorName, task->TaskName);
+				tasksCount++;
+			}
+		}
+	}
+
+}

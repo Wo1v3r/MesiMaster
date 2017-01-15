@@ -106,7 +106,7 @@ int ProjectMenu(Global* GlobalFile , Project* project, int accessGroup, int user
 
 //Finished - Ready for testing - Jonathan
 int StudentMenu(Global *GlobalFile, int studentID){
-	int status = 0, opt = -1, projectID = 0;
+	int opt = -1, projectID = 0;
 	Student* student = FindStudent(GlobalFile->StudentList, studentID);
 	Project* project = NULL;
 	while (opt == -1){
@@ -146,11 +146,6 @@ int StudentMenu(Global *GlobalFile, int studentID){
 			//ProjectMenu(GlobalFile,project, STUDENT, studentID);
 			break;
 		case 4:
-			//Might be good to transfer that part into ShowTasksByStatus, leaving it that way for now
-			printf("Available Status:\n");
-			printf("[0] New , [1] Elicitation, [2] Analysis, [3] VandV, [4] Approved\n ");
-			printf("Enter an integer of your choice:\n");
-			scanf("%d", &status);
 			//ShowTasksByStatus(studentID, status);
 			break;
 		case 5:
