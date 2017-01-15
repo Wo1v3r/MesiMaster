@@ -407,3 +407,52 @@ void ChangeTaskStatus(Global* GlobalFile, Project* project, int userID, int acce
 	}
 	task->TaskStatus = (STATUS)status;
 }
+
+
+void RemoveProject(Global* GlobalFile, Project* project, int userID, int accessGroup){
+	char choice = 'O';
+	printf("Are you sure you want to remove this project and all of its tasks (Y\N)?\n");
+	
+	while (choice == 'O'){
+		choice = getchar();
+
+		switch (choice){
+		case 'Y':
+		case 'y':
+			//delete // Need to implement functions that will remove this project id from all the users, from all the lists etc
+			break;
+		case 'N':
+		case 'n':
+			break;
+		default: printf("No such option!\n");
+			choice = 'O';
+		}
+	}
+
+}
+
+void LeaveMessageToStudent(Global* GlobalFile, Project* project, Watcher* watcher){
+	int studentID;
+	Student* student;
+	char* Message;
+	printf("Please choose a studentID of the student you want to leave a message for:\n");
+	scanf("%d", &studentID);
+	if (isStudentInProject(project, studentID)){
+		student = FindStudent(GlobalFile->StudentList, studentID);
+		if (!student) return //If for some reason student is not in the global file, exiting function
+		printf("Enter the message you want to leave:\n");
+		scanf("%s", &Message);
+		//Need to add proper place for messages in the struct to continue this function (More than one messages from different watchers?)
+	}
+}
+
+void AddProjectMessage(Global* GlobalFile, Project* project, Watcher* watcher){
+	char* Message = "";
+	printf("Enter the message you want to leave (Between 5 to 30):\n");
+	do
+	scanf("%s", &Message);
+	while (strlen(Message) < 5 || strlen(Message) > 30);
+
+	strcpy(project->ProjectMessages, Message);
+}
+

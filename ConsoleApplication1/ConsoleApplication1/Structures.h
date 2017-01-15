@@ -25,7 +25,7 @@ typedef struct Student{
 	char StudentUsername[31], StudentPassword[31], StudentName[21], StudentEmail[50], StudentSurename[21], StudentDepartment[21], StudentYear;
 	int *ProjectIDS;
 	char StudentMessages[31], StudentActivityLog[31];
-	Student *StudentNext;
+	struct Student *StudentNext;
 }Student;
 
 
@@ -240,4 +240,11 @@ Task* findTaskInProject(Global* globalFile , Project* project, int taskID){
 	if (i == project->ProjectTasksAmount) return NULL;
 
 	return FindTask(globalFile->TaskList, taskID);
+}
+
+int isStudentInProject(Project* project, int studentID){
+	int i;
+	for (i = 0; i < project->ProjectUsersAmount; i++) if ((project->StudentsIDS)[i] == studentID) return 1;
+
+	return 0;
 }
