@@ -546,7 +546,7 @@ void UpdateDetails(Global* GlobalFile, int userID){
 	scanf("%c", &input);
 	if (input == 'y') {
 		printf("Enter new first name:\n");
-		scanf("%s", name);
+		scanf("%s", &name);
 		input = 'n';
 	}
 
@@ -554,7 +554,7 @@ void UpdateDetails(Global* GlobalFile, int userID){
 	scanf("%c", &input);
 	if (input == 'y') {
 		printf("Enter new last name:\n");
-		scanf("%s", surname);
+		scanf("%s", &surname);
 		input = 'n';
 	}
 
@@ -562,7 +562,7 @@ void UpdateDetails(Global* GlobalFile, int userID){
 	scanf("%c", &input);
 	if (input == 'y') {
 		printf("Enter new user name:\n");
-		scanf("%s", username);
+		scanf("%s", &username);
 		input = 'n';
 	}
 
