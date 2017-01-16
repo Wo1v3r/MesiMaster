@@ -30,6 +30,9 @@
     <ClInclude Include="Register.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Liran_Testing.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Driver.c">
@@ -53,6 +56,9 @@
       <Filter>Resource Files</Filter>
     </Text>
     <Text Include="Databases\watchers.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="Databases\tasks.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>
