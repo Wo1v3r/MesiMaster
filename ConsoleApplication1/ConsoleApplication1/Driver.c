@@ -184,9 +184,8 @@ int AdminMenu(Global* GlobalFile ,int adminID){
 		printf("7) Print Projects List\n");
 		printf("8) Enter Project Menu\n");
 		printf("9) Add a global message\n");
-		printf("10) Add a global random quote\n");
-		printf("11) View Quotes\n");
-		printf("12) Exit Mesimaster\n");
+		printf("10) Manage Quotes\n");
+		printf("11) Exit Mesimaster\n");
 		scanf("%d", &opt);
 		switch (opt){
 		case 0:
@@ -203,7 +202,7 @@ int AdminMenu(Global* GlobalFile ,int adminID){
 			//PromoteUserToAdmin(GlobalFile);
 			break;
 		case 5:
-			//ShowUserDetails(GlobalFile);
+			ShowUserDetails(GlobalFile);
 		case 6:
 			UpdateDetails(GlobalFile, adminID);
 		case 7:
@@ -224,11 +223,9 @@ int AdminMenu(Global* GlobalFile ,int adminID){
 			AddGlobalMessage(GlobalFile);
 			break;
 		case 10:
-			AddNewQuote(GlobalFile);
+			ManageQuotes(GlobalFile);
 			break;
 		case 11:
-			PrintQuotes(GlobalFile);
-		case 12:
 			return 0;
 		default:
 			printf("No such option!\n");
