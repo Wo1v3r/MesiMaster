@@ -18,7 +18,7 @@ typedef struct Watcher Watcher;
 typedef struct Task Task;
 typedef struct Quote Quote;
 typedef struct Global Global;
-// structures 
+// structures
 typedef struct Student{
 	AccessGroup Group;
 	int StudentID, StudentProjectsAmount, StudentTasksAmount;
@@ -204,33 +204,43 @@ Watcher* AddWatcher(Watcher *watcherHead, Watcher *addWatcher){
 
 	addWatcher->WatcherNext = NULL;
 	current->WatcherNext = addWatcher;
-
+	}
 	return watcherHead;
 }
 
 
 Project* AddProject(Project *projectHead, Project *addProject){
 	Project *current = projectHead;
-
+	if (projectHead == NULL)
+	{
+		projectHead = addProject;
+		addProject->ProjectNext = NULL;
+	}
+	else {
 	while (current->ProjectNext != NULL)		// go to the last node
 		current = current->ProjectNext;
 
 	addProject->ProjectNext = NULL;
 	current->ProjectNext = addProject;
-
+	}
 	return projectHead;
 }
 
 
 Quote* AddQuote(Quote *QuoteHead, Quote *addQuote){
 	Quote *current = QuoteHead;
-
+	if (QuoteHead == NULL)
+	{
+		QuoteHead = addQuote;
+		addQuote->QuoteNext = NULL;
+	}
+	else {
 	while (current->QuoteNext != NULL)		// go to the last node
 		current = current->QuoteNext;
 
 	addQuote->QuoteNext = NULL;
 	current->QuoteNext = addQuote;
-
+	}
 	return QuoteHead;
 }
 
@@ -238,13 +248,18 @@ Quote* AddQuote(Quote *QuoteHead, Quote *addQuote){
 Task *AddTask(Task *TasksHead, Task *addTask){
 
 	Task *current = TasksHead;
-
+	if (TasksHead == NULL)
+	{
+		TasksHead = TasksHead;
+		TasksHead->TaskNext = NULL;
+	}
+	else {
 	while (current->TaskNext != NULL)		// go to the last node
 		current = current->TaskNext;
 
 	addTask->TaskNext = NULL;
 	current->TaskNext = addTask;
-
+	}
 	return TasksHead;
 }
 //delete elements from linked list
@@ -266,10 +281,48 @@ Project *RemoveProjectFromList(Project *head, int deleteID)
 		previous = current;
 		current = current->ProjectNext;
 	}
-
-
+	return head;
 }
 
+Student *RemoveStudentFromList(Student *head, int deleteID)
+{
+	Student *current = head, *previous = NULL,*deleteStudent;
+
+	while (current->StudentNext && current)
+	{
+		if (current->StudentID == deleteID)
+		{
+			deleteStudent = current;
+			previous->StudentNext = current->StudentNext;
+			free(deleteStudent);
+			break;
+		}
+
+		previous = current;
+		current = current->StudentNext;
+	}
+	return head;
+}
+
+Watcher *RemoveWatcherFromList(Watcher *head, int deleteID)
+{
+	Watcher *current = head, *previous = NULL,*deleteWatcher;
+
+	while (current->WatcherNext && current)
+	{
+		if (current->WatcherID == deleteID)
+		{
+			deleteWatcher = current;
+			previous->WatcherNext = current->WatcherNext;
+			free(deleteWatcher);
+			break;
+		}
+
+		previous = current;
+		current = current->WatcherNext;
+	}
+	return head;
+}
 
 //Utilities:
 
