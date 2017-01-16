@@ -153,16 +153,27 @@ Task *FindTask(Task* head, int TaskID){
 // Add to lists
 Student* AddStudent(Student *studentHead, Student *addStudent){
 
-	addStudent->StudentNext = studentHead;			// head pointer will now be head->next Node
-	studentHead = addStudent;						 // new node will become Head Node
+	Student *current = studentHead;
+	while (current->StudentNext != NULL)		// go to the last node
+		current = current->StudentNext;
+
+	addStudent->StudentNext = NULL;
+	current->StudentNext = addStudent;
+
 	return studentHead;
 }
 
 
 Admin* AddAdmin(Admin *adminHead, Admin *addAdmin){
 
-	addAdmin->AdminNext = adminHead;			// head pointer will now be head->next Node
-	adminHead = addAdmin;						 // new node will become Head Node
+	Admin *current = adminHead;
+
+	while (current->AdminNext != NULL)		// go to the last node
+		current = current->AdminNext;
+
+	addAdmin->AdminNext = NULL;
+	current->AdminNext = addAdmin;
+
 	return adminHead;
 
 }
@@ -170,31 +181,54 @@ Admin* AddAdmin(Admin *adminHead, Admin *addAdmin){
 
 Watcher* AddWatcher(Watcher *watcherHead, Watcher *addWatcher){
 
-	addWatcher->WatcherNext = watcherHead;			// head pointer will now be head->next Node
-	watcherHead = addWatcher;						 // new node will become Head Node
+	Watcher *current = watcherHead;
+
+	while (current->WatcherNext != NULL)		// go to the last node
+		current = current->WatcherNext;
+
+	addWatcher->WatcherNext = NULL;
+	current->WatcherNext = addWatcher;
+
 	return watcherHead;
 }
 
 
 Project* AddProject(Project *projectHead, Project *addProject){
-	addProject->ProjectNext = projectHead;			// head pointer will now be head->next Node
-	projectHead = addProject;						 // new node will become Head Node
+	Project *current = projectHead;
+
+	while (current->ProjectNext != NULL)		// go to the last node
+		current = current->ProjectNext;
+
+	addProject->ProjectNext = NULL;
+	current->ProjectNext = addProject;
+
 	return projectHead;
 }
 
 
 Quote* AddQuote(Quote *QuoteHead, Quote *addQuote){
+	Quote *current = QuoteHead;
 
-	addQuote->QuoteNext = QuoteHead;			// head pointer will now be head->next Node
-	QuoteHead = addQuote;						 // new node will become Head Node
+	while (current->QuoteNext != NULL)		// go to the last node
+		current = current->QuoteNext;
+
+	addQuote->QuoteNext = NULL;
+	current->QuoteNext = addQuote;
+
 	return QuoteHead;
 }
 
 
 Task *AddTask(Task *TasksHead, Task *addTask){
 
-	addTask->TaskNext = TasksHead;			// head pointer will now be head->next Node
-	TasksHead = addTask;					// new node will become Head Node
+	Task *current = TasksHead;
+
+	while (current->TaskNext != NULL)		// go to the last node
+		current = current->TaskNext;
+
+	addTask->TaskNext = NULL;
+	current->TaskNext = addTask;
+
 	return TasksHead;
 }
 
