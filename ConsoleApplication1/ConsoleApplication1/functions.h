@@ -679,6 +679,25 @@ void PrintUsersLists(Global* GlobalFile)
 	PrintWatcherList(GlobalFile->WatchersList);
 	puts("");
 }
+// done, help func
+void PrintProjectsByID(Project *head, int indexes[])
+{
+	int size = sizeof(indexes) / sizeof(int);
+	Project *current = NULL;
+	int i;
+	if (size == 0)
+	{
+		puts("No Projects");
+		return;
+	}
+	for (i = 0; i < size; i++)
+	{
+		current = FindProject(head, indexes[i]);
+		if (current)
+			printf("ID: %d, Name: %s, Tasks : %d\n", current->ProjectID, current->ProjectName, current->ProjectTasksAmount);
+	}
+}
+// not done
 void ShowUserDetails(Global *GlobalFile)
 {
 	Student * student = NULL;
@@ -699,7 +718,8 @@ void ShowUserDetails(Global *GlobalFile)
 		if (student)
 		{
 			printf("User data for user with ID %d",ID);
-			printf("\nUsername : %s\nPassword :%s\nName : %s\nSurename : %s\nEmail : %s\nDepartment :%s\nYear : %c\nProjects Amount : %d\nTasks Amount : %d\n\n", student->StudentUsername, student->StudentPassword, student->StudentName, student->StudentSurename, student->StudentEmail, student->StudentDepartment, student->StudentYear, student->StudentProjectsAmount, student->StudentTasksAmount);
+			printf("\nUsername : %s\nName : %s\nSurename : %s\nEmail : %s\nDepartment :%s\n\n", student->StudentUsername, student->StudentName, student->StudentSurename, student->StudentEmail, student->StudentDepartment);
+			PrintProjectsByID(GlobalFile->ProjectsList, student->ProjectIDS);
 		}
 		else
 			puts("Student with this id not found");
@@ -712,6 +732,7 @@ void ShowUserDetails(Global *GlobalFile)
 		{
 			printf("User data for user with ID %d", ID);
 			printf("\nUsername : %s\nPassword :%s\nName : %s\n%Surename\n\n", admin->AdminUsername, admin->AdminPassword, admin->AdminName, admin->AdminSurename);
+
 		}
 		else
 			puts("Admin with this ID not found");
