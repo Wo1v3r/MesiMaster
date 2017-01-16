@@ -567,3 +567,49 @@ void UpdateDetails(Global* GlobalFile, int userID){
 	}
 
 }
+
+void AddGlobalMessage(Global* GlobalFile){
+	char temp[250] = "";
+	printf("Enter global message (max length 30):\n");
+	do
+	scanf("%s", &temp);
+	while (strlen(temp) > 30);
+
+	strcpy(GlobalFile->GlobalMessages, temp);
+}
+
+void AddNewQuote(Global* GlobalFile){
+	char tempQuote[300], tempAuthor[100];
+	//Creating a new quote and incrementing quoteRunID: Not sure if that's right
+	int quoteID = GlobalFile->QuoteRunID++;
+	Quote* newQuote = (Quote*) malloc(sizeof(Quote));
+	newQuote->QuoteID = quoteID;
+	printf("Enter quote (max length 256):\n");
+	do
+	scanf("%s", &tempQuote);
+	while (strlen(tempQuote) > 255);
+
+	strcpy(newQuote->Quote, tempQuote);
+
+	printf("Enter quote's author (max length 30):\n");
+	do
+	scanf("%s", &tempAuthor);
+	while (strlen(tempQuote) > 30);
+
+	strcpy(newQuote->QuoteAuthor, tempAuthor);
+
+	//Adding to global quote list:
+	AddQuote(GlobalFile->QuotesList, newQuote);
+
+}
+
+void PrintQuotes(Global* GlobalFile){
+	Quote* quote = GlobalFile->QuotesList;
+	int i = 1;
+	while (quote != NULL){
+
+		printf("%d.)''%s'' - %s", i, quote->Quote, quote->QuoteAuthor);
+		quote = quote->QuoteNext;
+		i++;
+	}
+}

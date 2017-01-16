@@ -221,13 +221,13 @@ int AdminMenu(Global* GlobalFile ,int adminID){
 			ProjectMenu(GlobalFile, project, ADMIN, adminID);
 			break;
 		case 9: 
-			//AddGlobalMessage(GlobalFile, admin);
+			AddGlobalMessage(GlobalFile);
 			break;
 		case 10:
-			//AddNewQuote(GlobalFile); //An Add quote function exists, need to write one that uses it from the menu 
+			AddNewQuote(GlobalFile);
 			break;
 		case 11:
-			//PrintQuotes(GlobalFile);
+			PrintQuotes(GlobalFile);
 		case 12:
 			return 0;
 		default:
