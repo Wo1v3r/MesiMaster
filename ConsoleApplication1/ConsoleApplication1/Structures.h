@@ -152,14 +152,20 @@ Task *FindTask(Task* head, int TaskID){
 // search in list end
 // Add to lists
 Student* AddStudent(Student *studentHead, Student *addStudent){
+	if (studentHead == NULL)
+	{
+		studentHead = addStudent;
+		addStudent->StudentNext = NULL;
+	}
+	else {
 
-	Student *current = studentHead;
-	while (current->StudentNext != NULL)		// go to the last node
-		current = current->StudentNext;
+		Student *current = studentHead;
+		while (current->StudentNext != NULL)		// go to the last node
+			current = current->StudentNext;
 
-	addStudent->StudentNext = NULL;
-	current->StudentNext = addStudent;
-
+		addStudent->StudentNext = NULL;
+		current->StudentNext = addStudent;
+	}
 	return studentHead;
 }
 
@@ -167,20 +173,30 @@ Student* AddStudent(Student *studentHead, Student *addStudent){
 Admin* AddAdmin(Admin *adminHead, Admin *addAdmin){
 
 	Admin *current = adminHead;
+	if (adminHead == NULL)
+	{
+		adminHead = addAdmin;
+		addAdmin->AdminNext = NULL;
+	}
+	else {
+		while (current->AdminNext != NULL)		// go to the last node
+			current = current->AdminNext;
 
-	while (current->AdminNext != NULL)		// go to the last node
-		current = current->AdminNext;
-
-	addAdmin->AdminNext = NULL;
-	current->AdminNext = addAdmin;
-
+		addAdmin->AdminNext = NULL;
+		current->AdminNext = addAdmin;
+	}
 	return adminHead;
 
 }
 
 
 Watcher* AddWatcher(Watcher *watcherHead, Watcher *addWatcher){
-
+	if (watcherHead == NULL)
+	{
+		watcherHead = addWatcher;
+		addWatcher->WatcherNext = NULL;
+	}
+	else {
 	Watcher *current = watcherHead;
 
 	while (current->WatcherNext != NULL)		// go to the last node
@@ -230,6 +246,28 @@ Task *AddTask(Task *TasksHead, Task *addTask){
 	current->TaskNext = addTask;
 
 	return TasksHead;
+}
+//delete elements from linked list
+
+Project *RemoveProjectFromList(Project *head, int deleteID)
+{
+	Project *current = head, *previous = NULL,*deleteProject;
+
+	while (current->ProjectNext && current)
+	{
+		if (current->ProjectID == deleteID)
+		{
+			deleteProject = current;
+			previous->ProjectNext = current->ProjectNext;
+			free(deleteProject);
+			break;
+		}
+
+		previous = current;
+		current = current->ProjectNext;
+	}
+
+
 }
 
 
