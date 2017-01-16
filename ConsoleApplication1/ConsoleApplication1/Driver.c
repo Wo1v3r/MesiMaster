@@ -5,9 +5,9 @@
 //Project Menu : Finished ,Ready for testing - Jonathan
 int ProjectMenu(Global* GlobalFile , Project* project, int accessGroup, int userID){
 	//Showing project menu of projectID project based on the accessgroup of the user:
-	Student* student;
-	Admin* admin;
-	Watcher* watcher;
+	Student* student = NULL;
+	Admin* admin = NULL;
+	Watcher* watcher = NULL;
 	int opt = -1;
 	char* username;
 
@@ -58,39 +58,39 @@ int ProjectMenu(Global* GlobalFile , Project* project, int accessGroup, int user
 			//Exit to upper menu
 			return 1;
 		case 1:
-			//CreateNewTask(GlobalFile,project,userID,accessGroup);
+			CreateNewTask(GlobalFile,project,userID,accessGroup);
 			break;
 		case 2:
-			//PrintTasksList(GlobalFile, project);
+			PrintTasksList(GlobalFile, project);
 			break;
 		case 3:
-			//PrintActivityLog(GlobalFile, project);
+			PrintActivityLog(GlobalFile, project);
 			break;
 		case 4:
-			//PrintProjectDetails(GlobalFile, project);
+			PrintProjectDetails(GlobalFile, project);
 			break;
 		case 5:
-			//addUserToProject(GlobalFile, project);
+			addUserToProject(GlobalFile, project);
 			break;
 		case 6:
-			//ChangeTaskStatus(GlobalFile, project, userID, accessGroup);
+			ChangeTaskStatus(GlobalFile, project, userID, accessGroup);
 			break;
 
 		case 7:
 			switch (accessGroup){
 
 			case ADMIN:
-				//RemoveProject(GlobalFile, project, userID, accessGroup);
+				RemoveProject(GlobalFile, project, userID, accessGroup);
 				break;
 			case WATCHER:
-				//LeaveMessageToStudent(GlobalFile,project, watcher);
+				LeaveMessageToStudent(GlobalFile,project,watcher);
 				break;
 			}
 			break;
 
 		case 8:
 			if (accessGroup == WATCHER){ //The last option is only for watcher
-				//AddProjectMessage(GlobalFile, project, watcher);
+				AddProjectMessage(GlobalFile, project, watcher);
 				break;
 			}
 		default:
@@ -128,10 +128,10 @@ int StudentMenu(Global *GlobalFile, int studentID){
 		case 0:
 			return 1;
 		case 1:
-			//CreateNewProject(GlobalFile,studentID,STUDENT); //3
+			CreateNewProject(GlobalFile,studentID,STUDENT); //3
 			break;
 		case 2:
-			//PrintProjectsList(GlobalFile,studentID,STUDENT); // 13
+			PrintProjectsList(GlobalFile,studentID,STUDENT); // 13
 			break;
 
 		case 3:
@@ -143,16 +143,16 @@ int StudentMenu(Global *GlobalFile, int studentID){
 				printf("No project of that ID\n");
 				break;
 			}
-			//ProjectMenu(GlobalFile,project, STUDENT, studentID);
+			ProjectMenu(GlobalFile,project, STUDENT, studentID);
 			break;
 		case 4:
-			//ShowTasksByStatus(studentID, status);
+			ShowTasksByStatus(GlobalFile, studentID);
 			break;
 		case 5:
-			//UpdateDetails(student); // 19
+			UpdateDetails(GlobalFile,studentID); // 19
 			break;
 		case 6:
-			//PrintStudentLog(student); // 11
+			PrintStudentLog(student); // 11
 			break;
 		case 7:
 			return 0;
@@ -205,9 +205,9 @@ int AdminMenu(Global* GlobalFile ,int adminID){
 		case 5:
 			//ShowUserDetails(GlobalFile);
 		case 6:
-			//UpdateDetails(GlobalFile, admin);
+			UpdateDetails(GlobalFile, adminID);
 		case 7:
-			//PrintProjectsList(GlobalFile, adminID, ADMIN);
+			PrintProjectsList(GlobalFile, adminID, ADMIN);
 			break;
 		case 8:
 			printf("Enter Project ID:\n");
@@ -218,7 +218,7 @@ int AdminMenu(Global* GlobalFile ,int adminID){
 				printf("No project of that ID!\n");
 				break;
 			}
-			//ProjectMenu(GlobalFile, project, ADMIN, adminID);
+			ProjectMenu(GlobalFile, project, ADMIN, adminID);
 			break;
 		case 9: 
 			//AddGlobalMessage(GlobalFile, admin);
@@ -261,10 +261,10 @@ int WatcherMenu(Global* GlobalFile, int watcherID){
 		case 0:
 			return 1;
 		case 1:
-			//PrintProjectsList(GlobalFile, watcherID, WATCHER);
+			PrintProjectsList(GlobalFile, watcherID, WATCHER);
 			break;
 		case 2:
-			//PrintProjectsList(GlobalFile, 2001, ADMIN); //Needs to print all options either by admin like this or another project
+			PrintProjectsList(GlobalFile, 2001, ADMIN); //Needs to print all options either by admin like this or another project
 			break;
 		case 3:
 			printf("Enter Project ID:\n");
@@ -275,7 +275,7 @@ int WatcherMenu(Global* GlobalFile, int watcherID){
 				printf("No project of that ID\n");
 				break;
 		case 4:
-			//UpdateDetails(GlobalFile, watcher);
+			UpdateDetails(GlobalFile, watcherID);
 			break;
 		case 5:
 			return 0;

@@ -132,6 +132,7 @@ int CreateNewProject(Global* GlobalFile,int userID, AccessGroup userGroup)
 		Exit(GlobalFile);
 	else
 		puts("Incorrect input, you will be returned to Menu");
+	return 1;
 
 }
 
@@ -354,7 +355,7 @@ void PrintTasksList(Global* GlobalFile, Project* Project){
 	}
 }
 
-void printActivityLog(Global* GlobalFile, Project* project){
+void PrintActivityLog(Global* GlobalFile, Project* project){
 	
 	char BUFFER[400], *fileName = project->ProjectActivityLogs;
 	FILE* file = fopen(fileName, "r");
@@ -367,7 +368,7 @@ void printActivityLog(Global* GlobalFile, Project* project){
 
 
 
-void printProjectDetails(Global* GlobalFile, Project* project){
+void PrintProjectDetails(Global* GlobalFile, Project* project){
 	int projectID = project->ProjectID,
 		numOfTasks = project->ProjectTasksAmount,
 		numOfUsers = project->ProjectUsersAmount;
@@ -480,7 +481,7 @@ void ShowTasksByStatus(Global* GlobalFile, int studentID ){
 	for (i = 0; i < student->StudentProjectsAmount; i++){
 		projectID = projectIDs[i];
 		project = FindProject(GlobalFile->ProjectsList, projectID);
-		for (j = 0; j < project->TasksIDS; j++){
+		for (j = 0; j < project->ProjectTasksAmount; j++){
 			taskID = project->TasksIDS[j];
 			task = findTaskInProject(GlobalFile, project, taskID);
 			if (task->TaskStatus == status){
@@ -506,4 +507,63 @@ int FindAccessGroup(int ID){
 	if (ID > 0 && ID <= 1000) return STUDENT;
 	else if (ID > 1000 && ID <= 2000) return ADMIN;
 	else if (ID > 2000 && ID <= 3000) return WATCHER;
+	
+	return BAD;
+}
+
+void UpdateDetails(Global* GlobalFile, int userID){
+	//Finding the user and its' struct:
+	Watcher* watcher = NULL;
+	Admin* admin = NULL;
+	Student* student = NULL;
+	char *name, *surname, *username , input;
+	int AG = FindAccessGroup(userID);
+	
+	switch (AG){
+	case STUDENT:
+		student = FindStudent(GlobalFile->StudentList, userID);
+		name = student->StudentName;
+		surname = student->StudentSurename;
+		username = student->StudentUsername;
+		break;
+
+	case ADMIN:
+		admin = FindAdmin(GlobalFile->AdminsList, userID);
+		name = admin->AdminName;
+		surname = admin->AdminSurename;
+		username = admin->AdminUsername;
+		break;
+
+	case WATCHER:
+		watcher = FindWatcher(GlobalFile->WatchersList, userID);
+		name = student->StudentName;
+		surname = student->StudentSurename;
+		username = watcher->WatcherUsername;
+		break;
+	}
+
+	printf("Do you want to change your first name?(y/n)\n");
+	scanf("%c", &input);
+	if (input == 'y') {
+		printf("Enter new first name:\n");
+		scanf("%s", name);
+		input = 'n';
+	}
+
+	printf("Do you want to change your last name?(y/n)\n");
+	scanf("%c", &input);
+	if (input == 'y') {
+		printf("Enter new last name:\n");
+		scanf("%s", surname);
+		input = 'n';
+	}
+
+	printf("Do you want to change your user name?(y/n)\n");
+	scanf("%c", &input);
+	if (input == 'y') {
+		printf("Enter new user name:\n");
+		scanf("%s", username);
+		input = 'n';
+	}
+
 }
