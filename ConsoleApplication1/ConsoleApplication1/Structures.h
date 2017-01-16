@@ -148,6 +148,16 @@ Task *FindTask(Task* head, int TaskID){
 	return NULL;
 }
 
+Quote *FindQuote(Quote* head, int QuoteID){
+
+	Quote *current = head;
+	while (current){
+		if ((current)->QuoteID == QuoteID)
+			return current;
+		current = (current)->QuoteNext;
+	}
+	return NULL;
+}
 
 // search in list end
 // Add to lists
@@ -251,7 +261,7 @@ Task *AddTask(Task *TasksHead, Task *addTask){
 	if (TasksHead == NULL)
 	{
 		TasksHead = TasksHead;
-		TasksHead->TaskNext = NULL;
+		addTask->TaskNext = NULL;
 	}
 	else {
 	while (current->TaskNext != NULL)		// go to the last node
@@ -266,78 +276,172 @@ Task *AddTask(Task *TasksHead, Task *addTask){
 
 Project *RemoveProjectFromList(Project *head, int deleteID)
 {
-	Project *current = head, *previous = NULL,*deleteProject;
+	Project *current = head, *previous = NULL;
+	if (!head) return NULL;
 
-	while (current->ProjectNext && current)
+	while (current->ProjectID != deleteID && current->ProjectNext != NULL)
 	{
-		if (current->ProjectID == deleteID)
-		{
-			deleteProject = current;
-			previous->ProjectNext = current->ProjectNext;
-			free(deleteProject);
-			break;
-		}
-
 		previous = current;
 		current = current->ProjectNext;
+	}
+
+	if (current->ProjectID == deleteID)
+	{
+		if (previous)
+			previous->ProjectNext = current->ProjectNext;
+		else
+			head = current->ProjectNext;
+
+		free(current);
 	}
 	return head;
 }
 
 Student *RemoveStudentFromList(Student *head, int deleteID)
 {
-	Student *current = head, *previous = NULL,*deleteStudent;
+	Student *current = head, *previous = NULL;
+	if (!head) return NULL;
 
-	while (current->StudentNext && current)
+	while (current->StudentID != deleteID && current->StudentNext != NULL)
 	{
-		if (current->StudentID == deleteID)
-		{
-			deleteStudent = current;
-			previous->StudentNext = current->StudentNext;
-			free(deleteStudent);
-			break;
-		}
-
 		previous = current;
 		current = current->StudentNext;
+	}
+
+	if (current->StudentID == deleteID)
+	{
+		if (previous)
+			previous->StudentNext = current->StudentNext;
+		else
+			head = current->StudentNext;
+
+		free(current);
 	}
 	return head;
 }
 
 Watcher *RemoveWatcherFromList(Watcher *head, int deleteID)
 {
-	Watcher *current = head, *previous = NULL,*deleteWatcher;
+	Watcher *current = head, *previous = NULL;
 
-	while (current->WatcherNext && current)
+	if (!head) return NULL;
+
+	while (current->WatcherID != deleteID && current->WatcherNext != NULL)
 	{
-		if (current->WatcherID == deleteID)
-		{
-			deleteWatcher = current;
-			previous->WatcherNext = current->WatcherNext;
-			free(deleteWatcher);
-			break;
-		}
-
 		previous = current;
 		current = current->WatcherNext;
+	}
+
+	if (current->WatcherID == deleteID)
+	{
+		if (previous)
+			previous->WatcherNext = current->WatcherNext;
+		else
+			head = current->WatcherNext;
+
+		free(current);
 	}
 	return head;
 }
 
-//Utilities:
+Admin *RemoveAdminFromList(Admin *head, int deleteID)
+{
+	Admin *current = head, *previous = NULL;
+	if (!head) return NULL;
 
-void PrintStudentList(Student *StudentHead){
-
-	Student *s = StudentHead;
-	printf("ID  Name\tSurename\tDepartment\tYear\tProjects\tTasks\n");
-	while (s){
-
-		// print all student fields
-		printf("%d   %s\t%s\t\t%s\t%s\t%d\t\t%d\n", s->StudentID, s->StudentName, s->StudentSurename, s->StudentDepartment, s->StudentYear, s->StudentProjectsAmount, s->StudentTasksAmount);
-		s = s->StudentNext;
+	while (current->AdminID != deleteID && current->AdminNext != NULL)
+	{
+		previous = current;
+		current = current->AdminNext;
 	}
 
+	if (current->AdminID == deleteID)
+	{
+		if (previous)
+			previous->AdminNext = current->AdminNext;
+		else
+			head = current->AdminNext;
+
+		free(current);
+	}
+	return head;
 }
+
+Quote *RemoveQuoteFromList(Quote *head, int deleteID)
+{
+	Quote *current = head, *previous = NULL;
+	if (!head) return NULL;
+
+	while (current->QuoteID != deleteID && current->QuoteNext != NULL)
+	{
+		previous = current;
+		current = current->QuoteNext;
+	}
+
+	if (current->QuoteID == deleteID)
+	{
+		if (previous)
+			previous->QuoteNext = current->QuoteNext;
+		else
+			head = current->QuoteNext;
+
+		free(current);
+	}
+	return head;
+}
+/// end remove functions
+
+
+// Print List's Functions start
+void PrintStudentList(Student *StudentHead){
+
+	Student *student = StudentHead;
+	if (student == NULL)
+		puts("No students in system");
+
+	printf("ID\tName\tSurename\tDepartment\tYear\tProjects\tTasks\n");
+	while (student){
+
+		// print all student fields
+		printf("%d\t%s\t%s\t\t%s\t%c\t%d\t\t%d\n", student->StudentID, student->StudentName, student->StudentSurename, student->StudentDepartment, student->StudentYear, student->StudentProjectsAmount, student->StudentTasksAmount);
+		student = student->StudentNext;
+	}
+}
+void PrintAdminsList(Admin *head)
+{
+	
+	Admin *admin = head;
+	if (admin == NULL)
+		puts("No admins in system");
+
+	printf("ID\tName\tSurename\n");
+	while (admin){
+		// print all admin fields
+		printf("%d\t%s\t%s\n",admin->AdminID, admin->AdminName, admin->AdminSurename);
+		admin = admin->AdminNext;
+	}
+}
+
+void PrintWatcherList(Watcher *head)
+{
+
+	Watcher *watcher = head;
+	if (head == NULL)
+		puts("No watchers in system");
+
+	printf("ID\tName\tSurename\tProjects\n");
+	while (watcher){
+		// print all watcher fields
+		printf("%d\t%s\t%s\t%d\n", watcher->WatcherID, watcher->WatcherName, watcher->WatcherSurename,watcher->WatcherProjectsAmount);
+		watcher = watcher->WatcherNext;
+	}
+}
+
+// print List's funcs end
+
+
+//Utilities:
+
 char* convertStatusToString(STATUS status){
 	switch (status){
 	case 0 :

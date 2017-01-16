@@ -9,7 +9,7 @@ void PrintProjectsList(Global *GlobalFile, int UserID, AccessGroup group);						
 /////// declarations end
 
 // Functions
-// 46 - Create new project by STUDENT or WATCHER only , done, ready for testing
+// 46 - Create new project by STUDENT or WATCHER only, UNDONE
 int CreateNewProject(Global* GlobalFile,int userID, AccessGroup userGroup)
 {
 	Student *Student;
@@ -416,7 +416,7 @@ void ChangeTaskStatus(Global* GlobalFile, Project* project, int userID, int acce
 
 void RemoveProject(Global* GlobalFile, Project* project, int userID, int accessGroup){
 	char choice = 'O';
-	printf("Are you sure you want to remove this project and all of its tasks (Y\N)?\n");
+	printf("Are you sure you want to remove this project and all of its tasks (Y/N)?\n");
 	
 	while (choice == 'O'){
 		choice = getchar();
@@ -424,6 +424,7 @@ void RemoveProject(Global* GlobalFile, Project* project, int userID, int accessG
 		switch (choice){
 		case 'Y':
 		case 'y':
+			RemoveProjectFromList(GlobalFile->ProjectsList, project->ProjectID);
 			//delete // Need to implement functions that will remove this project id from all the users, from all the lists etc
 			break;
 		case 'N':
@@ -577,7 +578,7 @@ void AddGlobalMessage(Global* GlobalFile){
 
 	strcpy(GlobalFile->GlobalMessages, temp);
 }
-
+// quotes funcs start, done, ready to testing
 void AddNewQuote(Global* GlobalFile){
 	char tempQuote[300], tempAuthor[100];
 	//Creating a new quote and incrementing quoteRunID: Not sure if that's right
@@ -586,30 +587,155 @@ void AddNewQuote(Global* GlobalFile){
 	newQuote->QuoteID = quoteID;
 	printf("Enter quote (max length 256):\n");
 	do
-	scanf("%s", &tempQuote);
+	{
+		fflush(stdin);
+		scanf("%s", &tempQuote);
+	}
 	while (strlen(tempQuote) > 255);
 
 	strcpy(newQuote->Quote, tempQuote);
 
 	printf("Enter quote's author (max length 30):\n");
 	do
-	scanf("%s", &tempAuthor);
+	{
+		fflush(stdin);
+		scanf("%s", &tempAuthor);
+	}
 	while (strlen(tempQuote) > 30);
 
 	strcpy(newQuote->QuoteAuthor, tempAuthor);
 
 	//Adding to global quote list:
 	AddQuote(GlobalFile->QuotesList, newQuote);
+	GlobalFile->QuoteRunID++;
 
 }
-
 void PrintQuotes(Global* GlobalFile){
 	Quote* quote = GlobalFile->QuotesList;
 	int i = 1;
+	puts("Quotes in Database:");
 	while (quote != NULL){
 
-		printf("%d.)''%s'' - %s", i, quote->Quote, quote->QuoteAuthor);
+		printf("%d) \"%s\"\t,Author: %s\n", i, quote->Quote, quote->QuoteAuthor);
 		quote = quote->QuoteNext;
 		i++;
 	}
+	puts("");
+}
+void DeleteQuote(Global* GlobalFile)
+{
+	Quote *quote = NULL;
+	int ID;
+	fflush(stdin);
+	printf("Input Quote ID to delete : ");
+	scanf("%d", &ID);
+	quote = FindQuote(GlobalFile->QuotesList, ID);
+	if (quote)
+	{
+		RemoveQuoteFromList(GlobalFile->QuotesList, ID);
+		printf("Quote with id : %d found and deleted.\n", ID);
+	}
+	else
+		puts("ID not found in database");
+}
+void ManageQuotes(Global *GlobalFile)
+{
+	char choice;
+
+	BOOL flag = TRUE;
+	
+	while (flag)
+	{
+		puts("1. Print all Quotes in database");
+		puts("2. Add new Quote");
+		puts("3. Remove quote by ID");
+		puts("4. Back to previous menu");
+		fflush(stdin);
+		printf("Choice : ");
+		choice = getchar();
+		if (choice == '1')
+			PrintQuotes(GlobalFile);
+		else if (choice == '2')
+			AddNewQuote(GlobalFile);
+		else if (choice == '3')
+			DeleteQuote(GlobalFile);
+		else if (choice == '4')
+			flag=FALSE;
+		else
+			puts("Incorrect choice");
+	}
+
+}
+// quotes funcs end
+void PrintUsersLists(Global* GlobalFile)
+{
+	puts("Admins :");
+	PrintAdminsList(GlobalFile->AdminsList);
+	puts("");
+	puts("Students :");
+	PrintStudentList(GlobalFile->StudentList);
+	puts("");
+	puts("Watchers :");
+	PrintWatcherList(GlobalFile->WatchersList);
+	puts("");
+}
+void ShowUserDetails(Global *GlobalFile)
+{
+	Student * student = NULL;
+	Watcher *watcher = NULL;
+	Admin *admin = NULL;
+	PrintUsersLists(GlobalFile);
+	
+	char choice;
+	int ID;
+	printf("Input ID to see full details of user : ");
+	fflush(stdin);
+	scanf("%d",&ID);
+	if (ID < 1000 || ID >=4000)
+		puts("incorrect ID , correct range 1000-3999");
+	else if (ID >= 1000 && ID <= 1999)
+	{
+		student = FindStudent(GlobalFile->StudentList, ID);
+		if (student)
+		{
+			printf("User data for user with ID %d",ID);
+			printf("\nUsername : %s\nPassword :%s\nName : %s\nSurename : %s\nEmail : %s\nDepartment :%s\nYear : %c\nProjects Amount : %d\nTasks Amount : %d\n\n", student->StudentUsername, student->StudentPassword, student->StudentName, student->StudentSurename, student->StudentEmail, student->StudentDepartment, student->StudentYear, student->StudentProjectsAmount, student->StudentTasksAmount);
+		}
+		else
+			puts("Student with this id not found");
+
+	}
+	else if (ID >= 2000 && ID <= 2999)
+	{
+		admin = FindAdmin(GlobalFile->AdminsList, ID);
+		if (admin)
+		{
+			printf("User data for user with ID %d", ID);
+			printf("\nUsername : %s\nPassword :%s\nName : %s\n%Surename\n\n", admin->AdminUsername, admin->AdminPassword, admin->AdminName, admin->AdminSurename);
+		}
+		else
+			puts("Admin with this ID not found");
+
+	}
+	else if (ID >= 3000 && ID <= 3999)
+	{
+		watcher = FindWatcher(GlobalFile->WatchersList, ID);
+		if (watcher)
+		{
+			printf("User data for user with ID %d\n", ID);
+			printf("Username : %s\nPassword :%s\nName : %s\n%Surename\nEmail : %s\nProjects Amount : %d\n\n", watcher->WatcherUsername, watcher->WatcherPassword, watcher->WatcherName, watcher->WatcherSurename, watcher->WatcherProjectsAmount);
+		}
+		else
+			puts("Watcher with this ID not found");
+
+	}
+		printf("Return to previous menu ( Y / N ) :");
+		fflush(stdin);
+	choice = getchar();
+	if (choice == 'Y' || choice == 'y')
+		return;
+	else if (choice == 'N' || choice == 'n')
+		Exit(GlobalFile);
+	else
+		puts("Incorrect choice, returning to previous menu");
 }
