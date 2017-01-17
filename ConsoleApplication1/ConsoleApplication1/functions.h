@@ -680,29 +680,34 @@ void PrintUsersLists(Global* GlobalFile)
 	puts("");
 }
 
-// print all tasks in project
-void PrintTasksByID(Task *head, int indexes[],int size)
+// 
+// done, ready for testing
+void PrintTasksByID(Task *head, int indexes[], int size, char *creator)
 {
 
 	Task *current = NULL;
-	int i;
+	int i,CreatedTasks=0;
 	if (size == 0)
 	{
 		puts("No Tasks in this project");
 		return;
 	}
+	printf("ID\tStatus\t\tTask\n");
 	for (i = 0; i < size; i++)
 	{
 		current = FindTask(head, indexes[i]);
-		if (current)
+		if (current && strcmp(current->TaskCreatorName, creator) == 0)
 		{
-			char *status = convertStatusToString(current->TaskStatus);
-			printf("ID: %d, Name: %s, Status: %s\n", current->TaskID, current->TaskName, status);
-		}
+				char *status = convertStatusToString(current->TaskStatus);
+				printf("%d\t%s\t%s\n", current->TaskID, status, current->TaskName);
+				CreatedTasks++;
+		}	
 	}
+	if (CreatedTasks == 0)
+		puts("User not created any task in this project");
 }
-// done, help func
-void PrintProjectsByID(Global *GlobalFile, int indexes[],int size)
+// done, ready for testing
+void PrintProjectsByID(Global *GlobalFile, int indexes[],int size,char *creator)
 {
 	Project *head = GlobalFile->ProjectsList;
 	Project *current = NULL;
@@ -717,12 +722,12 @@ void PrintProjectsByID(Global *GlobalFile, int indexes[],int size)
 		current = FindProject(head, indexes[i]);
 		if (current)
 		{
-			printf("ID: %d, Name: %s, Tasks : %d\nTasks in this Project :\n", current->ProjectID, current->ProjectName, current->ProjectTasksAmount);
-			PrintTasksByID(GlobalFile->TaskList, current->TasksIDS, current->ProjectTasksAmount);
+			printf("ID: %d, Name: %s, Tasks : %d\n\nTasks in this Project :\n", current->ProjectID, current->ProjectName, current->ProjectTasksAmount);
+			PrintTasksByID(GlobalFile->TaskList, current->TasksIDS, current->ProjectTasksAmount,creator);
 		}
 	}
 }
-// not done
+// done, ready for testing
 void ShowUserDetails(Global *GlobalFile)
 {
 	Student * student = NULL;
@@ -743,8 +748,9 @@ void ShowUserDetails(Global *GlobalFile)
 		if (student)
 		{
 			printf("User data for user with ID %d",ID);
-			printf("\nUsername : %s\nName : %s\nSurename : %s\nEmail : %s\nDepartment :%s\n\n", student->StudentUsername, student->StudentName, student->StudentSurename, student->StudentEmail, student->StudentDepartment);
-			PrintProjectsByID(GlobalFile, student->ProjectIDS,student->StudentProjectsAmount);
+			printf("\nUsername : %s\nName : %s\nSurename : %s\nEmail : %s\nDepartment :%s\n", student->StudentUsername, student->StudentName, student->StudentSurename, student->StudentEmail, student->StudentDepartment);
+			puts("--------------\nCollaborator at Projects:");
+			PrintProjectsByID(GlobalFile, student->ProjectIDS,student->StudentProjectsAmount,student->StudentName);
 			
 		}
 		else
@@ -758,7 +764,6 @@ void ShowUserDetails(Global *GlobalFile)
 		{
 			printf("User data for user with ID %d", ID);
 			printf("\nUsername : %s\nPassword :%s\nName : %s\n%Surename\n\n", admin->AdminUsername, admin->AdminPassword, admin->AdminName, admin->AdminSurename);
-
 		}
 		else
 			puts("Admin with this ID not found");
@@ -771,7 +776,7 @@ void ShowUserDetails(Global *GlobalFile)
 		{
 			printf("User data for user with ID %d\n", ID);
 			printf("Username : %s\nPassword :%s\nName : %s\n%Surename\nEmail : %s\nProjects Amount : %d\n\n", watcher->WatcherUsername, watcher->WatcherPassword, watcher->WatcherName, watcher->WatcherSurename, watcher->WatcherProjectsAmount);
-			PrintProjectsByID(GlobalFile, watcher->ProjectIDS,watcher->WatcherProjectsAmount);
+
 		}
 		else
 			puts("Watcher with this ID not found");
