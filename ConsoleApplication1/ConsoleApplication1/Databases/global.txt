@@ -4,4 +4,4 @@
 4003
 5003
 6003
-globalMsg.txt
+EMPTY

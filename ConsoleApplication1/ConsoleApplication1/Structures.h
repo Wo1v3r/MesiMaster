@@ -81,7 +81,7 @@ typedef struct Global{
 	Project *ProjectsList;
 	Quote *QuotesList;
 	Task *TaskList;
-	char GlobalMessages[31];
+	char GlobalMessages[256];
 }Global;
 
 

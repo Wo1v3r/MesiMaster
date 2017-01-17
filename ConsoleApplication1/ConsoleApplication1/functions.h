@@ -9,6 +9,41 @@ void PrintProjectsList(Global *GlobalFile, int UserID, AccessGroup group);						
 /////// declarations end
 
 // Functions
+////////////Project create functions
+// add new project to student's array of Project IS's
+void AddProjectIDToStudent(Student * Student, int ProjectID)
+{
+	int ProjectIDSNewSize,index;
+	int* newArrayIDs;	//create new increased array
+
+	ProjectIDSNewSize = Student->StudentProjectsAmount + 1;
+	newArrayIDs = (int*)malloc(ProjectIDSNewSize * sizeof(int));
+
+	for (index = 0; index < ProjectIDSNewSize - 1; index++)
+		newArrayIDs[index] = Student->ProjectIDS[index];			// copy old values
+	newArrayIDs[index] = ProjectID;					// add new project id to last index of nea array
+
+	free(Student->ProjectIDS);											// free old array memory
+	Student->ProjectIDS = newArrayIDs;									// set new array pointer to student
+	Student->StudentProjectsAmount++;								// update size of projects amount to watcher
+}
+// add new project to watcher's array of Project IS's
+void AddProjectIDToWatcher(Watcher * Watcher, int ProjectID)
+{
+	int ProjectIDSNewSize, index;
+	int* newArrayIDs;	//create new increased array
+
+	ProjectIDSNewSize = Watcher->WatcherProjectsAmount + 1;
+	newArrayIDs = (int*)malloc(ProjectIDSNewSize * sizeof(int));
+
+	for (index = 0; index < ProjectIDSNewSize - 1; index++)
+		newArrayIDs[index] = Watcher->ProjectIDS[index];			// copy old values
+	newArrayIDs[index] = ProjectID;					// add new project id to last index of nea array
+
+	free(Watcher->ProjectIDS);											// free old array memory
+	Watcher->ProjectIDS = newArrayIDs;									// set new array pointer to student
+	Watcher->WatcherProjectsAmount++;								// update size of projects amount to watcher
+}
 // 46 - Create new project by STUDENT or WATCHER only, UNDONE
 int CreateNewProject(Global* GlobalFile,int userID, AccessGroup userGroup)
 {
@@ -26,7 +61,7 @@ int CreateNewProject(Global* GlobalFile,int userID, AccessGroup userGroup)
 		Watcher = FindWatcher(GlobalFile->WatchersList, userID);
 	else
 	{
-		puts("Incorrect acess group received.");
+		puts("Incorrect access group received.");
 		return 1;		// incorrect access group
 	}
 
@@ -64,7 +99,7 @@ int CreateNewProject(Global* GlobalFile,int userID, AccessGroup userGroup)
 
 	// create file name ID_ProjectMessages.txt and put name to ProjectMessages field
 	char MessagesFileName[50];		
-	sprintf(MessagesFileName, "%d_Project.Messages.txt", newProject->ProjectID);
+	sprintf(MessagesFileName, "%d_ProjectMessages.txt", newProject->ProjectID);
 	FILE *ProjMsgs = fopen(MessagesFileName, "w");
 	fclose(ProjMsgs);
 	strcpy(newProject->ProjectMessages, MessagesFileName);
@@ -78,31 +113,12 @@ int CreateNewProject(Global* GlobalFile,int userID, AccessGroup userGroup)
 
 	if (userGroup == STUDENT)			// add project ID to student 
 	{
-		ProjectIDSNewSize = Student->StudentProjectsAmount + 1;
-		newArrayIDs = (int*)malloc(ProjectIDSNewSize * sizeof(int));
-
-		for (index = 0; index < ProjectIDSNewSize - 1; index++)
-			newArrayIDs[index] = Student->ProjectIDS[index];			// copy old values
-		newArrayIDs[index] = newProject->ProjectID;					// add new project id to last index of nea array
-
-		free(Student->ProjectIDS);											// free old array memory
-		Student->ProjectIDS = newArrayIDs;									// set new array pointer to student
-		Student->StudentProjectsAmount ++;									// update size of projects amount to student
-
+		AddProjectIDToStudent(Student, newProject->ProjectID);
 	}
 
 	else if (userGroup == WATCHER)			// add project ID to Watcher's array
 	{
-		ProjectIDSNewSize = Watcher->WatcherProjectsAmount + 1;
-		newArrayIDs = (int*)malloc(ProjectIDSNewSize * sizeof(int));
-
-		for (index = 0; index < ProjectIDSNewSize - 1; index++)
-			newArrayIDs[index] = Watcher->ProjectIDS[index];			// copy old values
-		newArrayIDs[index] = newProject->ProjectID;					// add new project id to last index of nea array
-
-		free(Watcher->ProjectIDS);											// free old array memory
-		Student->ProjectIDS = newArrayIDs;									// set new array pointer to student
-		Watcher->WatcherProjectsAmount++;								// update size of projects amount to watcher
+		AddProjectIDToWatcher(Watcher, newProject->ProjectID);
 	}
 
 
@@ -123,19 +139,21 @@ int CreateNewProject(Global* GlobalFile,int userID, AccessGroup userGroup)
 		break;
 	}
 	puts("1 .Return to previous menu");
-	puts("2. Exit");
+	puts("2. Exit Mesimaster");
 	fflush(stdin);
 	choice = getchar();
 	if (choice == '1')
 		return 1; //returns to menu
 	else if (choice == '2')
-		Exit(GlobalFile);
+		Exit(GlobalFile);			// check correct choice
 	else
 		puts("Incorrect input, you will be returned to Menu");
 	return 1;
 
 }
 
+
+////////// project create funcs end
 // 42 - Add user to project  , done, ready for testing
 void addUserToProject(Global *GlobalFile, Project *newProject)
 {
@@ -164,16 +182,7 @@ void addUserToProject(Global *GlobalFile, Project *newProject)
 			if (student)	// student found
 			{
 				/// add project to student 
-				StudentProjectsIDSNewSize = student->StudentProjectsAmount + 1;
-				ProjectsIDs = (int*)malloc(StudentProjectsIDSNewSize * sizeof(int));
-
-				for (i = 0; i < StudentProjectsIDSNewSize - 1; i++)
-					ProjectsIDs[i] = student->ProjectIDS[i];			// copy old values
-				ProjectsIDs[i] = newProject->ProjectID;					// add new project id to last index of nea array
-
-				free(student->ProjectIDS);											// free old array memory
-				student->ProjectIDS = ProjectsIDs;									// set new array pointer to student
-
+				AddProjectIDToStudent(student, newProject->ProjectID);
 				printf("\nStudent with ID : %d was added to project!\n", ID);
 				
 				// add student to project
@@ -194,22 +203,14 @@ void addUserToProject(Global *GlobalFile, Project *newProject)
 			printf("\nWatcher ID :");
 			scanf("%d", &ID);
 			watcher = FindWatcher(GlobalFile->WatchersList, ID);
-			if (watcher)	// student found
+			if (watcher)	// watcher found
 			{
-				/// add project to student 
-				WatcherProjectsIDSNewSize = watcher->WatcherProjectsAmount + 1;
-				ProjectsIDs = (int*)malloc(WatcherProjectsIDSNewSize * sizeof(int));
-
-				for (i = 0; i < WatcherProjectsIDSNewSize - 1; i++)
-					ProjectsIDs[i] = watcher->ProjectIDS[i];			// copy old values
-				ProjectsIDs[i] = newProject->ProjectID;					// add new project id to last index of nea array
-
-				free(watcher->ProjectIDS);											// free old array memory
-				watcher->ProjectIDS = ProjectsIDs;									// set new array pointer to student
+				/// add project to watcher 
+				AddProjectIDToWatcher(watcher, newProject->ProjectID);
 
 				printf("Watcher with ID : %d was added to project!\n", ID);
 
-				// add student to project
+				// add watcher to project
 				ProjectUsersIDNewSize = newProject->ProjectUsersAmount + 1;
 				UsersID = (int*)malloc(ProjectUsersIDNewSize*sizeof(int));
 				for (i = 0; i < ProjectUsersIDNewSize - 1; i++)
@@ -286,6 +287,12 @@ void PrintProjectsList(Global *GlobalFile, int UserID, AccessGroup group)
 	Project *current = NULL;
 	int *ProjectsIDS;
 
+	if (GlobalFile->ProjectsList == NULL)
+	{
+		puts("No Projects in database");
+		return;
+	}
+
 	// find user
 	if (group == STUDENT)
 	{
@@ -324,8 +331,7 @@ void PrintProjectsList(Global *GlobalFile, int UserID, AccessGroup group)
 		{
 			current = FindProject(GlobalFile->ProjectsList, watcher->ProjectIDS[i]);
 			if (current)
-				printf("%d\t%s\t%d\t%d", current->ProjectID, current->ProjectName, current->ProjectUsersAmount, current->ProjectTasksAmount);
-			
+				printf("%d\t%s\t%d\t%d", current->ProjectID, current->ProjectName, current->ProjectUsersAmount, current->ProjectTasksAmount);	
 		}
 	}
 	else
@@ -496,7 +502,7 @@ void ShowTasksByStatus(Global* GlobalFile, int studentID ){
 	}
 
 }
-
+// print activity log of student in project, receive student, done, ready for testing
 void PrintStudentLog(Student* student){
 	char BUFFER[400], *fileName = student->StudentActivityLog;
 	FILE* file = fopen(fileName, "r");
@@ -505,7 +511,7 @@ void PrintStudentLog(Student* student){
 	while (fgets(BUFFER, 400, file)) printf("%s\n", BUFFER);
 	fclose(file);
 }
-
+// receive ID and return user group, done, ready for testing
 int FindAccessGroup(int ID){
 	//Should be in Functions, I wrote it for the meantime here
 	if (ID >= 1000 && ID <= 1999) return STUDENT;
@@ -571,13 +577,24 @@ void UpdateDetails(Global* GlobalFile, int userID){
 	}
 
 }
-
+// print global message from admin, done, ready for testing
+void PrintGlobalMessages(Global *GlobalFile)
+{
+	if (strcmp(GlobalFile->GlobalMessages, "EMPTY") != 0)
+	{
+		puts("\n*** System message ***");
+		puts(GlobalFile->GlobalMessages);
+		puts("\n**********************");
+	}
+	
+}
+// add message by admin, done, ready for etsting
 void AddGlobalMessage(Global* GlobalFile){
-	char temp[250] = "";
-	printf("Enter global message (max length 30):\n");
+	char temp[250];
+	printf("Enter global message (max length 255):\n");
 	do
-	scanf("%s", &temp);
-	while (strlen(temp) > 30);
+	gets(temp);
+	while (strlen(temp) > 255);
 
 	strcpy(GlobalFile->GlobalMessages, temp);
 }
@@ -670,6 +687,8 @@ void ManageQuotes(Global *GlobalFile)
 
 }
 // quotes funcs end
+//
+// prints all users in system, for admin, done, ready for testing
 void PrintUsersLists(Global* GlobalFile)
 {
 	puts("Admins :");
@@ -682,12 +701,9 @@ void PrintUsersLists(Global* GlobalFile)
 	PrintWatcherList(GlobalFile->WatchersList);
 	puts("");
 }
-
-// 
-// done, ready for testing
+// print all tasks with ID's from received array, done, ready for testing
 void PrintTasksByID(Task *head, int indexes[], int size, char *creator)
 {
-
 	Task *current = NULL;
 	int i,CreatedTasks=0;
 	if (size == 0)
@@ -709,7 +725,7 @@ void PrintTasksByID(Task *head, int indexes[], int size, char *creator)
 	if (CreatedTasks == 0)
 		puts("User not created any task in this project");
 }
-// done, ready for testing
+// print projects by ID's array, done, ready for testing
 void PrintProjectsByID(Global *GlobalFile, int indexes[],int size,char *creator)
 {
 	Project *head = GlobalFile->ProjectsList;
@@ -730,7 +746,7 @@ void PrintProjectsByID(Global *GlobalFile, int indexes[],int size,char *creator)
 		}
 	}
 }
-// done, ready for testing
+// print all users in system, gives option to chooce user for more information, done, ready for testing
 void ShowUserDetails(Global *GlobalFile)
 {
 	Student * student = NULL;
@@ -779,18 +795,17 @@ void ShowUserDetails(Global *GlobalFile)
 		{
 			printf("User data for user with ID %d\n", ID);
 			printf("Username : %s\nPassword :%s\nName : %s\n%Surename\nEmail : %s\nProjects Amount : %d\n\n", watcher->WatcherUsername, watcher->WatcherPassword, watcher->WatcherName, watcher->WatcherSurename, watcher->WatcherProjectsAmount);
-
 		}
 		else
 			puts("Watcher with this ID not found");
 	}
-		printf("Return to previous menu ( Y / N ) :");
+		printf("Return to previous menu ( Y / N for Exit ) :");
 		fflush(stdin);
 	choice = getchar();
 	if (choice == 'Y' || choice == 'y')
 		return;
 	else if (choice == 'N' || choice == 'n')
-		Exit(GlobalFile);
+		Exit(GlobalFile);											//////// check correct option for this
 	else
 		puts("Incorrect choice, returning to previous menu");
 }
