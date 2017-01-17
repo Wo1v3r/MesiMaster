@@ -680,7 +680,7 @@ void PrintUsersLists(Global* GlobalFile)
 	puts("");
 }
 
-//
+// print all tasks in project
 void PrintTasksByID(Task *head, int indexes[],int size)
 {
 
@@ -722,7 +722,6 @@ void PrintProjectsByID(Global *GlobalFile, int indexes[],int size)
 		}
 	}
 }
-
 // not done
 void ShowUserDetails(Global *GlobalFile)
 {
@@ -776,7 +775,6 @@ void ShowUserDetails(Global *GlobalFile)
 		}
 		else
 			puts("Watcher with this ID not found");
-
 	}
 		printf("Return to previous menu ( Y / N ) :");
 		fflush(stdin);
