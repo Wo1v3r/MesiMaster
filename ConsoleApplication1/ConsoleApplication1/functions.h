@@ -290,6 +290,11 @@ void PrintProjectsList(Global *GlobalFile, int UserID, AccessGroup group)
 	if (group == STUDENT)
 	{
 		student = FindStudent(GlobalFile->StudentList, UserID);
+		if (student->StudentProjectsAmount == 0)
+		{
+			puts("Student not in any project");
+			return;
+		}
 		ProjectsIDS = student->ProjectIDS;
 
 		int arraySize = sizeof(ProjectsIDS) / sizeof(int);
@@ -299,16 +304,18 @@ void PrintProjectsList(Global *GlobalFile, int UserID, AccessGroup group)
 		{
 			current = FindProject(GlobalFile->ProjectsList, student->ProjectIDS[i]);
 			if (current)
-			{
 				printf("%d\t%s\t%d\t%d",current->ProjectID,current->ProjectName,current->ProjectUsersAmount,current->ProjectTasksAmount);
-			}
-
 		}
 	}// in case of watcher
 	else if (group == WATCHER)
 	{
 		watcher = FindWatcher(GlobalFile->WatchersList, UserID);
 		ProjectsIDS = watcher->ProjectIDS;
+		if (watcher->WatcherProjectsAmount == 0)
+		{
+			puts("Watcher not in any project");
+			return;
+		}
 
 		int arraySize = sizeof(ProjectsIDS) / sizeof(int);
 		puts("List of your projects :");
@@ -317,10 +324,8 @@ void PrintProjectsList(Global *GlobalFile, int UserID, AccessGroup group)
 		{
 			current = FindProject(GlobalFile->ProjectsList, watcher->ProjectIDS[i]);
 			if (current)
-			{
 				printf("%d\t%s\t%d\t%d", current->ProjectID, current->ProjectName, current->ProjectUsersAmount, current->ProjectTasksAmount);
-			}
-
+			
 		}
 	}
 	else
@@ -364,8 +369,6 @@ void PrintActivityLog(Global* GlobalFile, Project* project){
 	while (fgets(BUFFER, 400, file)) printf("%s\n", BUFFER);
 	fclose(file);
 }
-
-
 
 
 void PrintProjectDetails(Global* GlobalFile, Project* project){
@@ -505,9 +508,9 @@ void PrintStudentLog(Student* student){
 
 int FindAccessGroup(int ID){
 	//Should be in Functions, I wrote it for the meantime here
-	if (ID > 0 && ID <= 1000) return STUDENT;
-	else if (ID > 1000 && ID <= 2000) return ADMIN;
-	else if (ID > 2000 && ID <= 3000) return WATCHER;
+	if (ID >= 1000 && ID <= 1999) return STUDENT;
+	else if (ID >= 2000 && ID <= 2999) return ADMIN;
+	else if (ID >= 3000 && ID <= 3999) return WATCHER;
 	
 	return BAD;
 }
