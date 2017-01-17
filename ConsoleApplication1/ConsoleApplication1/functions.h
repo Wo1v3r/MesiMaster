@@ -679,10 +679,32 @@ void PrintUsersLists(Global* GlobalFile)
 	PrintWatcherList(GlobalFile->WatchersList);
 	puts("");
 }
-// done, help func
-void PrintProjectsByID(Project *head, int indexes[])
+
+//
+void PrintTasksByID(Task *head, int indexes[],int size)
 {
-	int size = sizeof(indexes) / sizeof(int);
+
+	Task *current = NULL;
+	int i;
+	if (size == 0)
+	{
+		puts("No Tasks in this project");
+		return;
+	}
+	for (i = 0; i < size; i++)
+	{
+		current = FindTask(head, indexes[i]);
+		if (current)
+		{
+			char *status = convertStatusToString(current->TaskStatus);
+			printf("ID: %d, Name: %s, Status: %s\n", current->TaskID, current->TaskName, status);
+		}
+	}
+}
+// done, help func
+void PrintProjectsByID(Global *GlobalFile, int indexes[],int size)
+{
+	Project *head = GlobalFile->ProjectsList;
 	Project *current = NULL;
 	int i;
 	if (size == 0)
@@ -694,9 +716,13 @@ void PrintProjectsByID(Project *head, int indexes[])
 	{
 		current = FindProject(head, indexes[i]);
 		if (current)
-			printf("ID: %d, Name: %s, Tasks : %d\n", current->ProjectID, current->ProjectName, current->ProjectTasksAmount);
+		{
+			printf("ID: %d, Name: %s, Tasks : %d\nTasks in this Project :\n", current->ProjectID, current->ProjectName, current->ProjectTasksAmount);
+			PrintTasksByID(GlobalFile->TaskList, current->TasksIDS, current->ProjectTasksAmount);
+		}
 	}
 }
+
 // not done
 void ShowUserDetails(Global *GlobalFile)
 {
@@ -719,7 +745,8 @@ void ShowUserDetails(Global *GlobalFile)
 		{
 			printf("User data for user with ID %d",ID);
 			printf("\nUsername : %s\nName : %s\nSurename : %s\nEmail : %s\nDepartment :%s\n\n", student->StudentUsername, student->StudentName, student->StudentSurename, student->StudentEmail, student->StudentDepartment);
-			PrintProjectsByID(GlobalFile->ProjectsList, student->ProjectIDS);
+			PrintProjectsByID(GlobalFile, student->ProjectIDS,student->StudentProjectsAmount);
+			
 		}
 		else
 			puts("Student with this id not found");
@@ -745,6 +772,7 @@ void ShowUserDetails(Global *GlobalFile)
 		{
 			printf("User data for user with ID %d\n", ID);
 			printf("Username : %s\nPassword :%s\nName : %s\n%Surename\nEmail : %s\nProjects Amount : %d\n\n", watcher->WatcherUsername, watcher->WatcherPassword, watcher->WatcherName, watcher->WatcherSurename, watcher->WatcherProjectsAmount);
+			PrintProjectsByID(GlobalFile, watcher->ProjectIDS,watcher->WatcherProjectsAmount);
 		}
 		else
 			puts("Watcher with this ID not found");
