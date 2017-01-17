@@ -1,5 +1,20 @@
 //Jonathan
 #include "Register.h"
+
+/*
+FOR RUNNING THE TESTS COPY THEM BEFORE THE MAIN FUNCTION.
+ADD include for minunit.h
+#include "MinUnit.h"
+in the main function add
+MU_RUN_SUITE(InitTest);
+
+These tests are built on the given txt files. any change will need to be change in accordance with them!!!
+if you wish to run the programm as usual comment this whole file.
+*/
+
+
+
+
 ////// Menus
 
 //Project Menu : Finished ,Ready for testing - Jonathan
@@ -270,9 +285,10 @@ int WatcherMenu(Global* GlobalFile, int watcherID){
 			project = FindProject(GlobalFile->ProjectsList, projectID);
 			if (project == NULL){
 				//Project not found 
-				printf("No project of that ID\n";
+				printf("No project of that ID\n");
 				break;
 			}
+			
 			ProjectMenu(GlobalFile, project, WATCHER, watcherID);
 			break;
 		case 4:
@@ -288,7 +304,6 @@ int WatcherMenu(Global* GlobalFile, int watcherID){
 			system("pause");
 			opt = -1;
 			}
-		}
 	}
 	return 0;
 
@@ -363,6 +378,7 @@ void LoginMenu(Global* GlobalFile){
 }
 
 ///////////MAIN//////////
+
 
 int main()
 {
