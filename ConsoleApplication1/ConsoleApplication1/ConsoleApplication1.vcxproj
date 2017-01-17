@@ -80,6 +80,7 @@
   <ItemGroup>
     <ClInclude Include="DataBase.h" />
     <ClInclude Include="functions.h" />
+    <ClInclude Include="Jonathan_Testing.h" />
     <ClInclude Include="Liran_Testing.h" />
     <ClInclude Include="MinUnit.h" />
     <ClInclude Include="Register.h" />

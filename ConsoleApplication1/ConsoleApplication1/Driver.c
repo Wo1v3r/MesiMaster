@@ -251,7 +251,8 @@ int WatcherMenu(Global* GlobalFile, int watcherID){
 		printf("2) Create a project\n");
 		printf("3) Enter Project menu of a Project you're watching\n");
 		printf("4) Update details\n");
-		printf("5) Exit MesiMaster \n");
+		printf("5) Show project notifications\n");
+		printf("6) Exit MesiMaster \n");
 
 		scanf("%d", &opt);
 		switch (opt){
@@ -269,12 +270,18 @@ int WatcherMenu(Global* GlobalFile, int watcherID){
 			project = FindProject(GlobalFile->ProjectsList, projectID);
 			if (project == NULL){
 				//Project not found 
-				printf("No project of that ID\n");
+				printf("No project of that ID\n";
 				break;
+			}
+			ProjectMenu(GlobalFile, project, WATCHER, watcherID);
+			break;
 		case 4:
 			UpdateDetails(GlobalFile, watcherID);
 			break;
 		case 5:
+			//ShowNotifications(GlobalFile, watcher);
+			break;
+		case 6:
 			return 0;
 		default:
 			printf("No such option!\n");
