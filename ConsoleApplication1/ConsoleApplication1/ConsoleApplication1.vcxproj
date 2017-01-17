@@ -80,6 +80,7 @@
   <ItemGroup>
     <ClInclude Include="DataBase.h" />
     <ClInclude Include="functions.h" />
+    <ClInclude Include="Liran_Testing.h" />
     <ClInclude Include="MinUnit.h" />
     <ClInclude Include="Register.h" />
     <ClInclude Include="Structures.h">
@@ -96,6 +97,7 @@
     <Text Include="Databases\projects.txt" />
     <Text Include="Databases\quotes.txt" />
     <Text Include="Databases\students.txt" />
+    <Text Include="Databases\tasks.txt" />
     <Text Include="Databases\watchers.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

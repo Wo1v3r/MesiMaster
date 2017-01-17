@@ -1,5 +1,6 @@
 //Liran
 #include "Structures.h"
+
 /// Define path's
 #define StudentsFilePath "./Databases/students.txt"
 #define AdminsFilePath "./Databases/admins.txt"
@@ -208,19 +209,13 @@ Quote* initQuotes(){
 	return head;
 }
 
-Global *InitDataBases(){
+Global *initGlobal(){
 	FILE *globalFile = fopen(GlobalFilePath, "r");
 	if (!globalFile){
 		printf("Warning ! File %s can't be opened.\n", GlobalFilePath);
 		exit(1);
 	}
 	Global *GlobalDB = (Global*)malloc(sizeof(Global));
-	GlobalDB->AdminsList = initAdmins();
-	GlobalDB->StudentList = initStudents();
-	GlobalDB->WatchersList = initWatchers();
-	GlobalDB->QuotesList = initQuotes();
-	GlobalDB->TaskList = initTasks();
-	GlobalDB->ProjectsList = initProjects();
 	fscanf(globalFile, "%d", &GlobalDB->StudentRunID);
 	fscanf(globalFile, "%d", &GlobalDB->AdminRunID);
 	fscanf(globalFile, "%d", &GlobalDB->WatcherRunID);
@@ -229,6 +224,17 @@ Global *InitDataBases(){
 	fscanf(globalFile, "%d", &GlobalDB->TaskRunID);
 	fscanf(globalFile, "%s", &GlobalDB->GlobalMessages);
 	fclose(globalFile);
+	return GlobalDB;
+}
+
+Global *InitDataBases(){
+	Global *GlobalDB = initGlobal();
+	GlobalDB->AdminsList = initAdmins();
+	GlobalDB->StudentList = initStudents();
+	GlobalDB->WatchersList = initWatchers();
+	GlobalDB->QuotesList = initQuotes();
+	GlobalDB->TaskList = initTasks();
+	GlobalDB->ProjectsList = initProjects();
 	return GlobalDB;
 }
 
@@ -285,6 +291,8 @@ void saveWatchers(Watcher *WatchersList){
 			else
 				fprintf(saveFile, "%d ", WatchersList->ProjectIDS[i]);
 		}
+		if (WatchersList->WatcherProjectsAmount == 0)
+			fprintf(saveFile, "\n");
 		WatchersList = WatchersList->WatcherNext;
 	}
 	fclose(saveFile);

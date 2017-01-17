@@ -260,7 +260,7 @@ Task *AddTask(Task *TasksHead, Task *addTask){
 	Task *current = TasksHead;
 	if (TasksHead == NULL)
 	{
-		TasksHead = TasksHead;
+		TasksHead = addTask;
 		addTask->TaskNext = NULL;
 	}
 	else {
