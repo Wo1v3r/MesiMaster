@@ -248,7 +248,7 @@ int WatcherMenu(Global* GlobalFile, int watcherID){
 	while (opt == -1){
 		printf("0) Exit watcher menu\n");
 		printf("1) Print list of projects you're watching\n");
-		printf("2) Print list of all projects\n");
+		printf("2) Create a project\n");
 		printf("3) Enter Project menu of a Project you're watching\n");
 		printf("4) Update details\n");
 		printf("5) Exit MesiMaster \n");
@@ -261,7 +261,7 @@ int WatcherMenu(Global* GlobalFile, int watcherID){
 			PrintProjectsList(GlobalFile, watcherID, WATCHER);
 			break;
 		case 2:
-			PrintProjectsList(GlobalFile, 2001, ADMIN); //Needs to print all options either by admin like this or another project
+			CreateNewProject(GlobalFile, watcherID, WATCHER);
 			break;
 		case 3:
 			printf("Enter Project ID:\n");
