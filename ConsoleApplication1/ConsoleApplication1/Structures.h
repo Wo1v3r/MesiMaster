@@ -8,7 +8,6 @@
 typedef enum { BAD, STUDENT, ADMIN, WATCHER }AccessGroup;
 typedef enum { NEW, ELICITATION, ANALYSIS, VandV, APPROVED, TRASH }STATUS;
 typedef enum { FALSE, TRUE }BOOL;
-typedef enum { FILE_READ_ERROR, FILE_WRITE_ERROR } ERRORS;
 //structures declarations
 typedef struct Project Project;
 typedef struct Student Student;
@@ -28,13 +27,11 @@ typedef struct Student{
 	struct Student *StudentNext;
 }Student;
 
-
 typedef struct Quote{
 	int QuoteID;
 	char Quote [256], QuoteAuthor[31];
 	struct Quote *QuoteNext;
 }Quote;
-
 
 typedef struct Project{
 	int ProjectID, ProjectUsersAmount, ProjectTasksAmount;
@@ -46,14 +43,12 @@ typedef struct Project{
 	struct Project *ProjectNext;
 }Project;
 
-
 typedef struct Admin{
 	int AdminID;
 	char AdminUsername[31], AdminPassword[31], AdminName[21], AdminSurename[21];
 	AccessGroup Group;
 	struct Admin *AdminNext;
 }Admin;
-
 
 typedef struct Watcher{
 	AccessGroup Group;
@@ -64,14 +59,12 @@ typedef struct Watcher{
 	struct Watcher *WatcherNext;
 }Watcher;
 
-
 typedef struct Task{
 	int TaskID;
 	char TaskName[256], TaskCreatorName[31];
 	STATUS TaskStatus;
 	Task* TaskNext;
 }Task;
-
 
 typedef struct Global{
 	int QuoteRunID, StudentRunID, WatcherRunID, AdminRunID,ProjectRunID,TaskRunID;
@@ -83,6 +76,8 @@ typedef struct Global{
 	Task *TaskList;
 	char GlobalMessages[256];
 }Global;
+
+//////////////// structures end
 
 
 //
@@ -100,7 +95,6 @@ Student *FindStudent(Student* head, int StudentID){
 	return NULL;
 }
 
-
 Admin *FindAdmin(Admin *head, int AdminID){
 
 	Admin *current = head;
@@ -111,7 +105,6 @@ Admin *FindAdmin(Admin *head, int AdminID){
 	}
 	return NULL;
 }
-
 
 Watcher *FindWatcher(Watcher* head, int WatcherID){
 
@@ -124,7 +117,6 @@ Watcher *FindWatcher(Watcher* head, int WatcherID){
 	return NULL;
 }
 
-
 Project *FindProject(Project* head, int ProjectID){
 
 	Project *current = head;
@@ -135,7 +127,6 @@ Project *FindProject(Project* head, int ProjectID){
 	}
 	return NULL;
 }
-
 
 Task *FindTask(Task* head, int TaskID){
 
@@ -179,7 +170,6 @@ Student* AddStudent(Student *studentHead, Student *addStudent){
 	return studentHead;
 }
 
-
 Admin* AddAdmin(Admin *adminHead, Admin *addAdmin){
 
 	Admin *current = adminHead;
@@ -199,7 +189,6 @@ Admin* AddAdmin(Admin *adminHead, Admin *addAdmin){
 
 }
 
-
 Watcher* AddWatcher(Watcher *watcherHead, Watcher *addWatcher){
 	if (watcherHead == NULL)
 	{
@@ -218,7 +207,6 @@ Watcher* AddWatcher(Watcher *watcherHead, Watcher *addWatcher){
 	return watcherHead;
 }
 
-
 Project* AddProject(Project *projectHead, Project *addProject){
 	Project *current = projectHead;
 	if (projectHead == NULL)
@@ -235,7 +223,6 @@ Project* AddProject(Project *projectHead, Project *addProject){
 	}
 	return projectHead;
 }
-
 
 Quote* AddQuote(Quote *QuoteHead, Quote *addQuote){
 	Quote *current = QuoteHead;
@@ -254,7 +241,6 @@ Quote* AddQuote(Quote *QuoteHead, Quote *addQuote){
 	return QuoteHead;
 }
 
-
 Task *AddTask(Task *TasksHead, Task *addTask){
 
 	Task *current = TasksHead;
@@ -272,6 +258,7 @@ Task *AddTask(Task *TasksHead, Task *addTask){
 	}
 	return TasksHead;
 }
+
 //delete elements from linked list
 
 Project *RemoveProjectFromList(Project *head, int deleteID)
@@ -421,7 +408,6 @@ void PrintAdminsList(Admin *head)
 		admin = admin->AdminNext;
 	}
 }
-
 void PrintWatcherList(Watcher *head)
 {
 
@@ -436,13 +422,9 @@ void PrintWatcherList(Watcher *head)
 		watcher = watcher->WatcherNext;
 	}
 }
-
-
 // print List's funcs end
 
-
 //Utilities:
-
 char* convertStatusToString(STATUS status){
 	switch (status){
 	case 0 :
@@ -462,7 +444,6 @@ char* convertStatusToString(STATUS status){
 		return NULL;
 	}
 }
-
 Task* findTaskInProject(Global* globalFile , Project* project, int taskID){
 	int i;
 	for (i = 0; i < project->ProjectTasksAmount && taskID != project->TasksIDS[i]; i++);

@@ -7,8 +7,173 @@ void CreateNewTask(Global *GlobalFile, Project *project, int UserID, AccessGroup
 void PrintProjectsList(Global *GlobalFile, int UserID, AccessGroup group);						//44
 
 /////// declarations end
+///////////////////////////////////// Johnatan func's
 
-// Functions
+// change status of choosen task, done, ready for testing
+void ChangeTaskStatus(Global* GlobalFile, Project* project, int userID, int accessGroup){
+	int taskID, status;
+	Task* task;
+	//Getting a task from the user:
+
+	printf("Enter Task ID:\n");
+	scanf("%d", &taskID);
+	//Making sure that task is in the relevant project:
+	task = findTaskInProject(GlobalFile, project, taskID);
+	if (!task){
+		printf("Task does not belong to this project\n");
+		return;
+	}
+
+	printf("Current status is: %s\n", convertStatusToString(task->TaskStatus));
+	printf("Choose status to change into:\n");
+	printf("Available Status:\n");
+	printf("[0] New , [1] Elicitation, [2] Analysis, [3] VandV ");
+	if (accessGroup != STUDENT) printf(" [4] Approved"); //Student can't change to approved
+	printf("\n");
+	printf("Enter an integer of your choice:\n");
+	scanf("%d", &status);
+	if (accessGroup == STUDENT && status == APPROVED) {
+		printf("Student cannot set status to approved, please contact your watcher or admin\n");
+		return;
+	}
+	if (status == NEW || status == ELICITATION || status == ANALYSIS || status == VandV || status == APPROVED)
+		task->TaskStatus = (STATUS)status;
+	else
+		puts("Incorrect status identificator, status not been changed.");
+}
+// undone
+void RemoveProject(Global* GlobalFile, Project* project, int userID, int accessGroup){
+	char choice = 'O';
+	printf("Are you sure you want to remove this project and all of its tasks (Y/N)?\n");
+
+	while (choice == 'O'){
+		choice = getchar();
+
+		switch (choice){
+		case 'Y':
+		case 'y':
+			RemoveProjectFromList(GlobalFile->ProjectsList, project->ProjectID);
+			//delete // Need to implement functions that will remove this project id from all the users, from all the lists etc
+			break;
+		case 'N':
+		case 'n':
+			break;
+		default: printf("No such option!\n");
+			choice = 'O';
+		}
+	}
+
+}
+
+void LeaveMessageToStudent(Global* GlobalFile, Project* project, Watcher* watcher){
+	int studentID;
+	Student* student;
+	char* Message;
+	printf("Please choose a studentID of the student you want to leave a message for:\n");
+	scanf("%d", &studentID);
+	if (isStudentInProject(project, studentID)){
+		student = FindStudent(GlobalFile->StudentList, studentID);
+		if (!student) return //If for some reason student is not in the global file, exiting function
+			printf("Enter the message you want to leave (Between 5 to 30):\n");
+		do
+		scanf("%s", &Message);
+		while (strlen(Message) < 5 || strlen(Message) > 30);
+		strcpy(student->StudentMessages, Message);
+	}
+}
+
+void AddProjectMessage(Global* GlobalFile, Project* project, Watcher* watcher){
+	char* Message = "";
+	printf("Enter the message you want to leave (Between 5 to 30):\n");
+	do
+	scanf("%s", &Message);
+	while (strlen(Message) < 5 || strlen(Message) > 30);
+
+	strcpy(project->ProjectMessages, Message);
+}
+
+void ShowTasksByStatus(Global* GlobalFile, int studentID){
+	int tasksCount = 1, i, j, status = -1, projectID, taskID;
+	Student* student = FindStudent(GlobalFile->StudentList, studentID);
+	Project* project;
+	Task* task;
+	int* projectIDs = student->ProjectIDS;
+
+	printf("Available Status:\n");
+	printf("[0] New , [1] Elicitation, [2] Analysis, [3] VandV, [4] Approved\n ");
+	printf("Enter an integer of your choice:\n");
+	do
+	scanf("%d", &status);
+	while (status < 0 || status > 4);
+
+	//Finding all the projects this student belongs to and printing the tasks:
+	for (i = 0; i < student->StudentProjectsAmount; i++){
+		projectID = projectIDs[i];
+		project = FindProject(GlobalFile->ProjectsList, projectID);
+		for (j = 0; j < project->ProjectTasksAmount; j++){
+			taskID = project->TasksIDS[j];
+			task = findTaskInProject(GlobalFile, project, taskID);
+			if (task->TaskStatus == status){
+				printf("%d.)ID: %d , Creator: %s , Task: %s \n", tasksCount, task->TaskID, task->TaskCreatorName, task->TaskName);
+				tasksCount++;
+			}
+		}
+	}
+}
+
+void PrintTasksList(Global* GlobalFile, Project* Project){
+	int i, j, status, taskID;
+	Task* task;
+	char* creator;
+	char* taskName;
+
+	printf("Tasks in project:\n");
+	for (j = 1, i = 0; i < Project->ProjectTasksAmount; i++){
+		task = FindTask(GlobalFile->TaskList, Project->TasksIDS[i]);
+		status = task->TaskStatus;
+		if (status == 5) //Trash and won't show it
+			continue;
+		taskID = task->TaskID;
+		creator = task->TaskCreatorName;
+		taskName = task->TaskName;
+
+		printf("---\n");
+		printf("%d) ID: %d Creator: %s Status: %d\n", j, taskID, creator, status);
+		printf("Task: %s\n\n", taskName);
+		j++;
+	}
+}
+
+void PrintActivityLog(Global* GlobalFile, Project* project){
+
+	char BUFFER[400], *fileName = project->ProjectActivityLogs;
+	FILE* file = fopen(fileName, "r");
+	if (!file) return;
+
+	while (fgets(BUFFER, 400, file)) printf("%s\n", BUFFER);
+	fclose(file);
+}
+
+void PrintProjectDetails(Global* GlobalFile, Project* project){
+	int projectID = project->ProjectID,
+		numOfTasks = project->ProjectTasksAmount,
+		numOfUsers = project->ProjectUsersAmount;
+	char* creator = project->ProjectCreatorName, *projectName = project->ProjectName;
+
+	printf("Project Details:\n");
+	printf("-------------------");
+	printf("ID: %d , Number of tasks: %d , Number of users: %d , Creator: %s", projectID, numOfTasks, numOfUsers, creator);
+
+	//Need to print details of student here too.
+	printf("Students in project:\n");
+	printf("----------------------");
+	//Need to add a helper function for that
+}
+
+
+//////////////////////////////////// Johnatan func's end
+
+
 // add message to file
 void printLogToFile(char *file, char msg[500])
 {
@@ -16,9 +181,7 @@ void printLogToFile(char *file, char msg[500])
 	fprintf(fp,"%s", msg);
 	fclose(fp);
 }
-
-
-////////////Project create functions
+////////////		Project create functions
 // add new project to student's array of Project ID's, done, ready for testing
 void AddProjectIDToStudent(Student * Student, int ProjectID)
 {
@@ -169,7 +332,7 @@ int CreateNewProject(Global* GlobalFile,int userID, AccessGroup userGroup)
 	return 1;
 
 }
-////////// project create funcs end
+//////////			Project create funcs end
 
 // 42 - Add user to project  , done, ready for testing
 void addUserToProject(Global *GlobalFile, Project *newProject)
@@ -257,12 +420,31 @@ void addUserToProject(Global *GlobalFile, Project *newProject)
 	fclose(file);
 }
 
+// Add id of new task to array in project
+void AddTaskIDToProject(Project* project, int TaskID)
+{
+	int TaskIDSNewSize, index;
+	int* newArrayIDs;	//create new increased array
+
+	TaskIDSNewSize = project->ProjectTasksAmount + 1;
+	newArrayIDs = (int*)malloc(TaskIDSNewSize * sizeof(int));
+
+	for (index = 0; index < TaskIDSNewSize - 1; index++)
+		newArrayIDs[index] = project->TasksIDS[index];			// copy old values
+	newArrayIDs[index] = TaskID;					// add new project id to last index of nea array
+
+	free(project->TasksIDS);											// free old array memory
+	project->TasksIDS = newArrayIDs;									// set new array pointer to student
+
+
+}
+
 // 53 - create new task from project menu, done, ready for testing
 void CreateNewTask(Global *GlobalFile, Project *project,int UserID,AccessGroup group)
 {
 	Student *student = NULL;
 	Watcher *watcher = NULL;
-
+	char log[300];
 	Task *newTask = (Task*)malloc(sizeof(Task));	//new task pointer
 
 	newTask->TaskID = GlobalFile->TaskRunID;		// set Task Run ID
@@ -281,27 +463,31 @@ void CreateNewTask(Global *GlobalFile, Project *project,int UserID,AccessGroup g
 		return;
 	}
 
-	if (group == STUDENT)
+	if (group == STUDENT && student)
 	{
 		strcpy(newTask->TaskCreatorName, student->StudentName);			// copy creator name to task
 		student->StudentTasksAmount++;
+		// add log to student
+		sprintf(log, "%s created task : %s", student->StudentName, newTask->TaskName);
+		printLogToFile(student->StudentActivityLog, log);
 	}
-	else if (group == WATCHER)
+	else if (group == WATCHER && watcher)
 		strcpy(newTask->TaskCreatorName, watcher->WatcherName);			// copy creator name to task
+	
 
 	newTask->TaskStatus = NEW;								// initialize status
 	
+	// add ID of new task to array TasksIDs in project
+	AddTaskIDToProject(project, newTask->TaskID);
 
-	///////THERES AN ERROR HERE  //////
-	//project->TasksList = AddTask(project->TasksList, newTask);		// add new task to tasks list of choosen project
+	// add new task to global list of Tasks
+	AddTask(GlobalFile->TaskList, newTask);
 	printf("New Task \"%s\" was created in project \"%s\"\n",newTask->TaskName,project->ProjectName);
-
-
-	/// to complete saving ID to TASKSID array
-
+	// add creation of task to project log
+	printLogToFile(project->ProjectActivityLogs, log);
 }
 
-
+// print list of projects with details in which user is collaborator, done, ready for testing
 void PrintProjectsList(Global *GlobalFile, int UserID, AccessGroup group)
 {
 	int i;
@@ -365,168 +551,6 @@ void PrintProjectsList(Global *GlobalFile, int UserID, AccessGroup group)
 	
 }
 
-
-void PrintTasksList(Global* GlobalFile, Project* Project){
-	int i, j, status, taskID;
-	Task* task;
-	char* creator;
-	char* taskName;
-
-	printf("Tasks in project:\n");
-	for (j = 1, i = 0; i < Project->ProjectTasksAmount; i++){
-		task = FindTask(GlobalFile->TaskList, Project->TasksIDS[i]);
-		status = task->TaskStatus;
-		if (status == 5) //Trash and won't show it
-			continue;
-		taskID = task->TaskID;
-		creator = task->TaskCreatorName;
-		taskName = task->TaskName;
-
-		printf("---\n");
-		printf("%d) ID: %d Creator: %s Status: %d\n", j, taskID, creator, status);
-		printf("Task: %s\n\n", taskName);
-		j++;
-	}
-}
-
-void PrintActivityLog(Global* GlobalFile, Project* project){
-	
-	char BUFFER[400], *fileName = project->ProjectActivityLogs;
-	FILE* file = fopen(fileName, "r");
-	if (!file) return;
-
-	while (fgets(BUFFER, 400, file)) printf("%s\n", BUFFER);
-	fclose(file);
-}
-
-
-void PrintProjectDetails(Global* GlobalFile, Project* project){
-	int projectID = project->ProjectID,
-		numOfTasks = project->ProjectTasksAmount,
-		numOfUsers = project->ProjectUsersAmount;
-	char* creator = project->ProjectCreatorName, *projectName = project->ProjectName;
-
-	printf("Project Details:\n");
-	printf("-------------------");
-	printf("ID: %d , Number of tasks: %d , Number of users: %d , Creator: %s", projectID, numOfTasks, numOfUsers, creator);
-
-	//Need to print details of student here too.
-	printf("Students in project:\n");
-	printf("----------------------");
-	//Need to add a helper function for that
-}
-// change status of choosen task
-void ChangeTaskStatus(Global* GlobalFile, Project* project, int userID, int accessGroup){
-	int taskID, status;
-	Task* task;
-	//Getting a task from the user:
-
-	printf("Enter Task ID:\n");
-	scanf("%d", &taskID);
-	//Making sure that task is in the relevant project:
-	task = findTaskInProject(GlobalFile, project, taskID);
-	if (!task){
-		printf("Task does not belong to this project\n");
-		return;
-	}
-
-	printf("Current status is: %s\n", convertStatusToString(task->TaskStatus));
-	printf("Choose status to change into:\n");
-	printf("Available Status:\n");
-	printf("[0] New , [1] Elicitation, [2] Analysis, [3] VandV ");
-	if (accessGroup != STUDENT) printf(" [4] Approved"); //Student can't change to approved
-	printf("\n");
-	printf("Enter an integer of your choice:\n");
-	scanf("%d", &status);
-	if (accessGroup == STUDENT && status == APPROVED) {
-		printf("Student cannot set status to approved, please contact your watcher or admin\n");
-		return;
-	}
-	if (status == NEW || status == ELICITATION || status == ANALYSIS || status == VandV || status == APPROVED)
-		task->TaskStatus = (STATUS)status;
-	else
-		puts("Incorrect new status identificator, status not been changed.");
-}
-// undone
-void RemoveProject(Global* GlobalFile, Project* project, int userID, int accessGroup){
-	char choice = 'O';
-	printf("Are you sure you want to remove this project and all of its tasks (Y/N)?\n");
-	
-	while (choice == 'O'){
-		choice = getchar();
-
-		switch (choice){
-		case 'Y':
-		case 'y':
-			RemoveProjectFromList(GlobalFile->ProjectsList, project->ProjectID);
-			//delete // Need to implement functions that will remove this project id from all the users, from all the lists etc
-			break;
-		case 'N':
-		case 'n':
-			break;
-		default: printf("No such option!\n");
-			choice = 'O';
-		}
-	}
-
-}
-
-void LeaveMessageToStudent(Global* GlobalFile, Project* project, Watcher* watcher){
-	int studentID;
-	Student* student;
-	char* Message;
-	printf("Please choose a studentID of the student you want to leave a message for:\n");
-	scanf("%d", &studentID);
-	if (isStudentInProject(project, studentID)){
-		student = FindStudent(GlobalFile->StudentList, studentID);
-		if (!student) return //If for some reason student is not in the global file, exiting function
-		printf("Enter the message you want to leave (Between 5 to 30):\n");
-		do
-			scanf("%s", &Message);
-		while (strlen(Message) < 5 || strlen(Message) > 30);
-		strcpy(student->StudentMessages, Message);
-	}
-}
-
-void AddProjectMessage(Global* GlobalFile, Project* project, Watcher* watcher){
-	char* Message = "";
-	printf("Enter the message you want to leave (Between 5 to 30):\n");
-	do
-	scanf("%s", &Message);
-	while (strlen(Message) < 5 || strlen(Message) > 30);
-
-	strcpy(project->ProjectMessages, Message);
-}
-
-void ShowTasksByStatus(Global* GlobalFile, int studentID ){
-	int tasksCount = 1 , i,j, status = -1 , projectID, taskID;
-	Student* student = FindStudent(GlobalFile->StudentList, studentID);
-	Project* project;
-	Task* task;
-	int* projectIDs = student->ProjectIDS;
-
-	printf("Available Status:\n");
-	printf("[0] New , [1] Elicitation, [2] Analysis, [3] VandV, [4] Approved\n ");
-	printf("Enter an integer of your choice:\n");
-	do
-	scanf("%d", &status);
-	while (status < 0 || status > 4);
-
-	//Finding all the projects this student belongs to and printing the tasks:
-	for (i = 0; i < student->StudentProjectsAmount; i++){
-		projectID = projectIDs[i];
-		project = FindProject(GlobalFile->ProjectsList, projectID);
-		for (j = 0; j < project->ProjectTasksAmount; j++){
-			taskID = project->TasksIDS[j];
-			task = findTaskInProject(GlobalFile, project, taskID);
-			if (task->TaskStatus == status){
-				printf("%d.)ID: %d , Creator: %s , Task: %s \n", tasksCount,task->TaskID, task->TaskCreatorName, task->TaskName);
-				tasksCount++;
-			}
-		}
-	}
-
-}
 // print activity log of student in project, receive student, done, ready for testing
 void PrintStudentLog(Student* student){
 	char BUFFER[400], *fileName = student->StudentActivityLog;
@@ -536,6 +560,7 @@ void PrintStudentLog(Student* student){
 	while (fgets(BUFFER, 400, file)) printf("%s\n", BUFFER);
 	fclose(file);
 }
+
 // receive ID and return user group, done, ready for testing
 int FindAccessGroup(int ID){
 	//Should be in Functions, I wrote it for the meantime here
@@ -602,6 +627,7 @@ void UpdateDetails(Global* GlobalFile, int userID){
 	}
 
 }
+
 // print global message from admin, done, ready for testing
 void PrintGlobalMessages(Global *GlobalFile)
 {
@@ -613,6 +639,7 @@ void PrintGlobalMessages(Global *GlobalFile)
 	}
 	
 }
+
 // add message by admin, done, ready for etsting
 void AddGlobalMessage(Global* GlobalFile){
 	char temp[250];
@@ -623,7 +650,8 @@ void AddGlobalMessage(Global* GlobalFile){
 
 	strcpy(GlobalFile->GlobalMessages, temp);
 }
-// quotes funcs start, done, ready to testing
+
+// Quotes funcs start, done, ready to testing
 void AddNewQuote(Global* GlobalFile){
 	char tempQuote[300], tempAuthor[100];
 	//Creating a new quote and incrementing quoteRunID: Not sure if that's right
@@ -712,7 +740,8 @@ void ManageQuotes(Global *GlobalFile)
 
 }
 // quotes funcs end
-//
+
+
 // prints all users in system, for admin, done, ready for testing
 void PrintUsersLists(Global* GlobalFile)
 {
@@ -726,6 +755,7 @@ void PrintUsersLists(Global* GlobalFile)
 	PrintWatcherList(GlobalFile->WatchersList);
 	puts("");
 }
+
 // print all tasks with ID's from received array, done, ready for testing
 void PrintTasksByID(Task *head, int indexes[], int size, char *creator)
 {
@@ -750,6 +780,7 @@ void PrintTasksByID(Task *head, int indexes[], int size, char *creator)
 	if (CreatedTasks == 0)
 		puts("User not created any task in this project");
 }
+
 // print projects by ID's array, done, ready for testing
 void PrintProjectsByID(Global *GlobalFile, int indexes[],int size,char *creator)
 {
@@ -771,6 +802,7 @@ void PrintProjectsByID(Global *GlobalFile, int indexes[],int size,char *creator)
 		}
 	}
 }
+
 // print all users in system, gives option to chooce user for more information, done, ready for testing
 void ShowUserDetails(Global *GlobalFile)
 {
@@ -850,6 +882,7 @@ int *RemoveUserIDFromProject(Project* project, int ID)
 
 	return UsersIDs;
 }
+
 // receive user id, run over all projects, if user in project, remove it from array, and decrease amount of users in project, done, ready for testing
 void RemoveUserFromProjects(Global *GlobalFile, int UserID)
 {
@@ -869,6 +902,7 @@ void RemoveUserFromProjects(Global *GlobalFile, int UserID)
 	}
 
 }
+
 // print all users in database for admin, admin chooce user id for delete, done, ready for testing
 void DeleteUser(Global *GlobalFile)
 {
@@ -915,6 +949,7 @@ void DeleteUser(Global *GlobalFile)
 		break;
 	}
 }
+
 // promote user to Admin, done, ready for testing
 void PromoteUserToAdmin(Global *GlobalFile)
 {
