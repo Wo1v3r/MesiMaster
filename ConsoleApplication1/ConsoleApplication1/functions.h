@@ -9,8 +9,17 @@ void PrintProjectsList(Global *GlobalFile, int UserID, AccessGroup group);						
 /////// declarations end
 
 // Functions
+// add message to file
+void printLogToFile(char *file, char msg[500])
+{
+	FILE *fp = fopen(file, "a");
+	fprintf(fp,"%s", msg);
+	fclose(fp);
+}
+
+
 ////////////Project create functions
-// add new project to student's array of Project IS's
+// add new project to student's array of Project ID's, done, ready for testing
 void AddProjectIDToStudent(Student * Student, int ProjectID)
 {
 	int ProjectIDSNewSize,index;
@@ -27,7 +36,7 @@ void AddProjectIDToStudent(Student * Student, int ProjectID)
 	Student->ProjectIDS = newArrayIDs;									// set new array pointer to student
 	Student->StudentProjectsAmount++;								// update size of projects amount to watcher
 }
-// add new project to watcher's array of Project IS's
+// add new project to watcher's array of Project ID's, done, ready for testing
 void AddProjectIDToWatcher(Watcher * Watcher, int ProjectID)
 {
 	int ProjectIDSNewSize, index;
@@ -44,13 +53,15 @@ void AddProjectIDToWatcher(Watcher * Watcher, int ProjectID)
 	Watcher->ProjectIDS = newArrayIDs;									// set new array pointer to student
 	Watcher->WatcherProjectsAmount++;								// update size of projects amount to watcher
 }
-// 46 - Create new project by STUDENT or WATCHER only, UNDONE
+// 46 - Create new project by STUDENT or WATCHER only, UNDONE, should to split
 int CreateNewProject(Global* GlobalFile,int userID, AccessGroup userGroup)
 {
 	Student *Student;
 	Watcher *Watcher;
+	FILE *file = NULL;
 	puts("Input Name of your project (maximum 127 characters) : ");
 	char buffer[128];		// get name
+	char logText[500];
 	gets(buffer);
 	
 	// check if student or watcher and get pointer to him
@@ -108,19 +119,26 @@ int CreateNewProject(Global* GlobalFile,int userID, AccessGroup userGroup)
 	AddProject(GlobalFile->ProjectsList, newProject); 
 
 	//add id of new project to creator
-	int ProjectIDSNewSize,index;
-	int* newArrayIDs;	//create new increased array
-
 	if (userGroup == STUDENT)			// add project ID to student 
-	{
 		AddProjectIDToStudent(Student, newProject->ProjectID);
-	}
 
 	else if (userGroup == WATCHER)			// add project ID to Watcher's array
-	{
 		AddProjectIDToWatcher(Watcher, newProject->ProjectID);
-	}
 
+
+	// print log to project activity file
+
+	sprintf(logText, "Project [%d] created by %s\n", newProject->ProjectID, newProject->ProjectCreatorName);
+	printLogToFile(newProject->ProjectActivityLogs, logText);
+	//---------------------
+
+	// print log to student activity file
+	if (Student)
+	{
+		sprintf(logText, "Created project \" %s \" with id [%d]\n", newProject->ProjectID, newProject->ProjectCreatorName);
+		printLogToFile(Student->StudentActivityLog, logText);
+	}
+	//---------------------
 
 	char choice;
 	printf("Project \"%s\" created!\nWant to add collaborators to this project? (y / n) :", newProject->ProjectName);
@@ -151,18 +169,18 @@ int CreateNewProject(Global* GlobalFile,int userID, AccessGroup userGroup)
 	return 1;
 
 }
-
-
 ////////// project create funcs end
+
 // 42 - Add user to project  , done, ready for testing
 void addUserToProject(Global *GlobalFile, Project *newProject)
 {
 	BOOL flag = TRUE;
+	FILE *file = fopen(newProject->ProjectActivityLogs,"a");
 	Student *student=NULL;
 	Watcher *watcher= NULL;
 	char choice;
-	int StudentProjectsIDSNewSize, WatcherProjectsIDSNewSize, i, ProjectUsersIDNewSize, ID;
-	int* ProjectsIDs,*UsersID;	//create new increased array
+	int   i, ProjectUsersIDNewSize, ID;
+	int *UsersID;	//create new increased array
 
 
 	while (flag)
@@ -184,6 +202,8 @@ void addUserToProject(Global *GlobalFile, Project *newProject)
 				/// add project to student 
 				AddProjectIDToStudent(student, newProject->ProjectID);
 				printf("\nStudent with ID : %d was added to project!\n", ID);
+				fprintf(file,"Student with ID : %d was added to project!\n", ID);
+
 				
 				// add student to project
 				ProjectUsersIDNewSize = newProject->ProjectUsersAmount + 1;
@@ -208,7 +228,8 @@ void addUserToProject(Global *GlobalFile, Project *newProject)
 				/// add project to watcher 
 				AddProjectIDToWatcher(watcher, newProject->ProjectID);
 
-				printf("Watcher with ID : %d was added to project!\n", ID);
+				printf("\nWatcher with ID : %d was added to project!\n", ID);
+				fprintf(file,"Watcher with ID : %d was added to project!\n", ID);
 
 				// add watcher to project
 				ProjectUsersIDNewSize = newProject->ProjectUsersAmount + 1;
@@ -232,6 +253,8 @@ void addUserToProject(Global *GlobalFile, Project *newProject)
 		}
 
 	}
+
+	fclose(file);
 }
 
 // 53 - create new task from project menu, done, ready for testing
@@ -392,7 +415,7 @@ void PrintProjectDetails(Global* GlobalFile, Project* project){
 	printf("----------------------");
 	//Need to add a helper function for that
 }
-
+// change status of choosen task
 void ChangeTaskStatus(Global* GlobalFile, Project* project, int userID, int accessGroup){
 	int taskID, status;
 	Task* task;
@@ -411,7 +434,7 @@ void ChangeTaskStatus(Global* GlobalFile, Project* project, int userID, int acce
 	printf("Choose status to change into:\n");
 	printf("Available Status:\n");
 	printf("[0] New , [1] Elicitation, [2] Analysis, [3] VandV ");
-	if (accessGroup != 1) printf(" [4] Approved"); //Student can't change to approved
+	if (accessGroup != STUDENT) printf(" [4] Approved"); //Student can't change to approved
 	printf("\n");
 	printf("Enter an integer of your choice:\n");
 	scanf("%d", &status);
@@ -419,10 +442,12 @@ void ChangeTaskStatus(Global* GlobalFile, Project* project, int userID, int acce
 		printf("Student cannot set status to approved, please contact your watcher or admin\n");
 		return;
 	}
-	task->TaskStatus = (STATUS)status;
+	if (status == NEW || status == ELICITATION || status == ANALYSIS || status == VandV || status == APPROVED)
+		task->TaskStatus = (STATUS)status;
+	else
+		puts("Incorrect new status identificator, status not been changed.");
 }
-
-
+// undone
 void RemoveProject(Global* GlobalFile, Project* project, int userID, int accessGroup){
 	char choice = 'O';
 	printf("Are you sure you want to remove this project and all of its tasks (Y/N)?\n");
@@ -808,4 +833,125 @@ void ShowUserDetails(Global *GlobalFile)
 		Exit(GlobalFile);											//////// check correct option for this
 	else
 		puts("Incorrect choice, returning to previous menu");
+}
+
+//receive id and project, remove user ID from array of USersIDs and update array, done, ready for testing
+int *RemoveUserIDFromProject(Project* project, int ID)
+{
+	int *UsersIDs = (int*)malloc((project->ProjectUsersAmount - 1) * sizeof(int)),i,newindex=0;
+	
+	for (i = 0; i < project->ProjectUsersAmount; i++,newindex++)
+	{
+		if (project->StudentsIDS[i] != ID)
+			UsersIDs[newindex] = project->StudentsIDS[i];
+		else
+			newindex--;
+	}
+
+	return UsersIDs;
+}
+// receive user id, run over all projects, if user in project, remove it from array, and decrease amount of users in project, done, ready for testing
+void RemoveUserFromProjects(Global *GlobalFile, int UserID)
+{
+	Project *current = GlobalFile->ProjectsList;
+	int i;
+	while (current)
+	{
+		for (i = 0; i < current->ProjectUsersAmount; i++)
+		{
+			if (current->StudentsIDS[i] == UserID)
+			{
+				current->StudentsIDS = RemoveUserIDFromProject(current, UserID);
+				current->ProjectUsersAmount--;
+			}
+		}
+		current = current->ProjectNext;
+	}
+
+}
+// print all users in database for admin, admin chooce user id for delete, done, ready for testing
+void DeleteUser(Global *GlobalFile)
+{
+	int ID;
+	AccessGroup group;
+	Student *student = NULL;
+	Watcher *watcher = NULL;
+	Admin *admin = NULL;
+
+	puts("List of all users in system :\n-----------------------");
+	PrintUsersLists(GlobalFile);
+	printf("Enter ID of user you want to remove: ");
+	fflush(stdin);
+	scanf("%d", &ID);
+	group = FindAccessGroup(ID);
+	switch (group)
+	{
+	case WATCHER:
+		watcher = FindWatcher(GlobalFile->WatchersList, ID);
+		if (watcher)
+		{
+			RemoveWatcherFromList(GlobalFile->WatchersList, ID);
+			RemoveUserFromProjects(GlobalFile, ID);
+		}
+		else
+			puts("Watcher not found in database");
+		break;
+	case STUDENT:
+		student = FindStudent(GlobalFile->StudentList, ID);
+		if (student)
+		{
+			RemoveStudentFromList(GlobalFile->StudentList, ID);
+			RemoveUserFromProjects(GlobalFile, ID);
+		}
+		else
+			puts("Student not found in database");
+		break;
+	case ADMIN:
+		admin = FindAdmin(GlobalFile->AdminsList, ID);
+		if (admin)
+			RemoveAdminFromList(GlobalFile->AdminsList, ID);
+		else
+			puts("Admin not found in database");
+		break;
+	}
+}
+// promote user to Admin, done, ready for testing
+void PromoteUserToAdmin(Global *GlobalFile)
+{
+	puts("List of all users in system :\n-----------------------");
+	PrintUsersLists(GlobalFile);
+	int ID;
+	Student *student = NULL;
+	Watcher *watcher = NULL;
+	AccessGroup group = BAD;
+	
+	printf("Input ID of user, you want to promoto to ADMIN group : ");
+	fflush(stdin);
+	scanf("%d", &ID);
+	group = FindAccessGroup(ID);
+	switch (group)
+	{
+	case BAD:
+		puts("Incorrect range of ID ( 1000 - 3999 )");
+		break;
+	case STUDENT:
+		student = FindStudent(GlobalFile->StudentList, ID);
+		if (student)
+			student->Group = ADMIN;
+		else
+			puts("Student with this id not found");
+		break;
+
+	case WATCHER:
+		watcher = FindWatcher(GlobalFile->WatchersList, ID);
+		if (watcher)
+			watcher->Group = ADMIN;
+		else
+			puts("Watcher with this id not found");
+		break;
+
+	case ADMIN:
+		puts("User with this ID is admin already");
+	}
+	
 }
