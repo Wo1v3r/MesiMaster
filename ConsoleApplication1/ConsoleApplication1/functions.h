@@ -5,6 +5,7 @@
 void addUserToProject(Global *GlobalFile, Project *newProject);									//42
 void CreateNewTask(Global *GlobalFile, Project *project, int UserID, AccessGroup group);		//53
 void PrintProjectsList(Global *GlobalFile, int UserID, AccessGroup group);						//44
+void printLogToFile(char *file, char msg[500]);
 
 /////// declarations end
 ///////////////////////////////////// Johnatan func's
@@ -65,21 +66,26 @@ void RemoveProject(Global* GlobalFile, Project* project, int userID, int accessG
 
 }
 
+// choose student id in project and send message to him, done, ready for testing
 void LeaveMessageToStudent(Global* GlobalFile, Project* project, Watcher* watcher){
 	int studentID;
 	Student* student;
 	char* Message;
-	printf("Please choose a studentID of the student you want to leave a message for:\n");
+	printf("Please choose a studentID of the student you want to leave a message for (message will be shown once)\n");
 	scanf("%d", &studentID);
 	if (isStudentInProject(project, studentID)){
 		student = FindStudent(GlobalFile->StudentList, studentID);
-		if (!student) return //If for some reason student is not in the global file, exiting function
+		if (!student) return; //If for some reason student is not in the global file, exiting function
 			printf("Enter the message you want to leave (Between 5 to 30):\n");
 		do
 		scanf("%s", &Message);
 		while (strlen(Message) < 5 || strlen(Message) > 30);
 		strcpy(student->StudentMessages, Message);
 	}
+	// add message to student message file 
+	FILE *file = fopen(student->StudentMessages, "a");
+	fprintf("%s %s\n", watcher->WatcherUsername, Message);
+
 }
 
 void AddProjectMessage(Global* GlobalFile, Project* project, Watcher* watcher){
@@ -90,6 +96,12 @@ void AddProjectMessage(Global* GlobalFile, Project* project, Watcher* watcher){
 	while (strlen(Message) < 5 || strlen(Message) > 30);
 
 	strcpy(project->ProjectMessages, Message);
+
+	// add message to project activity and Messages logs
+	char log[120];
+	sprintf(log,"%s added message : %s", watcher->WatcherUsername, Message);
+	printLogToFile(project->ProjectMessages,log);
+	printLogToFile(project->ProjectActivityLogs, log);
 }
 
 void ShowTasksByStatus(Global* GlobalFile, int studentID){
@@ -121,13 +133,19 @@ void ShowTasksByStatus(Global* GlobalFile, int studentID){
 	}
 }
 
-void PrintTasksList(Global* GlobalFile, Project* Project){
+int PrintTasksList(Global* GlobalFile, Project* Project){
 	int i, j, status, taskID;
 	Task* task;
 	char* creator;
 	char* taskName;
 
 	printf("Tasks in project:\n");
+	if (Project->ProjectTasksAmount == 0)
+	{
+		puts("No Tasks created in this project");
+		return -1;		// No tasks returned value
+	}
+
 	for (j = 1, i = 0; i < Project->ProjectTasksAmount; i++){
 		task = FindTask(GlobalFile->TaskList, Project->TasksIDS[i]);
 		status = task->TaskStatus;
@@ -142,6 +160,7 @@ void PrintTasksList(Global* GlobalFile, Project* Project){
 		printf("Task: %s\n\n", taskName);
 		j++;
 	}
+	return 0;	// planned end of function
 }
 
 void PrintActivityLog(Global* GlobalFile, Project* project){
@@ -491,7 +510,7 @@ void CreateNewTask(Global *GlobalFile, Project *project,int UserID,AccessGroup g
 		project->ProgramChanges = TRUE;
 }
 
-// print list of projects with details in which user is collaborator, done, ready for testing
+// print list of projects with details in which user is collaborator - for students, done, ready for testing
 void PrintProjectsList(Global *GlobalFile, int UserID, AccessGroup group)
 {
 	int i;
@@ -553,6 +572,71 @@ void PrintProjectsList(Global *GlobalFile, int UserID, AccessGroup group)
 		return;
 	}
 	
+}
+
+// print users list by ID array in project, done,ready fro testing
+void PrintUsersByID(Global *GlobalFile, Project *project)
+{
+	int i;
+	Student *student = NULL;
+	puts("Collaborators in project");
+	if (project->ProjectUsersAmount == 0)
+		puts("No users added.");
+	printf("Username\t\tName\t\tSurename\t\tDepartment\tEmail\t");
+	for (i = 0; i < project->ProjectUsersAmount; i++)
+	{
+		student = FindStudent(GlobalFile->StudentList, project->StudentsIDS[i]);
+		if (student)
+			printf("%s\t\t%s\t%s\t%d\t%s", student->StudentUsername, student->StudentName, student->StudentSurename, student->StudentDepartment, student ->StudentEmail);
+	}
+
+}
+
+// print list of projects with details in which watcher is watching, done, ready for testing
+void PrintProjectsListWatcher(Global *GlobalFile, int UserID, AccessGroup group)
+{
+	int i;
+	Student* student = NULL;
+	Watcher *watcher = NULL;
+	Project *current = NULL;
+	int *ProjectsIDS;
+
+	if (GlobalFile->ProjectsList == NULL)
+	{
+		puts("No Projects in database");
+		return;
+	}
+
+	// in case of watcher
+	if (group == WATCHER)
+	{
+		watcher = FindWatcher(GlobalFile->WatchersList, UserID);
+		ProjectsIDS = watcher->ProjectIDS;
+		if (watcher->WatcherProjectsAmount == 0)
+		{
+			puts("Watcher not in any project");
+			return;
+		}
+
+		int arraySize = sizeof(ProjectsIDS) / sizeof(int);
+		puts("List of your projects :");
+		printf("ID\tName\tUsers\tTasks");
+		for (i = 0; i < arraySize; i++)
+		{
+			current = FindProject(GlobalFile->ProjectsList, watcher->ProjectIDS[i]);
+			if (current)
+			{
+				printf("%d\t%s\t%d\t%d", current->ProjectID, current->ProjectName, current->ProjectUsersAmount, current->ProjectTasksAmount);
+				PrintUsersByID(GlobalFile, current);				
+			}
+		}
+	}
+	else
+	{
+		puts("Incorrect access group");
+		return;
+	}
+
 }
 
 // print activity log of student in project, receive student, done, ready for testing
@@ -997,7 +1081,6 @@ void PromoteUserToAdmin(Global *GlobalFile)
 
 
 //// watcher notifications
-
 // Turns on / off watcher notifications, return true if status changed, false if not changed
 BOOL ShowNotifications(Global *GlobalFile, Watcher *watcher)
 {
@@ -1040,5 +1123,29 @@ void PrintProjectChanges(Global *GlobalFile, Project* project, Watcher *watcher)
 		PrintActivityLog(GlobalFile, project);
 	}
 
-
 }
+//// watcher notifications end
+
+// show messages from watcher to student, done, ready for testing
+void ShowMessagesToStudent(Global * Global, Student *student)
+{
+
+	FILE *file = fopen(student->StudentMessages, "r");
+	char username[31], message[31];
+	if (file)
+	{
+		puts("You have one or more messages from watchers");
+		while (!feof(file))
+		{
+			fscanf("%s %s", &username, &message);
+			printf("User : %s, Message :%s", &username, &message);
+		}
+	}
+	fclose(file);
+	// once messages been printed to student, delete old file by creating new empty one
+	file = fopen(student->StudentMessages, "w");
+	fclose(file);
+}
+
+
+// wtite  function to print project messages to project team! 
