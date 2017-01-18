@@ -485,6 +485,10 @@ void CreateNewTask(Global *GlobalFile, Project *project,int UserID,AccessGroup g
 	printf("New Task \"%s\" was created in project \"%s\"\n",newTask->TaskName,project->ProjectName);
 	// add creation of task to project log
 	printLogToFile(project->ProjectActivityLogs, log);
+
+	// switch flag for watcher subscribes
+	if (project->ProgramChanges == FALSE)
+		project->ProgramChanges = TRUE;
 }
 
 // print list of projects with details in which user is collaborator, done, ready for testing
@@ -989,4 +993,52 @@ void PromoteUserToAdmin(Global *GlobalFile)
 		puts("User with this ID is admin already");
 	}
 	
+}
+
+
+//// watcher notifications
+
+// Turns on / off watcher notifications, return true if status changed, false if not changed
+BOOL ShowNotifications(Global *GlobalFile, Watcher *watcher)
+{
+	char choice;
+
+	printf("\nCurrent status of Subscription : ");
+	if (watcher->WatcherReceiveChanges == FALSE)
+		puts("OFF");
+	if (watcher->WatcherReceiveChanges == TRUE)
+		puts("ON");
+
+	printf("\nChange status? ( Y/N ) : ");
+	fflush(stdin);
+	choice = getchar();
+	if (choice == 'y' || choice == 'Y')
+	{
+		puts("New status : ON");
+		watcher->WatcherReceiveChanges = TRUE;
+		return TRUE;
+	}
+	else if (choice == 'n' || choice == 'N')
+	{
+		puts("New status : OFF");
+		watcher->WatcherReceiveChanges = FALSE;
+		return TRUE;
+	}
+	puts("Incorrect choice, status not been changed");
+		return FALSE;
+	
+	
+
+}
+
+// print changes in project to watcher
+void PrintProjectChanges(Global *GlobalFile, Project* project, Watcher *watcher)
+{
+	if (watcher->WatcherReceiveChanges == TRUE)
+	{
+		puts("Last changes in this project : ");
+		PrintActivityLog(GlobalFile, project);
+	}
+
+
 }
