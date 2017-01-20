@@ -40,7 +40,6 @@ Admin * WatcherToAdmin(Global *GlobalFile, Watcher *watcher);
 
 //Log functions
 void PrintStudentLog(Student* student);
-void printLogToFile(char *file, char msg[500]);
 void printLogToFile(char file[], char msg[500]);
 void PrintProjectChanges(Global *GlobalFile, Project* project, Watcher *watcher);
 void PrintGlobalMessages(Global *GlobalFile);
