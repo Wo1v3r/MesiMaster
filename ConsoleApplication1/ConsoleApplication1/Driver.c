@@ -328,6 +328,7 @@ void LoginMenu(Global* GlobalFile){
 			printf("Thank you for using MesiMaster, have a fruitful day!\n\n");
 			system("pause");
 			Exit(GlobalFile);
+			return;
 		case 1:
 			ID = Login(GlobalFile); //If ID = 0 means there was a problem with the login
 			break;
@@ -370,6 +371,7 @@ void LoginMenu(Global* GlobalFile){
 			printf("Thank you for using MesiMaster, have a fruitful day!\n\n");
 			system("pause");
 			Exit(GlobalFile);
+			return;
 		}
 
 	}
