@@ -374,7 +374,7 @@ void UpdateDetails(Global* GlobalFile, int userID){
 void printLogToFile(char file[], char msg[500])
 {
 	FILE *fp = fopen(file, "a");
-	if (fp)
+	if (fp!=NULL)
 	{
 		fprintf(fp, "%s", msg);
 		fclose(fp);
@@ -493,13 +493,15 @@ int CreateNewProject(Global* GlobalFile,int userID, AccessGroup userGroup)
 
 	sprintf(logText, "%s created this project with id [%d]\n", newProject->ProjectCreatorName,newProject->ProjectID);
 	printLogToFile(newProject->ProjectActivityLogs, logText);
+
 	//---------------------
 
 	// print log to student activity file
 	if (Student)
 	{
-		sprintf(logText, "Created project \" %s \" with id [%d]\n", newProject->ProjectID, newProject->ProjectCreatorName);
+		sprintf(logText, "Created project \" %s \" with id [%d]\n", newProject->ProjectName, newProject->ProjectID);
 		printLogToFile(Student->StudentActivityLog, logText);
+
 	}
 	//---------------------
 
