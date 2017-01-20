@@ -1368,4 +1368,120 @@ BOOL CheckPassword(char* pass)
 		return FALSE;
 	}
 }
+BOOL CheckIfUserExists(Global *g, char *username)
+{
+	Student *tempStud = g->StudentList;
+	Watcher *tempWatch = g->WatchersList;
+	Admin *tempAdm = g->AdminsList;
+	while (tempStud != NULL)																		//Checking if the username exists in the student list																																
+	{
+		if (strcmp(tempStud->StudentUsername, username) == 0)
+		{
+			return TRUE;
+		}
+		tempStud = tempStud->StudentNext;
+	}
+	while (tempWatch != NULL)														                //Checking if the username exists in the watcher list
+	{
+		if (strcmp(tempWatch->WatcherUsername, username) == 0)
+		{
+			return TRUE;
+		}
+		tempWatch = tempWatch->WatcherNext;
+	}
+	while (tempAdm != NULL)														                    //Checking if the username exists in the admins list
+	{
+		if (strcmp(tempAdm->AdminUsername, username) == 0)
+		{
+			return TRUE;
+		}
+		tempAdm = tempAdm->AdminNext;
+	}
+	return FALSE;
+}
 
+
+int AdminRegister(Global *GlobalFile)
+{
+	Admin* newAdmin = NULL;
+	int choice = 0;
+	newAdmin = (Admin*)malloc(sizeof(Admin));													//Allocating memory for the new watcher
+
+	if (newAdmin == NULL)                                                                         //Allocation check
+	{
+		printf("Error allocating memory for the new Admin.\n");
+		return 0;
+	}
+	newAdmin->AdminID = GlobalFile->AdminRunID;														//Id allocation
+	(GlobalFile->AdminRunID)++;
+
+	do{																								//Initializing username
+		_flushall();
+		printf("Enter your desired username: (Has to be less then 30 characters!)\n");
+		scanf("%s", newAdmin->AdminUsername);
+		getchar();
+		if (CheckIfUserExists(GlobalFile, newAdmin->AdminName) == TRUE)
+		{
+			printf("This username already exists in the system. \n Press 1 to try again, press 2 to go back to the next menu.\n");
+			scanf("%d", &choice);
+		}
+	} while (CheckIfUserExists(GlobalFile, newAdmin->AdminUsername) == TRUE && choice == 1);
+
+	if (choice != 1 && choice != 0)
+	{
+		printf("You did not press 1 to continue. Going back to last menu.\n");
+		free(newAdmin);
+		return 0;
+	}
+	//Initializing password
+	do{
+		_flushall();
+		printf("Enter your desired password: (Has to be less then 30 characters, and contain\n");
+		printf("at least one digit, one upper case letter, one lower case letter)\n");
+		scanf("%s", newAdmin->AdminPassword);
+		if (CheckPassword(newAdmin->AdminPassword) == FALSE)
+		{
+			printf("This password is invalid.\n You need to try again.\n");
+		}
+	} while (CheckPassword(newAdmin->AdminPassword) == FALSE);
+	//Initializing other attributes that require user input
+	printf("Enter your first name: (Has to be less then 20 characters!)\n");
+	scanf("%s", newAdmin->AdminName);
+	printf("Enter your last name: (Has to be less then 20 chatacters!)\n");
+	scanf("%s", newAdmin->AdminSurename);
+
+	newAdmin->Group = ADMIN;																	
+
+	AddAdmin(GlobalFile->AdminsList, newAdmin);	// add to AdminsList
+	return newAdmin->AdminID;
+}
+// Allow Admin to add new user
+int AddNewUser(Global *GlobalFile)
+{
+	int choice;
+	puts("You choosed to register new user :");
+                                                                                  //Action menu - choosing user type or action (student, watcher, back)
+	do{
+		printf("Choose a user type:\n\t[1] Student\n\t[2] Watcher\n\t[3] Admin\n\t[4] Back to last menu\n");
+		scanf("%d", &choice);
+	} while (choice != 1 && choice != 2 && choice != 3 && choice!=4);
+
+	if (choice == 1)                                                                                //Executing student registration
+	{
+		return StudentRegister(GlobalFile);
+	}
+	else if (choice == 2)																			//Executing watcher registration
+	{
+		return WatcherRegister(GlobalFile);
+	}
+	else if (choice == 3)
+	{
+		return AdminRegister(GlobalFile);
+	}
+	else
+		{	//Back to last menu
+		return 0;
+		}
+	
+
+}
