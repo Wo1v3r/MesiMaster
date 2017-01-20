@@ -376,6 +376,30 @@ Quote *RemoveQuoteFromList(Quote *head, int deleteID)
 	}
 	return head;
 }
+
+
+Task *RemoveTaskFromList(Task *head, int deleteID)
+{
+	Task *current = head, *previous = NULL;
+	if (!head) return NULL;
+
+	while (current->TaskID != deleteID && current->TaskNext != NULL)
+	{
+		previous = current;
+		current = current->TaskNext;
+	}
+
+	if (current->TaskID == deleteID)
+	{
+		if (previous)
+			previous->TaskNext = current->TaskNext;
+		else
+			head = current->TaskNext;
+
+		free(current);
+	}
+	return head;
+}
 /// end remove functions
 
 

@@ -7,6 +7,7 @@ void CreateNewTask(Global *GlobalFile, Project *project, int UserID, AccessGroup
 void PrintProjectsList(Global *GlobalFile, int UserID, AccessGroup group);						//44
 void printLogToFile(char *file, char msg[500]);
 BOOL CheckPassword(char* pass);
+BOOL CheckIfUserExists(Global *g, char *username);
 
 /////// declarations end
 ///////////////////////////////////// Johnatan func's
@@ -53,9 +54,68 @@ void ChangeTaskStatus(Global* GlobalFile, Project* project, int userID, int acce
 	else
 		puts("Incorrect status identificator, status not been changed.");
 }
-// undone
+
+
+//remove project id from received array, and return new array 
+int* RemoveProjectIDFromArray(int Array[], int ProjectID)
+{
+	int size = (sizeof(Array) / sizeof(int));
+	int *ProjectsIDs = (int*)malloc((size - 1) * sizeof(int)), i, newindex = 0;
+
+	for (i = 0; i < size; i++, newindex++)
+	{
+		if (Array[i] != ProjectID)
+			ProjectsIDs[newindex] = Array[i];
+		else
+			newindex--;
+	}
+
+	return ProjectsIDs;
+}
+
+// run over all watcher and student list, if found project ID in him array, delete it
+int RemoveProjectFromUsers(Global* GlobalFile, int ProjectID)
+{
+	int *CheckArray = NULL,i;
+	int DeletedFromArrays = 0;	// counter return amount of arrays, where ID been found and deleted from
+	Watcher *watcher = GlobalFile->WatchersList;
+	Student *student = GlobalFile->StudentList;
+
+	while (watcher)
+	{
+		for (i = 0; i < watcher->WatcherProjectsAmount; i++)
+		{
+			if (watcher->ProjectIDS[i] == ProjectID);
+			{
+				watcher->ProjectIDS = RemoveProjectIDFromArray(watcher->ProjectIDS, ProjectID);
+				watcher->WatcherProjectsAmount--;
+				DeletedFromArrays++;
+				break;
+			}
+		}
+		watcher = watcher->WatcherNext;
+	}
+	while (student)
+	{
+		for (i = 0; i < student->StudentProjectsAmount; i++)
+		{
+			if (student->ProjectIDS[i] == ProjectID);
+			{
+				student->ProjectIDS = RemoveProjectIDFromArray(student->ProjectIDS, ProjectID);
+				student->StudentProjectsAmount--;
+				DeletedFromArrays++;
+				break;
+			}
+		}
+		student = student->StudentNext;
+	}
+	return DeletedFromArrays;
+}
+
+// done by Alexey, ready for testing
 void RemoveProject(Global* GlobalFile, Project* project, int userID, int accessGroup){
 	char choice = 'O';
+	int i;
 	printf("Are you sure you want to remove this project and all of its tasks (Y/N)?\n");
 
 	while (choice == 'O'){
@@ -64,6 +124,16 @@ void RemoveProject(Global* GlobalFile, Project* project, int userID, int accessG
 		switch (choice){
 		case 'Y':
 		case 'y':
+
+			// remove Project ID from all users's arrays of ProjectsID
+			RemoveProjectFromUsers(GlobalFile, project->ProjectID);
+			free(project->StudentsIDS);
+			// remove tasks belongs to project from Global task list
+			for (i = 0; i < sizeof(project->TasksIDS) / sizeof(int); i++)
+				RemoveTaskFromList(GlobalFile->TaskList, project->TasksIDS[i]);
+
+			free(project->TasksIDS);
+			// remove project from GLobal list
 			RemoveProjectFromList(GlobalFile->ProjectsList, project->ProjectID);
 			//delete // Need to implement functions that will remove this project id from all the users, from all the lists etc
 			break;
@@ -197,7 +267,7 @@ int PrintTasksList(Global* GlobalFile, Project* Project){
 	return 0;	// planned end of function
 }
 
-// signature was changet to print all types of logs
+// signature was changed to print all types of logs
 void PrintActivityLog(char* filePath){
 
 	char BUFFER[400];
@@ -268,7 +338,7 @@ void UpdateDetails(Global* GlobalFile, int userID){
 	}
 
 	printf("\nDo you want to change your first name?(y/n)\n");
-	scanf("%c", &input);
+	input = getchar();
 	if (input == 'y') {
 		printf("Enter new first name:\n");
 		scanf("%s", &name);
@@ -276,7 +346,7 @@ void UpdateDetails(Global* GlobalFile, int userID){
 	}
 
 	printf("Do you want to change your last name?(y/n)\n");
-	scanf("%c", &input);
+	input = getchar();
 	if (input == 'y') {
 		printf("Enter new last name:\n");
 		scanf("%s", &surname);
@@ -284,7 +354,7 @@ void UpdateDetails(Global* GlobalFile, int userID){
 	}
 
 	printf("Do you want to change your password?(y/n)\n");
-	scanf("%c", &input);
+	input = getchar();
 	if (input == 'y') {
 		printf("Enter new password:\n");
 		scanf("%s", &tempPass);
@@ -301,11 +371,14 @@ void UpdateDetails(Global* GlobalFile, int userID){
 
 
 // add message to file
-void printLogToFile(char *file, char msg[500])
+void printLogToFile(char file[], char msg[500])
 {
 	FILE *fp = fopen(file, "a");
-	fprintf(fp,"%s", msg);
-	fclose(fp);
+	if (fp)
+	{
+		fprintf(fp, "%s", msg);
+		fclose(fp);
+	}
 }
 ////////////		Project create functions
 // add new project to student's array of Project ID's, done, ready for testing
@@ -345,12 +418,13 @@ void AddProjectIDToWatcher(Watcher * Watcher, int ProjectID)
 // 46 - Create new project by STUDENT or WATCHER only, UNDONE, should to split
 int CreateNewProject(Global* GlobalFile,int userID, AccessGroup userGroup)
 {
-	Student *Student;
-	Watcher *Watcher;
+	Student *Student=NULL;
+	Watcher *Watcher=NULL;
 	FILE *file = NULL;
 	puts("Input Name of your project (maximum 127 characters) : ");
 	char buffer[128];		// get name
 	char logText[500];
+	fflush(stdin);
 	gets(buffer);
 	
 	// check if student or watcher and get pointer to him
@@ -1128,7 +1202,7 @@ void DeleteUser(Global *GlobalFile)
 	}
 }
 
-// transfer Student to Admin
+// promote Student to be Admin
 Admin *StudentToAdmin(Global *GlobalFile, Student *student)
 {
 	Admin *newAdmin = (Admin*)malloc(sizeof(Admin));
@@ -1147,7 +1221,7 @@ Admin *StudentToAdmin(Global *GlobalFile, Student *student)
 
 	return newAdmin;
 }
-// transfer Watcher to Admin
+// promote Watcher to be Admin
 Admin * WatcherToAdmin(Global *GlobalFile, Watcher *watcher)
 {
 	Admin *newAdmin = (Admin*)malloc(sizeof(Admin));
@@ -1224,7 +1298,6 @@ void PromoteUserToAdmin(Global *GlobalFile)
 	
 }
 
-
 //// watcher notifications
 // Turns on / off watcher notifications, return true if status changed, false if not changed
 BOOL ShowNotifications(Global *GlobalFile, Watcher *watcher)
@@ -1293,7 +1366,7 @@ void ShowMessagesToStudent(Global * Global, Student *student)
 }
 
 
-// function to print project messages to project team,
+// function to print project messages to team,
 void PrintProjectMessages(Project *project)
 {
 	puts("-------------------\nWatcher message/s for project team :");
@@ -1334,73 +1407,7 @@ void ShowTasksByStatusWatcher(Global* GlobalFile, int WatcherID){
 		puts("Not found tasks in your projects");
 }
 
-
-
-// HELP FUNCTIONS
-
-//The function verifies whether the given password is valid.
-//A valid password is one that contains: at least 1 digit, 1 uppercase letter, 1 lowercase letter.
-BOOL CheckPassword(char* pass)
-{
-	BOOL lowerFlag = FALSE, upperFlag = FALSE, digitFlag = FALSE;
-	int i, size = strlen(pass);
-	for (i = 0; i < size; i++)
-	{
-		if (pass[i] >= 'A' && pass[i] <= 'Z')
-		{
-			upperFlag = TRUE;
-		}
-		if (pass[i] >= 'a' && pass[i] <= 'z')
-		{
-			lowerFlag = TRUE;
-		}
-		if (pass[i] >= '0' && pass[i] <= '9')
-		{
-			digitFlag = TRUE;
-		}
-	}
-	if (upperFlag == TRUE && lowerFlag == TRUE && digitFlag == TRUE)
-	{
-		return TRUE;
-	}
-	else
-	{
-		return FALSE;
-	}
-}
-BOOL CheckIfUserExists(Global *g, char *username)
-{
-	Student *tempStud = g->StudentList;
-	Watcher *tempWatch = g->WatchersList;
-	Admin *tempAdm = g->AdminsList;
-	while (tempStud != NULL)																		//Checking if the username exists in the student list																																
-	{
-		if (strcmp(tempStud->StudentUsername, username) == 0)
-		{
-			return TRUE;
-		}
-		tempStud = tempStud->StudentNext;
-	}
-	while (tempWatch != NULL)														                //Checking if the username exists in the watcher list
-	{
-		if (strcmp(tempWatch->WatcherUsername, username) == 0)
-		{
-			return TRUE;
-		}
-		tempWatch = tempWatch->WatcherNext;
-	}
-	while (tempAdm != NULL)														                    //Checking if the username exists in the admins list
-	{
-		if (strcmp(tempAdm->AdminUsername, username) == 0)
-		{
-			return TRUE;
-		}
-		tempAdm = tempAdm->AdminNext;
-	}
-	return FALSE;
-}
-
-
+// register new admin in system
 int AdminRegister(Global *GlobalFile)
 {
 	Admin* newAdmin = NULL;
@@ -1450,21 +1457,22 @@ int AdminRegister(Global *GlobalFile)
 	printf("Enter your last name: (Has to be less then 20 chatacters!)\n");
 	scanf("%s", newAdmin->AdminSurename);
 
-	newAdmin->Group = ADMIN;																	
+	newAdmin->Group = ADMIN;
 
 	AddAdmin(GlobalFile->AdminsList, newAdmin);	// add to AdminsList
 	return newAdmin->AdminID;
 }
-// Allow Admin to add new user
+
+// Allow Admin to add new user, done,ready for testing
 int AddNewUser(Global *GlobalFile)
 {
 	int choice;
 	puts("You choosed to register new user :");
-                                                                                  //Action menu - choosing user type or action (student, watcher, back)
+	//Action menu - choosing user type or action (student, watcher, back)
 	do{
 		printf("Choose a user type:\n\t[1] Student\n\t[2] Watcher\n\t[3] Admin\n\t[4] Back to last menu\n");
 		scanf("%d", &choice);
-	} while (choice != 1 && choice != 2 && choice != 3 && choice!=4);
+	} while (choice != 1 && choice != 2 && choice != 3 && choice != 4);
 
 	if (choice == 1)                                                                                //Executing student registration
 	{
@@ -1479,9 +1487,75 @@ int AddNewUser(Global *GlobalFile)
 		return AdminRegister(GlobalFile);
 	}
 	else
-		{	//Back to last menu
+	{	//Back to last menu
 		return 0;
-		}
-	
+	}
 
+
+}
+
+
+// HELP FUNCTIONS
+
+//The function verifies whether the given password is valid.
+//A valid password is one that contains: at least 1 digit, 1 uppercase letter, 1 lowercase letter.
+BOOL CheckPassword(char* pass)
+{
+	BOOL lowerFlag = FALSE, upperFlag = FALSE, digitFlag = FALSE;
+	int i, size = strlen(pass);
+	for (i = 0; i < size; i++)
+	{
+		if (pass[i] >= 'A' && pass[i] <= 'Z')
+		{
+			upperFlag = TRUE;
+		}
+		if (pass[i] >= 'a' && pass[i] <= 'z')
+		{
+			lowerFlag = TRUE;
+		}
+		if (pass[i] >= '0' && pass[i] <= '9')
+		{
+			digitFlag = TRUE;
+		}
+	}
+	if (upperFlag == TRUE && lowerFlag == TRUE && digitFlag == TRUE)
+	{
+		return TRUE;
+	}
+	else
+	{
+		return FALSE;
+	}
+}
+// help functions, check if user exists in system by username
+BOOL CheckIfUserExists(Global *g, char *username)
+{
+	Student *tempStud = g->StudentList;
+	Watcher *tempWatch = g->WatchersList;
+	Admin *tempAdm = g->AdminsList;
+	while (tempStud != NULL)																		//Checking if the username exists in the student list																																
+	{
+		if (strcmp(tempStud->StudentUsername, username) == 0)
+		{
+			return TRUE;
+		}
+		tempStud = tempStud->StudentNext;
+	}
+	while (tempWatch != NULL)														                //Checking if the username exists in the watcher list
+	{
+		if (strcmp(tempWatch->WatcherUsername, username) == 0)
+		{
+			return TRUE;
+		}
+		tempWatch = tempWatch->WatcherNext;
+	}
+	while (tempAdm != NULL)														                    //Checking if the username exists in the admins list
+	{
+		if (strcmp(tempAdm->AdminUsername, username) == 0)
+		{
+			return TRUE;
+		}
+		tempAdm = tempAdm->AdminNext;
+	}
+	return FALSE;
 }
