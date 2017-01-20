@@ -12,42 +12,6 @@ Watcher* FindWatcherByUN(Global*, char*);
 Admin* FindAdminByUN(Global*, char*);
 //END OF DECLARATIONS
 
-//HELP FUNCTION for Register(Global)
-//The function receives a username and a global pointer, and checks if the given username 
-//already exists in the system's databases (return TRUE/FALSE).
-BOOL CheckIfUserExists(Global *g, char *username)
-{
-	Student *tempStud = g->StudentList;
-	Watcher *tempWatch = g->WatchersList;
-	Admin *tempAdm = g->AdminsList;
-	while (tempStud != NULL)																		//Checking if the username exists in the student list																																
-	{
-		if (strcmp(tempStud->StudentUsername, username) == 0)
-		{
-			return TRUE;
-		}
-		tempStud = tempStud->StudentNext;
-	}
-	while (tempWatch != NULL)														                //Checking if the username exists in the watcher list
-	{
-		if (strcmp(tempWatch->WatcherUsername, username) == 0)
-		{
-			return TRUE;
-		}
-		tempWatch = tempWatch->WatcherNext;
-	}
-	while (tempAdm != NULL)														                    //Checking if the username exists in the admins list
-	{
-		if (strcmp(tempAdm->AdminUsername, username) == 0)
-		{
-			return TRUE;
-		}
-		tempAdm = tempAdm->AdminNext;
-	}
-	return FALSE;
-}
-
-
 int Register(Global *g)
 {
 	int choice;                                                                                     //Action menu - choosing user type or action (student, watcher, back)
