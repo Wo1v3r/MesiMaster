@@ -47,37 +47,6 @@ BOOL CheckIfUserExists(Global *g, char *username)
 	return FALSE;
 }
 
-//HELP FUNCTION for Register(Global)
-//The function verifies whether the given password is valid.
-//A valid password is one that contains: at least 1 digit, 1 uppercase letter, 1 lowercase letter.
-BOOL CheckPassword(char* pass)
-{
-	BOOL lowerFlag = FALSE, upperFlag = FALSE, digitFlag = FALSE;
-	int i , size = strlen(pass);
-	for (i = 0; i < size; i++)
-	{
-		if (pass[i] >= 'A' && pass[i] <= 'Z')
-		{
-			upperFlag = TRUE;
-		}
-		if (pass[i] >= 'a' && pass[i] <= 'z')
-		{
-			lowerFlag = TRUE;
-		}
-		if (pass[i] >= '0' && pass[i] <= '9')
-		{
-			digitFlag = TRUE;
-		}
-	}
-	if (upperFlag == TRUE && lowerFlag == TRUE && digitFlag == TRUE)
-	{
-		return TRUE;
-	}
-	else
-	{
-		return FALSE;
-	}
-}
 
 int Register(Global *g)
 {

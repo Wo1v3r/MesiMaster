@@ -1,20 +1,6 @@
 //Jonathan
 #include "Register.h"
 
-/*
-FOR RUNNING THE TESTS COPY THEM BEFORE THE MAIN FUNCTION.
-ADD include for minunit.h
-#include "MinUnit.h"
-in the main function add
-MU_RUN_SUITE(InitTest);
-
-These tests are built on the given txt files. any change will need to be change in accordance with them!!!
-if you wish to run the programm as usual comment this whole file.
-*/
-
-
-
-
 ////// Menus
 
 //Project Menu : Finished ,Ready for testing - Jonathan
@@ -39,6 +25,7 @@ int ProjectMenu(Global* GlobalFile , Project* project, int accessGroup, int user
 	case WATCHER:
 		watcher = FindWatcher(GlobalFile->WatchersList, userID);
 		username = watcher->WatcherUsername;
+		PrintProjectChanges(GlobalFile, project, watcher);
 	default:
 		//Error
 		printf("ERROR\n\n"); //Should not happen because accessgroup is evaluated in login function
@@ -53,15 +40,16 @@ int ProjectMenu(Global* GlobalFile , Project* project, int accessGroup, int user
 		printf("4) Print project details\n");
 		printf("5) Add users to Project\n");
 		printf("6) Change task status\n");
+		printf("7) Print Project Messages\n");
 
 		switch (accessGroup){
 
 		case ADMIN://This option is for admin only:
-			printf("7) Remove Project\n");
+			printf("8) Remove Project\n");
 			break;
 		case WATCHER: //These options are for watcher only:
-			printf("7) Leave a message to a student\n");
-			printf("8) Add a project message\n");
+			printf("8) Leave a message to a student\n");
+			printf("9) Add a project message\n");
 			break;
 		}
 		
@@ -79,7 +67,7 @@ int ProjectMenu(Global* GlobalFile , Project* project, int accessGroup, int user
 			PrintTasksList(GlobalFile, project);
 			break;
 		case 3:
-			PrintActivityLog(GlobalFile, project);
+			PrintActivityLog(project->ProjectActivityLogs);
 			break;
 		case 4:
 			PrintProjectDetails(GlobalFile, project);
@@ -90,8 +78,9 @@ int ProjectMenu(Global* GlobalFile , Project* project, int accessGroup, int user
 		case 6:
 			ChangeTaskStatus(GlobalFile, project, userID, accessGroup);
 			break;
-
 		case 7:
+			PrintProjectMessages(project);
+		case 8:
 			switch (accessGroup){
 
 			case ADMIN:
@@ -103,7 +92,7 @@ int ProjectMenu(Global* GlobalFile , Project* project, int accessGroup, int user
 			}
 			break;
 
-		case 8:
+		case 9:
 			if (accessGroup == WATCHER){ //The last option is only for watcher
 				AddProjectMessage(GlobalFile, project, watcher);
 				break;
@@ -136,7 +125,8 @@ int StudentMenu(Global *GlobalFile, int studentID){
 		printf("4) Show tasks by status\n");
 		printf("5) Update details\n");
 		printf("6) Print last actions\n");
-		printf("7) Exit Mesimaster\n");
+		printf("7) Show messages from watchers\n");
+		printf("8) Exit Mesimaster\n");
 
 		scanf("%d",&opt);
 		switch (opt){
@@ -170,6 +160,9 @@ int StudentMenu(Global *GlobalFile, int studentID){
 			PrintStudentLog(student); // 11
 			break;
 		case 7:
+			ShowMessagesToStudent(GlobalFile, student);
+			break;
+		case 8:
 			return 0;
 		default:
 			//Dosomething
@@ -206,15 +199,16 @@ int AdminMenu(Global* GlobalFile ,int adminID){
 		case 0:
 			return 1;
 		case 1:
-			//DeleteUser(GlobalFile);
+			DeleteUser(GlobalFile);
 			break;
 		case 2:
-			//AddNewUser(GlobalFile);
+			AddNewUser(GlobalFile);
 			break;
 		case 3:
-			//PrintAllUsers(GlobalFile);
-		case 4: 
-			//PromoteUserToAdmin(GlobalFile);
+			PrintUsersLists(GlobalFile);
+			break;
+		case 4:
+			PromoteUserToAdmin(GlobalFile);
 			break;
 		case 5:
 			ShowUserDetails(GlobalFile);
@@ -267,14 +261,15 @@ int WatcherMenu(Global* GlobalFile, int watcherID){
 		printf("3) Enter Project menu of a Project you're watching\n");
 		printf("4) Update details\n");
 		printf("5) Show project notifications\n");
-		printf("6) Exit MesiMaster \n");
+		printf("6) Show tasks in projects watched\n");
+		printf("7) Exit MesiMaster \n");
 
 		scanf("%d", &opt);
 		switch (opt){
 		case 0:
 			return 1;
 		case 1:
-			PrintProjectsList(GlobalFile, watcherID, WATCHER);
+			PrintProjectsListWatcher(GlobalFile, watcherID, WATCHER);
 			break;
 		case 2:
 			CreateNewProject(GlobalFile, watcherID, WATCHER);
@@ -295,9 +290,12 @@ int WatcherMenu(Global* GlobalFile, int watcherID){
 			UpdateDetails(GlobalFile, watcherID);
 			break;
 		case 5:
-			//ShowNotifications(GlobalFile, watcher);
+			ShowNotifications(GlobalFile, watcher);
 			break;
 		case 6:
+			ShowTasksByStatusWatcher(GlobalFile, watcherID);
+			break;
+		case 7:
 			return 0;
 		default:
 			printf("No such option!\n");
