@@ -148,7 +148,12 @@ int StudentMenu(Global *GlobalFile, int studentID){
 				printf("No project of that ID\n");
 				break;
 			}
-			ProjectMenu(GlobalFile,project, STUDENT, studentID);
+			if (isStudentInProject(project, studentID))
+				ProjectMenu(GlobalFile, project, STUDENT, studentID);
+			else{
+				printf("The student doesn't belong to this project\n");
+				system("pause");
+			}	
 			break;
 		case 4:
 			ShowTasksByStatus(GlobalFile, studentID);
