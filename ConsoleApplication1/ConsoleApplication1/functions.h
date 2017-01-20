@@ -1,16 +1,86 @@
-// Alexey
 #include "DataBase.h"
 
-/////// functions decalrations
-void addUserToProject(Global *GlobalFile, Project *newProject);									//42
+
+///Functions Declarations///
+// 1) Please add function number if possible when re-doing the DFD
+// 2) Please add a test to the tests file for each functions, mark "Test Written" as needed
+
+//Project Functions
+int CreateNewProject(Global* GlobalFile, int userID, AccessGroup userGroup);
 void CreateNewTask(Global *GlobalFile, Project *project, int UserID, AccessGroup group);		//53
+void addUserToProject(Global *GlobalFile, Project *newProject);									//42
+void ChangeTaskStatus(Global* GlobalFile, Project* project, int userID, int accessGroup);
+void addUserToProject(Global *GlobalFile, Project *newProject);
+void ChangeTaskStatus(Global* GlobalFile, Project* project, int userID, int accessGroup);
+void PrintProjectDetails(Global* GlobalFile, Project* project);
+void PrintProjectMessages(Project *project);
+
+//Utilities
+void ShowUserDetails(Global *GlobalFile);
+void PrintUsersLists(Global* GlobalFile);
+void PrintUsersByID(Global *GlobalFile, Project *project);
+int PrintTasksList(Global* GlobalFile, Project* Project);
+void PrintTasksByID(Task *head, int indexes[], int size, char *creator);
 void PrintProjectsList(Global *GlobalFile, int UserID, AccessGroup group);						//44
+void PrintProjectsByID(Global *GlobalFile, int indexes[], int size, char *creator);
+int* RemoveProjectIDFromArray(int Array[], int ProjectID);
+int RemoveProjectFromUsers(Global* GlobalFile, int ProjectID);
+void RemoveUserFromProjects(Global *GlobalFile, int UserID);
+int *RemoveUserIDFromProject(Project* project, int ID);
+void AddProjectIDToStudent(Student * Student, int ProjectID);
+void AddProjectIDToWatcher(Watcher * Watcher, int ProjectID);
+void AddTaskIDToProject(Project* project, int TaskID);
+int FindAccessGroup(int ID);  //Test Written
+Admin* FindAdminByUN(Global *g, char *username);
+Student* FindStudentByUN(Global *g, char *username);
+Watcher* FindWatcherByUN(Global *g, char *username);
+Admin *StudentToAdmin(Global *GlobalFile, Student *student);
+void UpdateDetails(Global* GlobalFile, int userID);
+Admin * WatcherToAdmin(Global *GlobalFile, Watcher *watcher);
+
+//Log functions
+void PrintStudentLog(Student* student);
 void printLogToFile(char *file, char msg[500]);
+void printLogToFile(char file[], char msg[500]);
+void PrintProjectChanges(Global *GlobalFile, Project* project, Watcher *watcher);
+void PrintGlobalMessages(Global *GlobalFile);
+void PrintActivityLog(char* filePath);
+void PrintQuotes(Global* GlobalFile);
+
+//Student Functions
+void ShowMessagesToStudent(Global * Global, Student *student);
+void ShowTasksByStatus(Global* GlobalFile, int studentID);
+
+
+//Watcher Functions
+void LeaveMessageToStudent(Global* GlobalFile, Project* project, Watcher* watcher);
+void AddProjectMessage(Global* GlobalFile, Project* project, Watcher* watcher);
+void PrintStudentActivityWatcher(Global *GlobalFile, Project *project);
+BOOL ShowNotifications(Global *GlobalFile, Watcher *watcher);
+void ShowTasksByStatusWatcher(Global* GlobalFile, int WatcherID);
+
+//Admin Functions
+void RemoveProject(Global* GlobalFile, Project* project, int userID, int accessGroup);
+void AddGlobalMessage(Global* GlobalFile);
+void AddNewQuote(Global* GlobalFile);
+void ManageQuotes(Global *GlobalFile);
+int AddNewUser(Global* GlobalFile);
+void DeleteQuote(Global* GlobalFile);
+void DeleteUser(Global *GlobalFile);
+void PromoteUserToAdmin(Global *GlobalFile);
+
+//Login/Register Functions
+int Register(Global *g);
+int Login(Global *g);
+int AdminRegister(Global *GlobalFile);
+int StudentRegister(Global *g);
 BOOL CheckPassword(char* pass);
 BOOL CheckIfUserExists(Global *g, char *username);
+int WatcherRegister(Global *g);
 
-/////// declarations end
-///////////////////////////////////// Johnatan func's
+
+
+
 
 // change status of choosen task, done, ready for testing
 void ChangeTaskStatus(Global* GlobalFile, Project* project, int userID, int accessGroup){
