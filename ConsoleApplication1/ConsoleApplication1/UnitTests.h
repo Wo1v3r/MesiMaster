@@ -11,6 +11,7 @@ These tests are built on the given txt files. any change will need to be change 
 if you wish to run the programm as usual comment this whole file.
 */
 
+//Init Suite tests:
 MU_TEST(test_init_student){
 	Student *check = initStudents();
 	mu_check(check->StudentID == 1);
@@ -99,6 +100,7 @@ MU_TEST(test_init_global){
 	free(check);
 }
 
+//Init Suite
 MU_TEST_SUITE(InitTest){
 	MU_RUN_TEST(test_init_student);
 	MU_RUN_TEST(test_init_projects);
@@ -111,6 +113,7 @@ MU_TEST_SUITE(InitTest){
 }
 
 
+//Utilities Suite Test
 
 MU_TEST(test_find_accessgroup){
 	int studentID = 1000, adminID = 2000, watcherID = 3000, badID1 = 999, badID2 = 4000;
@@ -121,8 +124,9 @@ MU_TEST(test_find_accessgroup){
 	mu_check(FindAccessGroup(badID2) == 0);
 }
 
+//Utilities suite
 
-MU_TEST_SUITE(jonathan_functions_test){
+MU_TEST_SUITE(Utilities){
 	MU_RUN_TEST(test_find_accessgroup);
 
 	MU_REPORT_SUITE();
