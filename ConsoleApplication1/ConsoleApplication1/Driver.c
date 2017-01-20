@@ -1,5 +1,5 @@
 //Jonathan
-#include "Register.h"
+#include "functions.h"
 
 ////// Menus
 

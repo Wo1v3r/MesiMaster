@@ -27,9 +27,6 @@
     <ClInclude Include="functions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Register.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Liran_Testing.h">
       <Filter>Header Files</Filter>
     </ClInclude>
