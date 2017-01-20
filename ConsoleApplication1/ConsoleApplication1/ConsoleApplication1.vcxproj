@@ -80,13 +80,12 @@
   <ItemGroup>
     <ClInclude Include="DataBase.h" />
     <ClInclude Include="functions.h" />
-    <ClInclude Include="Jonathan_Testing.h" />
-    <ClInclude Include="Liran_Testing.h" />
     <ClInclude Include="MinUnit.h" />
     <ClInclude Include="Structures.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
     </ClInclude>
+    <ClInclude Include="UnitTests.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Driver.c" />
