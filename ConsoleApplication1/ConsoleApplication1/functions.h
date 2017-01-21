@@ -54,7 +54,7 @@ void ShowTasksByStatus(Global* GlobalFile, int studentID); //No test needed
 //Watcher Functions
 void LeaveMessageToStudent(Global* GlobalFile, Project* project, Watcher* watcher); //No test needed(writing to file)
 void AddProjectMessage(Global* GlobalFile, Project* project, Watcher* watcher); //No test needed(writing to file)
-void PrintStudentActivityWatcher(Global *GlobalFile, Project *project); //Need TXT
+void PrintStudentActivityWatcher(Global *GlobalFile, Project *project); //No test needed(writing to console from file)
 BOOL ShowNotifications(Global *GlobalFile, Watcher *watcher, char choice); // Test written
 void ShowTasksByStatusWatcher(Global* GlobalFile, int WatcherID); //No test needed(printing to stdout)
 
