@@ -204,7 +204,7 @@ int AdminMenu(Global* GlobalFile ,int adminID){
 		case 0:
 			return 1;
 		case 1:
-			DeleteUser(GlobalFile);
+			DeleteUser(GlobalFile, 0);
 			break;
 		case 2:
 			AddNewUser(GlobalFile);
@@ -395,8 +395,10 @@ int main()
 		MU_RUN_SUITE(Utilities);
 		MU_RUN_SUITE(InitTest);
 		MU_RUN_SUITE(Login_Suite);
+		MU_RUN_SUITE(Admin_Suite);
+		system("pause");
+		return;
 	}
-	system("pause");
 	system("cls");
 	Global *GlobalFile = (Global*)malloc(sizeof(Global));
 	GlobalFile = InitDataBases();

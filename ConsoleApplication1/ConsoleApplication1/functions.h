@@ -67,7 +67,7 @@ void AddNewQuote(Global* GlobalFile);
 void ManageQuotes(Global *GlobalFile);
 int AddNewUser(Global* GlobalFile);
 void DeleteQuote(Global* GlobalFile);
-void DeleteUser(Global *GlobalFile);
+void DeleteUser(Global *GlobalFile, int ID); //Test written(with blood)
 void PromoteUserToAdmin(Global *GlobalFile);
 
 //Login/Register Functions
@@ -1219,23 +1219,28 @@ void RemoveUserFromProjects(Global *GlobalFile, int UserID)
 }
 
 // print all users in database for admin, admin chooce user id for delete, done, ready for testing
-void DeleteUser(Global *GlobalFile)
+void DeleteUser(Global *GlobalFile, int ID)
 {
-	int ID;
+	//int ID;
 	AccessGroup group;
 	Student *student = NULL;
 	Watcher *watcher = NULL;
 	Admin *admin = NULL;
 	BOOL flag = TRUE;
 	char choice;
-
-	puts("List of all users in system :\n-----------------------");
-	PrintUsersLists(GlobalFile);
+	if (!ID){
+		puts("List of all users in system :\n-----------------------");
+		PrintUsersLists(GlobalFile);
+	}
 	while (flag)
 	{
-		printf("Enter ID of user you want to remove: ");
-		fflush(stdin);
-		scanf("%d", &ID);
+		if (!ID){
+			printf("Enter ID of user you want to remove: ");
+			fflush(stdin);
+			scanf("%d", &ID);
+		}
+		else
+			flag = FALSE;
 		group = FindAccessGroup(ID);
 		switch (group)
 		{
@@ -1267,7 +1272,8 @@ void DeleteUser(Global *GlobalFile)
 				puts("Admin not found in database");
 			break;
 		}
-
+		if (flag == FALSE)
+			return;
 		printf("Want to delete another user? ( Y/ N ) :");
 		choice = getchar();
 		if (choice == 'n' || choice == 'N')

@@ -166,6 +166,7 @@ MU_TEST(test_check_if_user_exists){
 	mu_check(CheckIfUserExists(global, studentUN) == 1);
 	mu_check(CheckIfUserExists(global, watcherUN) == 1);
 	mu_check(CheckIfUserExists(global, badUN) == 0);
+	freeMemory(global);
 
 }
 MU_TEST_SUITE(Login_Suite){
@@ -173,4 +174,18 @@ MU_TEST_SUITE(Login_Suite){
 	MU_RUN_TEST(test_check_if_user_exists);
 
 	MU_REPORT_SUITE();
+}
+
+
+MU_TEST(test_delete_user){
+	Global* global = InitDataBases();
+	int id = 1001;
+	mu_check(FindStudent(global->StudentList, id) != NULL);
+	DeleteUser(global, id);
+	mu_check(FindStudent(global->StudentList, id) == NULL);
+	freeMemory(global);
+}
+
+MU_TEST_SUITE(Admin_Suite){
+	MU_RUN_TEST(test_delete_user);
 }
