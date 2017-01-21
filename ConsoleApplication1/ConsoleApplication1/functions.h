@@ -10,9 +10,8 @@
 //Project Functions
 int CreateNewProject(Global* GlobalFile, int userID, AccessGroup userGroup , char* projectName); //Test written
 int CreateNewTask(Global *GlobalFile, Project *project, int UserID, AccessGroup group,char* taskName);//Test written		
-void addUserToProject(Global *GlobalFile, Project *newProject);	
+int addUserToProject(Global *GlobalFile, Project *newProject,int UserID,int watcherOrStudent);//Test written	
 void ChangeTaskStatus(Global* GlobalFile, Project* project, int userID, int accessGroup);
-void addUserToProject(Global *GlobalFile, Project *newProject);
 void PrintProjectDetails(Global* GlobalFile, Project* project); //No test needed
 void PrintProjectMessages(Project *project); //No test needed
 
@@ -601,7 +600,7 @@ int CreateNewProject(Global* GlobalFile,int userID, AccessGroup userGroup,char* 
 	switch (choice)
 	{
 	case 'y':
-		addUserToProject(GlobalFile, newProject);
+		addUserToProject(GlobalFile, newProject,0,0);
 		break;
 	case 'n':
 		puts("Ok!");
@@ -628,7 +627,7 @@ int CreateNewProject(Global* GlobalFile,int userID, AccessGroup userGroup,char* 
 //////////			Project create funcs end
 
 // 42 - Add user to project  , done, ready for testing
-void addUserToProject(Global *GlobalFile, Project *newProject)
+int addUserToProject(Global *GlobalFile, Project *newProject , int userID , int watcherOrStudent)
 {
 	BOOL flag = TRUE;
 	FILE *file = fopen(newProject->ProjectActivityLogs,"a");
@@ -641,23 +640,33 @@ void addUserToProject(Global *GlobalFile, Project *newProject)
 
 	while (flag)
 	{
-		puts("1. Add Student ID");
-		puts("2. Add Watcher ID");
-		puts("3. Return to main menu");
-		fflush(stdin);
-		choice = getchar();
+		if (!userID){
+			puts("1. Add Student ID");
+			puts("2. Add Watcher ID");
+			puts("3. Return to main menu");
+			fflush(stdin);
+			choice = getchar();
+		}
+		else { 
+			choice = watcherOrStudent + '0';
+			ID = userID;
+		}
+
 		switch (choice)
 		{
 		case '1':
-			fflush(stdin);
-			printf("\nStudent ID :");
-			scanf("%d", &ID);
+			if (!userID){
+				fflush(stdin);
+				printf("\nStudent ID :");
+				scanf("%d", &ID);
+			}
+			
 			student = FindStudent(GlobalFile->StudentList, ID);
 			if (student)	// student found
 			{
 				/// add project to student 
 				AddProjectIDToStudent(student, newProject->ProjectID);
-				printf("\nStudent with ID : %d was added to project!\n", ID);
+				if (!userID) printf("\nStudent with ID : %d was added to project!\n", ID);
 				fprintf(file,"Student with ID : %d was added to project!\n", ID);
 
 				
@@ -669,22 +678,28 @@ void addUserToProject(Global *GlobalFile, Project *newProject)
 				UsersID[i] = ID;
 
 				newProject->StudentsIDS = UsersID;
+				newProject->ProjectUsersAmount++;
+				return 1;
 			}
-			else
-				puts("Student ID not found. Try again.");
+			else{
+				if (!userID) puts("Student ID not found.");
+				return 0;
+			}
 			break;
 
 		case '2':
-			fflush(stdin);
-			printf("\nWatcher ID :");
-			scanf("%d", &ID);
+			if (!userID){
+				fflush(stdin);
+				printf("\nWatcher ID :");
+				scanf("%d", &ID);
+			}
 			watcher = FindWatcher(GlobalFile->WatchersList, ID);
 			if (watcher)	// watcher found
 			{
 				/// add project to watcher 
 				AddProjectIDToWatcher(watcher, newProject->ProjectID);
 
-				printf("\nWatcher with ID : %d was added to project!\n", ID);
+				if (!userID) printf("\nWatcher with ID : %d was added to project!\n", ID);
 				fprintf(file,"Watcher with ID : %d was added to project!\n", ID);
 
 				// add watcher to project
@@ -693,18 +708,21 @@ void addUserToProject(Global *GlobalFile, Project *newProject)
 				for (i = 0; i < ProjectUsersIDNewSize - 1; i++)
 					UsersID[i] = newProject->StudentsIDS[i];
 				UsersID[i] = ID;
-
+				newProject->ProjectUsersAmount++;
 				newProject->StudentsIDS = UsersID;
+				return 1;
 			}
-			else
-				puts("Watcher ID not found. Try again.");
+			else{
+				if (!userID) puts("Watcher ID not found. Try again.");
+				return 0;
+			}
 			break;
 		case '3':
-			puts("Choosen to return back");
+			if (!userID )puts("Choosen to return back");
 			flag = FALSE;
 			break;
 		default:
-			puts("Incorrect choice. Try again.");
+			if (!userID) puts("Incorrect choice. Try again.");
 			break;
 		}
 
@@ -712,7 +730,7 @@ void addUserToProject(Global *GlobalFile, Project *newProject)
 
 	fclose(file);
 
-	system("pause");
+	return 1;
 }
 
 // Add id of new task to array in project
@@ -755,7 +773,7 @@ int CreateNewTask(Global *GlobalFile, Project *project,int UserID,AccessGroup gr
 
 	if (group == STUDENT){
 		student = FindStudent(GlobalFile->StudentList, UserID);
-		if (!watcher) return 0;
+		if (!student) return 0;
 	}
 	
 	else if (group == WATCHER){
@@ -800,6 +818,7 @@ int CreateNewTask(Global *GlobalFile, Project *project,int UserID,AccessGroup gr
 	system("pause");
 	}
 
+	project->ProjectTasksAmount++;
 	return newTask->TaskID;
 }
 

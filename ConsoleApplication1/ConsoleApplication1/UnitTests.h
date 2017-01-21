@@ -340,10 +340,29 @@ MU_TEST(test_create_task){
 	freeMemory(global);
 }
 
+MU_TEST(test_add_user_to_project){
+	int addStudent = 1, addWatcher = 2, Exit = 3, studentID = 1002, watcherID = 3002,doesNotExist = 1535;
+	Global* global = InitDataBases();
+	Project* project = FindProject(global->ProjectsList, 4002); //That project exists
+	//Trying to exit, should return 1:
+	mu_check(addUserToProject(global, project, studentID, Exit) == 1);
+	//Trying to add a user that does not exist:
+	mu_check(addUserToProject(global, project, doesNotExist, addStudent) == 0);
+	//Trying to check if that user is in the project:
+	mu_check(isStudentInProject(project, doesNotExist) == 0);
+	//Trying to add a student:
+	mu_check(addUserToProject(global, project, studentID, addStudent) == 1);
+	//Checking if that student is in the project:
+	mu_check(isStudentInProject(project, studentID) != 0);
+
+}
+
+
 MU_TEST_SUITE(Project_Suite){
 
 	MU_RUN_TEST(test_create_project);
 	MU_RUN_TEST(test_create_task);
+	MU_RUN_TEST(test_add_user_to_project);
 }
 
 //Structures suite tests
