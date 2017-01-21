@@ -214,11 +214,26 @@ MU_TEST(test_admin_register){
 	freeMemory(global);
 }
 
+MU_TEST(test_watcher_register){
+	Global* global = InitDataBases();
+	//Trying to register a watcher with a bad password:
+	mu_check(WatcherRegister(global, "Peter", "Parker", "Spiderman", "aab", "spiderman@marvel.com") == 0);
+
+	//Trying to register a watcher with a taken username:
+	mu_check(WatcherRegister(global, "Peter", "Parker", "liranr", "Aa1", "spiderman@marvel.com") == 0);
+
+	//Trying to register a watcher with valid input:
+	mu_check(WatcherRegister(global, "Peter", "Parker", "Spiderman", "Aa1", "spiderman@marvel.com") != 0);
+
+	//Checking if that user exists:
+	mu_check(FindWatcherByUN(global, "Spiderman") != NULL);
+}
+
 MU_TEST_SUITE(Register_Suite){
 	MU_RUN_TEST(test_student_register);
 	MU_RUN_TEST(test_admin_register);
-
-};
+	MU_RUN_TEST(test_watcher_register);
+}
 //Login suite tests:
 MU_TEST(test_login){
 	Global* global = InitDataBases();

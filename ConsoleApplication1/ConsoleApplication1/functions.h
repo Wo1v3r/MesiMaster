@@ -71,7 +71,7 @@ void PromoteUserToAdmin(Global *GlobalFile, int ID); //Test written
 //Login/Register Functions
 int Register(Global *g); //No test needewd , Admin\Watcher\Student Register takes care of that
 int AdminRegister(Global *GlobalFile, char* nameTest, char* surnameTest, char* unTest, char* passTest);//Test written
-int WatcherRegister(Global *g);
+int WatcherRegister(Global *g,char* nameTest, char* surnameTest, char* unTest, char* passTest, char* emailTest);//Test written
 int StudentRegister(Global *g, char* nameTest, char* surnameTest ,char* unTest, char* passTest, char* emailTest, char* departmentTest, char yearTest);//Test written
 int Login(Global *g, char* UN, char* PW); //Test written
 BOOL CheckPassword(char* pass); //Test written -Jonathan
@@ -1618,7 +1618,6 @@ int AdminRegister(Global *GlobalFile,char* nameTest, char* surnameTest , char* u
 		return 0;
 	}
 	newAdmin->AdminID = GlobalFile->AdminRunID;														//Id allocation
-	(GlobalFile->AdminRunID)++;
 
 	do{			
 		//Initializing username
@@ -1677,6 +1676,7 @@ int AdminRegister(Global *GlobalFile,char* nameTest, char* surnameTest , char* u
 	newAdmin->Group = ADMIN;
 
 	AddAdmin(GlobalFile->AdminsList, newAdmin);	// add to AdminsList
+	(GlobalFile->AdminRunID)++;
 
 	if (!nameTest)system("pause");
 	return newAdmin->AdminID;
@@ -1699,7 +1699,7 @@ int AddNewUser(Global *GlobalFile)
 	}
 	else if (choice == 2)																			//Executing watcher registration
 	{
-		return WatcherRegister(GlobalFile);
+		return WatcherRegister(GlobalFile,NULL,NULL,NULL,NULL,NULL);
 	}
 	else if (choice == 3)
 	{
@@ -1796,7 +1796,7 @@ int Register(Global *g)
 	}
 	else if (choice == 2)																			//Executing watcher registration
 	{
-		return WatcherRegister(g);
+		return WatcherRegister(g,NULL,NULL,NULL,NULL,NULL);
 	}
 	else
 	{																								//Back to last menu
@@ -1818,7 +1818,6 @@ int StudentRegister(Global *g,char* nameTest,char* surnameTest, char* unTest, ch
 	}
 
 	newStudent->StudentID = g->StudentRunID;														//ID allocation
-	(g->StudentRunID)++;
 
 	//Initializing username
 	do{
@@ -1893,10 +1892,11 @@ int StudentRegister(Global *g,char* nameTest,char* surnameTest, char* unTest, ch
 	strcat(newStudent->StudentMessages, "_SMess.txt"); // cat the rest of the file name
 
 	AddStudent(g->StudentList, newStudent);
+	(g->StudentRunID)++;
 	return newStudent->StudentID;
 }
 
-int WatcherRegister(Global *g)
+int WatcherRegister(Global *g,char* nameTest, char* surnameTest, char* unTest, char* passTest, char* emailTest)
 {
 	Watcher* newWatcher = NULL;
 	int choice = 0;
@@ -1904,47 +1904,67 @@ int WatcherRegister(Global *g)
 
 	if (newWatcher == NULL)                                                                         //Allocation check
 	{
-		printf("Error allocating memory for the new watcher.\n");
+		if (!nameTest) printf("Error allocating memory for the new watcher.\n");
 		return 0;
 	}
 	newWatcher->WatcherID = g->WatcherRunID;														//Id allocation
-	(g->WatcherRunID)++;
 
-	do{																								//Initializing username
-		_flushall();
-		printf("Enter your desired username: (Has to be less then 30 characters!)\n");
-		scanf("%s", newWatcher->WatcherUsername);
-		getchar();
+	do{		
+		//Initializing username
+		if (!nameTest) {
+			_flushall();
+			printf("Enter your desired username: (Has to be less then 30 characters!)\n");
+			scanf("%s", newWatcher->WatcherUsername);
+			getchar();
+		}
+		else strcpy(newWatcher->WatcherUsername, unTest);
+		
 		if (CheckIfUserExists(g, newWatcher->WatcherUsername) == TRUE)
 		{
-			printf("This username already exists in the system. \n Press 1 to try again, press 2 to go back to the next menu.\n");
+			if (nameTest) return 0;
+			printf("This username already exists in the system. \n Press 1 to try again, press 2 to go back to the last menu.\n");
 			scanf("%d", &choice);
 		}
 	} while (CheckIfUserExists(g, newWatcher->WatcherUsername) == TRUE && choice == 1);
 
 	if (choice != 1 && choice != 0)
 	{
-		printf("You did not press 1 to continue. Going back to last menu.\n");
+
+		if (!nameTest) printf("You did not press 1 to continue. Going back to last menu.\n");
 		return 0;
 	}
 	//Initializing password
 	do{
-		_flushall();
-		printf("Enter your desired password: (Has to be less then 30 characters, and contain\n");
-		printf("at least one digit, one upper case letter, one lower case letter)\n");
-		scanf("%s", newWatcher->WatcherPassword);
+
+		if (!nameTest){
+			_flushall();
+			printf("Enter your desired password: (Has to be less then 30 characters, and contain\n");
+			printf("at least one digit, one upper case letter, one lower case letter)\n");
+			scanf("%s", newWatcher->WatcherPassword);
+		}
+		else strcpy(newWatcher->WatcherPassword, passTest);
 		if (CheckPassword(newWatcher->WatcherPassword) == FALSE)
 		{
+			if (nameTest) return 0;
 			printf("This password is invalid.\n You need to try again.\n");
 		}
 	} while (CheckPassword(newWatcher->WatcherPassword) == FALSE);
 	//Initializing other attributes that require user input
-	printf("Enter your email address: (Has to be less then 50 characters!)\n");
-	scanf("%s", newWatcher->WatcherEmail);
-	printf("Enter your first name: (Has to be less then 20 characters!)\n");
-	scanf("%s", newWatcher->WatcherName);
-	printf("Enter your last name: (Has to be less then 20 chatacters!)\n");
-	scanf("%s", newWatcher->WatcherSurename);
+	if (!nameTest){
+		printf("Enter your email address: (Has to be less then 50 characters!)\n");
+		scanf("%s", newWatcher->WatcherEmail);
+		printf("Enter your first name: (Has to be less then 20 characters!)\n");
+		scanf("%s", newWatcher->WatcherName);
+		printf("Enter your last name: (Has to be less then 20 chatacters!)\n");
+		scanf("%s", newWatcher->WatcherSurename);
+	}
+	else{
+		strcpy(newWatcher->WatcherEmail, emailTest);
+		strcpy(newWatcher->WatcherName, nameTest);
+		strcpy(newWatcher->WatcherSurename, surnameTest);
+	}
+
+
 
 	newWatcher->Group = WATCHER;																	//Default initializations
 	newWatcher->ProjectIDS = NULL;
@@ -1952,6 +1972,7 @@ int WatcherRegister(Global *g)
 	newWatcher->WatcherReceiveChanges = FALSE;
 
 	AddWatcher(g->WatchersList, newWatcher);
+	(g->WatcherRunID)++;
 	return newWatcher->WatcherID;
 }
 
