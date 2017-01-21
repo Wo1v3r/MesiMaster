@@ -349,12 +349,44 @@ MU_TEST(test_add_user_to_project){
 
 }
 
+MU_TEST(test_change_task_status){
+	//int ChangeTaskStatus(Global* GlobalFile, Project* project, int userID, int accessGroup, int tasktest, int statustest); //Test written - Jonathan
+	Global* global = InitDataBases();
+	Project* project = FindProject(global->ProjectsList, 4000); //That projects exists for testing
+	int studentID = 1000, watcherID = 3001, badID = 1956, taskID = 6000;
+	Task* task = findTaskInProject(global, project, taskID);
 
+	//Trying to change status to Approved by student : should not work:
+	mu_check(ChangeTaskStatus(global, project, studentID, STUDENT, APPROVED, taskID) == 0);
+
+	//Trying to change status to Approved by watcher : should work:
+	mu_check(ChangeTaskStatus(global, project, watcherID, WATCHER, APPROVED, taskID) == 1);
+	mu_check(task->TaskStatus == APPROVED);
+
+	//Trying to change status to NEW:
+	mu_check(ChangeTaskStatus(global, project, studentID, STUDENT, NEW, taskID) == 1);
+	mu_check(task->TaskStatus == NEW);
+
+	//Trying to change status to ELICITATION:
+	mu_check(ChangeTaskStatus(global, project, studentID, STUDENT, ELICITATION, taskID) == 1);
+	mu_check(task->TaskStatus == ELICITATION);
+
+	//Trying to change status to ANALYSIS:
+	mu_check(ChangeTaskStatus(global, project, studentID, STUDENT, ANALYSIS, taskID) == 1);
+	mu_check(task->TaskStatus == ANALYSIS);
+
+	//Trying to change status to VANDV:
+	mu_check(ChangeTaskStatus(global, project, watcherID, WATCHER, VandV, taskID) == 1);
+	mu_check(task->TaskStatus == VandV);
+
+
+}
 MU_TEST_SUITE(Project_Suite){
 
 	MU_RUN_TEST(test_create_project);
 	MU_RUN_TEST(test_create_task);
 	MU_RUN_TEST(test_add_user_to_project);
+	MU_RUN_TEST(test_change_task_status);
 }
 
 //Structures suite tests
@@ -466,6 +498,8 @@ MU_TEST(test_AddStudent)
 
 	freeMemory(global);
 }
+
+
 
 MU_TEST(test_AddAdmin)
 {

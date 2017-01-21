@@ -8,10 +8,10 @@
 // 2) Please add a test to the tests file for each functions, mark "Test Written" as needed
 
 //Project Functions
-int CreateNewProject(Global* GlobalFile, int userID, AccessGroup userGroup , char* projectName); //Test written
-int CreateNewTask(Global *GlobalFile, Project *project, int UserID, AccessGroup group,char* taskName);//Test written		
-int addUserToProject(Global *GlobalFile, Project *newProject,int UserID,int watcherOrStudent);//Test written	
-void ChangeTaskStatus(Global* GlobalFile, Project* project, int userID, int accessGroup);
+int CreateNewProject(Global* GlobalFile, int userID, AccessGroup userGroup , char* projectName); //Test written - Jonathan
+int CreateNewTask(Global *GlobalFile, Project *project, int UserID, AccessGroup group,char* taskName);//Test written - Jonathan		
+int addUserToProject(Global *GlobalFile, Project *newProject,int UserID,int watcherOrStudent);//Test written - Jonathan
+int ChangeTaskStatus(Global* GlobalFile, Project* project, int userID, int accessGroup, int tasktest, int statustest); //Test written - Jonathan
 void PrintProjectDetails(Global* GlobalFile, Project* project); //No test needed
 void PrintProjectMessages(Project *project); //No test needed
 
@@ -30,7 +30,7 @@ int *RemoveUserIDFromProject(Project* project, int ID);
 void AddProjectIDToStudent(Student * Student, int ProjectID);
 void AddProjectIDToWatcher(Watcher * Watcher, int ProjectID);
 void AddTaskIDToProject(Project* project, int TaskID);
-int FindAccessGroup(int ID);  //Test Written
+int FindAccessGroup(int ID);  //Test Written - Jonathan
 Admin* FindAdminByUN(Global *g, char *username); //Test written - Isabelle
 Student* FindStudentByUN(Global *g, char *username); //Test written - Isabelle
 Watcher* FindWatcherByUN(Global *g, char *username); //Test written - Isabelle
@@ -74,37 +74,43 @@ int AdminRegister(Global *GlobalFile);
 int WatcherRegister(Global *g);
 int StudentRegister(Global *g);
 int Login(Global *g);
-BOOL CheckPassword(char* pass); //Test written
-BOOL CheckIfUserExists(Global *g, char *username); //Test written
+BOOL CheckPassword(char* pass); //Test written -Jonathan
+BOOL CheckIfUserExists(Global *g, char *username); //Test written -Jonathan
 
 //
 // change status of choosen task, done, ready for testing
-void ChangeTaskStatus(Global* GlobalFile, Project* project, int userID, int accessGroup){
+int ChangeTaskStatus(Global* GlobalFile, Project* project, int userID, int accessGroup,int statustest, int taskidtest){
 	int taskID, status;
 	Task* task;
 	Student * student = FindStudent(GlobalFile->StudentList, userID);
 	//Getting a task from the user:
+	if (!taskidtest){
+		printf("Enter Task ID:\n");
+		scanf("%d", &taskID);
+	}
+	else taskID = taskidtest;
 
-	printf("Enter Task ID:\n");
-	scanf("%d", &taskID);
 	//Making sure that task is in the relevant project:
 	task = findTaskInProject(GlobalFile, project, taskID);
 	if (!task){
-		printf("Task does not belong to this project\n");
-		return;
+		if (!taskidtest) printf("Task does not belong to this project\n");
+		return 0;
 	}
-
-	printf("Current status is: %s\n", convertStatusToString(task->TaskStatus));
-	printf("Choose status to change into:\n");
-	printf("Available Status:\n");
-	printf("[0] New , [1] Elicitation, [2] Analysis, [3] VandV ");
-	if (accessGroup != STUDENT) printf(" [4] Approved"); //Student can't change to approved
-	printf("\n");
-	printf("Enter an integer of your choice:\n");
-	scanf("%d", &status);
+	if (!taskidtest){
+		printf("Current status is: %s\n", convertStatusToString(task->TaskStatus));
+		printf("Choose status to change into:\n");
+		printf("Available Status:\n");
+		printf("[0] New , [1] Elicitation, [2] Analysis, [3] VandV ");
+		if (accessGroup != STUDENT) printf(" [4] Approved"); //Student can't change to approved
+		printf("\n");
+		printf("Enter an integer of your choice:\n");
+		scanf("%d", &status);
+	}
+	else status = statustest;
+	
 	if (accessGroup == STUDENT && status == APPROVED) {
-		printf("Student cannot set status to approved, please contact your watcher or admin\n");
-		return;
+		if (!taskidtest) printf("Student cannot set status to approved, please contact your watcher or admin\n");
+		return 0;
 	}
 	if (status == NEW || status == ELICITATION || status == ANALYSIS || status == VandV || status == APPROVED)
 	{
@@ -118,9 +124,12 @@ void ChangeTaskStatus(Global* GlobalFile, Project* project, int userID, int acce
 
 	}
 	else
-		puts("Incorrect status identificator, status not been changed.");
-
-	system("pause");
+	{
+		if (!taskidtest) puts("Incorrect status identificator, status not been changed.");
+		return 0;
+	}
+	if (!taskidtest)system("pause");
+	return 1;
 }
 
 
