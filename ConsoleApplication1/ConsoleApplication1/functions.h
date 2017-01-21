@@ -1512,11 +1512,13 @@ BOOL ShowNotifications(Global *GlobalFile, Watcher *watcher, char choice)
 		if (choice == 'y' || choice == 'Y'){
 			watcher->WatcherReceiveChanges = TRUE;
 			return TRUE;
+		}
 		else if (choice == 'n' || choice == 'N'){
 			watcher->WatcherReceiveChanges = FALSE;
 			return FALSE;
 		}
 	}
+	return FALSE;
 }
 
 // print changes in project to watcher, done,ready for testing

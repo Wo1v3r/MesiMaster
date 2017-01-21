@@ -307,7 +307,7 @@ MU_TEST(test_show_notifications){
 	freeMemory(global);
 }
 
-MU_TEST_SUITE(Admin_Suite){
+MU_TEST_SUITE(Watcher_Suite){
 	//MU_RUN_TEST(test_leave_message_to_students);
 	MU_RUN_TEST(test_show_notifications);
 }

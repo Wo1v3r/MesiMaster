@@ -295,7 +295,7 @@ int WatcherMenu(Global* GlobalFile, int watcherID){
 			UpdateDetails(GlobalFile, watcherID);
 			break;
 		case 5:
-			ShowNotifications(GlobalFile, watcher);
+			ShowNotifications(GlobalFile, watcher, 0);
 			break;
 		case 6:
 			ShowTasksByStatusWatcher(GlobalFile, watcherID);
