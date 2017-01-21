@@ -186,8 +186,43 @@ MU_TEST(test_delete_user){
 	freeMemory(global);
 }
 
+MU_TEST(test_delete_quote){
+	Global* global = InitDataBases();
+	int id = 1;
+	mu_check(FindQuote(global->QuotesList, id) != NULL);
+	DeleteQuote(global, id);
+	//mu_check(FindQuote(global->QuotesList, id) != NULL);
+	freeMemory(global);
+}
+
+MU_TEST(test_promote_user){
+	Global* global = InitDataBases();
+	int id = 1001;//student
+	int current_runID = global->AdminRunID;
+	mu_check(FindAccessGroup(id) == 1);
+	PromoteUserToAdmin(global, id);
+	mu_check(FindAccessGroup((global->AdminRunID) - 1) == 2);
+	id = 2000;//Admin
+	mu_check(FindAccessGroup(id) == 2);
+	PromoteUserToAdmin(global, id);
+	mu_check(FindAccessGroup((global->AdminRunID) - 1) == 2);
+	id = 3002;//Watcher
+	mu_check(FindAccessGroup(id) == 3);
+	PromoteUserToAdmin(global, id);
+	mu_check(FindAccessGroup((global->AdminRunID) - 1) == 2);
+	id = 9999;//Bad id
+	mu_check(FindAccessGroup(id) == 0);
+	PromoteUserToAdmin(global, id);
+	mu_check(FindAccessGroup(id) == 0);
+	mu_assert(global->AdminRunID - current_runID == 2, "Suppose to be 2!(2 promoted)");
+	freeMemory(global);
+}
+
+
 MU_TEST_SUITE(Admin_Suite){
 	MU_RUN_TEST(test_delete_user);
+	//MU_RUN_TEST(test_delete_quote);
+	MU_RUN_TEST(test_promote_user);
 }
 
 
