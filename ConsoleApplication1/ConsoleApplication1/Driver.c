@@ -335,7 +335,7 @@ void LoginMenu(Global* GlobalFile){
 			Exit(GlobalFile);
 			return;
 		case 1:
-			ID = Login(GlobalFile); //If ID = 0 means there was a problem with the login
+			ID = Login(GlobalFile, NULL, NULL); //If ID = 0 means there was a problem with the login
 			break;
 		case 2:
 			ID = Register(GlobalFile); //If ID = 0 means there was problem with the register
@@ -400,6 +400,7 @@ int main()
 		MU_RUN_SUITE(Project_Suite);
 		MU_RUN_SUITE(Structures_Suite);
 		MU_RUN_SUITE(Register_Suite);
+		MU_RUN_SUITE(Login_func_Suite);
 		system("pause");
 		return;
 	}

@@ -220,6 +220,26 @@ MU_TEST_SUITE(Register_Suite){
 
 };
 //Login suite tests:
+MU_TEST(test_login){
+	Global* global = InitDataBases();
+	//admin check
+	mu_check(Login(global, "Dubi", "purr") == 2000);
+	//watcher check
+	mu_check(Login(global, "watcher", "jipwa#$%sfjip") == 3001);
+	//student check
+	mu_check(Login(global, "alex", "Az1") == 1003);
+	//bad check username
+	mu_check(Login(global, "asdbfdgsdfg", "asd") == 0);
+	//bad check password
+	mu_check(Login(global, "Dubi", "asd") == 0);
+	freeMemory(global);
+}
+
+
+MU_TEST_SUITE(Login_func_Suite){
+	MU_RUN_TEST(test_login);
+}
+
 
 MU_TEST(test_check_password){
 	//A valid password is one that contains: at least 1 digit, 1 uppercase letter, 1 lowercase letter.

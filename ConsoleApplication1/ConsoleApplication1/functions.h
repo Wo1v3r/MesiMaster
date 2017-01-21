@@ -73,7 +73,7 @@ int Register(Global *g); //No test needewd , Admin\Watcher\Student Register take
 int AdminRegister(Global *GlobalFile, char* nameTest, char* surnameTest, char* unTest, char* passTest);//Test written
 int WatcherRegister(Global *g);
 int StudentRegister(Global *g, char* nameTest, char* surnameTest ,char* unTest, char* passTest, char* emailTest, char* departmentTest, char yearTest);//Test written
-int Login(Global *g);
+int Login(Global *g, char* UN, char* PW); //Test written
 BOOL CheckPassword(char* pass); //Test written -Jonathan
 BOOL CheckIfUserExists(Global *g, char *username); //Test written -Jonathan
 
@@ -2003,16 +2003,23 @@ Admin* FindAdminByUN(Global *g, char *username)
 	return NULL;
 }
 
-int Login(Global *g)
+int Login(Global *g, char* UN, char* PW)
 {
 	char username[81], pass[81];
+	BOOL flag = TRUE;
+	if (UN != NULL && PW != NULL){
+		strcpy(username, UN);
+		strcpy(pass, PW);
+		flag = FALSE;
+	}	
 	int i;
 	Student *studLogin = NULL;
 	Watcher *watchLogin = NULL;
 	Admin *admLogin = NULL;
-
-	printf("Please enter your username.\n");														//Entering username.
-	scanf("%s", username);
+	if (flag == TRUE){
+		printf("Please enter your username.\n");														//Entering username.
+		scanf("%s", username);
+	}
 	//Finding this username in one of the databases.
 	studLogin = FindStudentByUN(g, username);
 	watchLogin = FindWatcherByUN(g, username);
@@ -2020,7 +2027,8 @@ int Login(Global *g)
 
 	if (studLogin == NULL && watchLogin == NULL && admLogin == NULL)								//If not fount in any database - return 0.
 	{
-		printf("No such user in our system.\n");
+		if (flag == TRUE)
+			printf("No such user in our system.\n");
 		return 0;
 	}
 
@@ -2028,9 +2036,11 @@ int Login(Global *g)
 	{																								//If the password is correct - ID returned.
 		for (i = 0; i < 3; i++)																		//If none of the attempts were successful - 0 returned.
 		{
-			_flushall();
-			printf("Please enter you password.\n");
-			scanf("%s", pass);
+			if (flag == TRUE){
+				_flushall();
+				printf("Please enter you password.\n");
+				scanf("%s", pass);
+			}
 			if (strcmp(studLogin->StudentPassword, pass) == 0)
 				return studLogin->StudentID;
 		}
@@ -2039,9 +2049,11 @@ int Login(Global *g)
 	{
 		for (i = 0; i < 3; i++)
 		{
-			_flushall();
-			printf("Please enter you password.\n");
-			scanf("%s", pass);
+			if (flag == TRUE){
+				_flushall();
+				printf("Please enter you password.\n");
+				scanf("%s", pass);
+			}
 			if (strcmp(watchLogin->WatcherPassword, pass) == 0)
 				return watchLogin->WatcherID;
 		}
@@ -2050,14 +2062,17 @@ int Login(Global *g)
 	{
 		for (i = 0; i < 3; i++)
 		{
-			_flushall();
-			printf("Please enter you password.\n");
-			scanf("%s", pass);
+			if (flag == TRUE){
+				_flushall();
+				printf("Please enter you password.\n");
+				scanf("%s", pass);
+			}
 			if (strcmp(admLogin->AdminPassword, pass) == 0)
 				return admLogin->AdminID;
 		}
 	}
-	printf("You have failed to enter you password correctly 3 times. Login failed.\n");
+	if (flag == TRUE)
+		printf("You have failed to enter you password correctly 3 times. Login failed.\n");
 	return 0;
 }
 
