@@ -274,6 +274,14 @@ MU_TEST(test_global_message){
 	freeMemory(global);
 }
 
+//NEED THE FINAL TXT FILES
+MU_TEST(test_remove_project){
+	Global* global = InitDataBases();
+	RemoveProject(global, global->ProjectsList, 'y');
+	//mu_check(strcmp(global->GlobalMessages, "This Message entered") == 0);
+	freeMemory(global);
+}
+
 MU_TEST_SUITE(Admin_Suite){
 	MU_RUN_TEST(test_delete_user);
 	MU_RUN_TEST(test_delete_quote);

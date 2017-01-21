@@ -60,7 +60,7 @@ BOOL ShowNotifications(Global *GlobalFile, Watcher *watcher);
 void ShowTasksByStatusWatcher(Global* GlobalFile, int WatcherID);
 
 //Admin Functions
-void RemoveProject(Global* GlobalFile, Project* project, int userID, int accessGroup);
+void RemoveProject(Global* GlobalFile, Project* project, char choice);
 void AddGlobalMessage(Global* GlobalFile, char* msg); //Test written
 void AddNewQuote(Global* GlobalFile, char* quote, char* creator); //Test written
 void ManageQuotes(Global *GlobalFile); //No test needed(switch case function)
@@ -182,38 +182,44 @@ int RemoveProjectFromUsers(Global* GlobalFile, int ProjectID)
 }
 
 // done by Alexey, ready for testing
-void RemoveProject(Global* GlobalFile, Project* project, int userID, int accessGroup){
-	char choice = 'O';
+void RemoveProject(Global* GlobalFile, Project* project, char choice){
 	int i;
-	printf("Are you sure you want to remove this project and all of its tasks (Y/N)?\n");
-
-	while (choice == 'O'){
-		choice = getchar();
-
-		switch (choice){
-		case 'Y':
-		case 'y':
-
-			// remove Project ID from all users's arrays of ProjectsID
-			RemoveProjectFromUsers(GlobalFile, project->ProjectID);
-			free(project->StudentsIDS);
-			// remove tasks belongs to project from Global task list
-			for (i = 0; i < sizeof(project->TasksIDS) / sizeof(int); i++)
-				RemoveTaskFromList(GlobalFile->TaskList, project->TasksIDS[i]);
-
-			free(project->TasksIDS);
-			// remove project from GLobal list
-			GlobalFile->ProjectsList = RemoveProjectFromList(GlobalFile->ProjectsList, project->ProjectID);
-			//delete // Need to implement functions that will remove this project id from all the users, from all the lists etc
-			break;
-		case 'N':
-		case 'n':
-			break;
-		default: printf("No such option!\n");
-			choice = 'O';
+	if (choice != 'O'){
+		choice = 'O';
+		printf("Are you sure you want to remove this project and all of its tasks (Y/N)?\n");
+		while (choice == 'O'){
+			choice = getchar();
+			switch (choice){
+			case 'Y':
+			case 'y':
+				// remove Project ID from all users's arrays of ProjectsID
+				RemoveProjectFromUsers(GlobalFile, project->ProjectID);
+				free(project->StudentsIDS);
+				// remove tasks belongs to project from Global task list
+				for (i = 0; i < project->ProjectTasksAmount; i++)
+					GlobalFile->TaskList = RemoveTaskFromList(GlobalFile->TaskList, project->TasksIDS[i]);
+				free(project->TasksIDS);
+				// remove project from GLobal list
+				GlobalFile->ProjectsList = RemoveProjectFromList(GlobalFile->ProjectsList, project->ProjectID);
+				//delete // Need to implement functions that will remove this project id from all the users, from all the lists etc
+				break;
+			case 'N':
+			case 'n':
+				break;
+			default: printf("No such option!\n");
+				choice = 'O';
+			}
 		}
+		system("pause");
 	}
-	system("pause");
+	else{
+		RemoveProjectFromUsers(GlobalFile, project->ProjectID);
+		free(project->StudentsIDS);
+		for (i = 0; i < project->ProjectTasksAmount; i++)
+			GlobalFile->TaskList = RemoveTaskFromList(GlobalFile->TaskList, project->TasksIDS[i]);
+		free(project->TasksIDS);
+		GlobalFile->ProjectsList = RemoveProjectFromList(GlobalFile->ProjectsList, project->ProjectID);
+	}
 }
 
 // choose student id in project and send message to him, done, ready for testing
