@@ -514,12 +514,12 @@ int CreateNewProject(Global* GlobalFile,int userID, AccessGroup userGroup,char* 
 
 	else if (userGroup == WATCHER){
 		Watcher = FindWatcher(GlobalFile->WatchersList, userID);
-		if (!Watcher) return -1;
+		if (!Watcher) return 0;
 	}
 	else
 	{
 		if (!projectName) puts("Incorrect access group received.");
-		return -1;		// incorrect access group
+		return 0;		// incorrect access group
 	}
 
 	// allocate memory
