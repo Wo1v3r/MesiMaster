@@ -172,7 +172,31 @@ MU_TEST_SUITE(Utilities){
 	MU_REPORT_SUITE();
 }
 
+//Register suite tests:
 
+MU_TEST(test_student_register){
+	//int StudentRegister(Global *g, char* nameTest, char* unTest, char* passTest, char* emailTest, char* departmentTest, char yearTest)
+	Global* global = InitDataBases();
+	
+	//Trying to register a student with a bad password:
+	mu_check(StudentRegister(global, "Jonathan","Leon", "Johnleon24", "aab", "johnleon24@gmail.com", "Software", '2') == 0);
+
+	//Trying to register a student with a taken username:
+	mu_check(StudentRegister(global, "Jonathan", "Leon", "John", "A1b", "johnleon24@gmail.com", "Software", '2') == 0);
+
+	//Trying to register a student with valid input:
+	mu_check(StudentRegister(global, "Jonathan", "Leon", "Johnleon24", "A1b", "johnleon24@gmail.com", "Software", '2') != 0);
+
+	//Checking if that user exists:
+	mu_check(FindStudentByUN(global, "John") != NULL);
+
+}
+
+
+MU_TEST_SUITE(Register_Suite){
+	MU_RUN_TEST(test_student_register);
+
+};
 //Login suite tests:
 
 MU_TEST(test_check_password){
