@@ -47,16 +47,16 @@ void PrintActivityLog(char* filePath);//No test needed
 void PrintQuotes(Global* GlobalFile);//No test needed
 
 //Student Functions
-void ShowMessagesToStudent(Global * Global, Student *student);
-void ShowTasksByStatus(Global* GlobalFile, int studentID);
+void ShowMessagesToStudent(Global * Global, Student *student); //No test needed
+void ShowTasksByStatus(Global* GlobalFile, int studentID); //No test needed
 
 
 //Watcher Functions
 void LeaveMessageToStudent(Global* GlobalFile, Project* project, Watcher* watcher); //No test needed(writing to file)
 void AddProjectMessage(Global* GlobalFile, Project* project, Watcher* watcher); //No test needed(writing to file)
 void PrintStudentActivityWatcher(Global *GlobalFile, Project *project); //Need TXT
-BOOL ShowNotifications(Global *GlobalFile, Watcher *watcher, char choice);
-void ShowTasksByStatusWatcher(Global* GlobalFile, int WatcherID);
+BOOL ShowNotifications(Global *GlobalFile, Watcher *watcher, char choice); // Test written
+void ShowTasksByStatusWatcher(Global* GlobalFile, int WatcherID); //No test needed(printing to stdout)
 
 //Admin Functions
 void RemoveProject(Global* GlobalFile, Project* project, char choice);
@@ -1483,7 +1483,7 @@ void PromoteUserToAdmin(Global *GlobalFile, int ID)
 // Turns on / off watcher notifications, return true if status changed, false if not changed
 BOOL ShowNotifications(Global *GlobalFile, Watcher *watcher, char choice)
 {
-	if (choice != 0){
+	if (choice == 0){
 		printf("\nCurrent status of Subscription : ");
 		if (watcher->WatcherReceiveChanges == FALSE)
 			puts("OFF");
