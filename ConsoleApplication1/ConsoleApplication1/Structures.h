@@ -267,6 +267,13 @@ Project *RemoveProjectFromList(Project *head, int deleteID)
 {
 	Project *current = head, *previous = NULL;
 	if (!head) return NULL;
+	// if only 1 element at list
+	if (current && current->ProjectID == deleteID && !current->ProjectNext)
+	{
+		head = NULL;
+		free(current);
+		return NULL;
+	}
 
 	while (current->ProjectID != deleteID && current->ProjectNext != NULL)
 	{
@@ -290,6 +297,12 @@ Student *RemoveStudentFromList(Student *head, int deleteID)
 {
 	Student *current = head, *previous = NULL;
 	if (!head) return NULL;
+	if (current && current->StudentID == deleteID && !current->StudentNext)
+	{
+		head = NULL;
+		free(current);
+		return NULL;
+	}
 
 	while (current->StudentID != deleteID && current->StudentNext != NULL)
 	{
@@ -314,6 +327,12 @@ Watcher *RemoveWatcherFromList(Watcher *head, int deleteID)
 	Watcher *current = head, *previous = NULL;
 
 	if (!head) return NULL;
+	if (current && current->WatcherID == deleteID && !current->WatcherNext)
+	{
+		head = NULL;
+		free(current);
+		return NULL;
+	}
 
 	while (current->WatcherID != deleteID && current->WatcherNext != NULL)
 	{
@@ -337,6 +356,12 @@ Admin *RemoveAdminFromList(Admin *head, int deleteID)
 {
 	Admin *current = head, *previous = NULL;
 	if (!head) return NULL;
+	if (current && current->AdminID == deleteID &&!current->AdminNext)
+	{
+		head = NULL;
+		free(current);
+		return NULL;
+	}
 
 	while (current->AdminID != deleteID && current->AdminNext != NULL)
 	{
@@ -360,6 +385,12 @@ Quote *RemoveQuoteFromList(Quote *head, int deleteID)
 {
 	Quote *current = head, *previous = NULL;
 	if (!head) return NULL;
+	if (current &&current->QuoteID == deleteID && !current->QuoteNext)
+	{
+		head = NULL;
+		free(current);
+		return NULL;
+	}
 
 	while (current->QuoteID != deleteID && current->QuoteNext != NULL)
 	{
@@ -384,6 +415,12 @@ Task *RemoveTaskFromList(Task *head, int deleteID)
 {
 	Task *current = head, *previous = NULL;
 	if (!head) return NULL;
+	if (current &&current->TaskID == deleteID && !current->TaskNext)
+	{
+		head = NULL;
+		free(current);
+		return NULL;
+	}
 
 	while (current->TaskID != deleteID && current->TaskNext != NULL)
 	{
