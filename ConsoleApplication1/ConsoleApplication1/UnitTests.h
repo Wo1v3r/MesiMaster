@@ -215,7 +215,10 @@ MU_TEST(test_create_project){
 
 	freeMemory(global);
 }
+MU_TEST(test_create_task){
 
+
+}
 MU_TEST_SUITE(Project_Suite){
 
 	MU_RUN_TEST(test_create_project);
