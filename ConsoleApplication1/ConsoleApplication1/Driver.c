@@ -61,7 +61,7 @@ int ProjectMenu(Global* GlobalFile , Project* project, int accessGroup, int user
 			//Exit to upper menu
 			return 1;
 		case 1:
-			CreateNewTask(GlobalFile,project,userID,accessGroup);
+			CreateNewTask(GlobalFile,project,userID,accessGroup,NULL);
 			break;
 		case 2:
 			PrintTasksList(GlobalFile, project);

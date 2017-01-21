@@ -308,12 +308,26 @@ MU_TEST(test_create_project){
 	freeMemory(global);
 }
 MU_TEST(test_create_task){
+	char* taskName = "My Task";
+	Global* global = InitDataBases();
+	int noSuchUserID = 1058, studentID = 1001;
+	int taskID = 0;
 
+	Project *project = FindProject(global->ProjectsList, 4002); //Existing project - checked before this function
+	mu_check((taskID = CreateNewTask(global, project, noSuchUserID, STUDENT, taskName)) == 0); //No such user
+	mu_check((taskID = CreateNewTask(global, project, studentID, BAD, taskName)) == 0); //No such user acces group
+	mu_check((taskID = CreateNewTask(global, project, studentID, STUDENT, taskName)) != 0); // Should pass and create new task
+	
+	//Checking if that task was created successfuly:
+	mu_check(findTaskInProject(global, project, taskID) != NULL); //That task should exist
 
+	freeMemory(global);
 }
+
 MU_TEST_SUITE(Project_Suite){
 
 	MU_RUN_TEST(test_create_project);
+	MU_RUN_TEST(test_create_task);
 }
 
 //Structures suite tests

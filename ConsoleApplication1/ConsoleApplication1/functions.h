@@ -9,7 +9,7 @@
 
 //Project Functions
 int CreateNewProject(Global* GlobalFile, int userID, AccessGroup userGroup , char* projectName); //Test written
-int CreateNewTask(Global *GlobalFile, Project *project, int UserID, AccessGroup group);		
+int CreateNewTask(Global *GlobalFile, Project *project, int UserID, AccessGroup group,char* taskName);//Test written		
 void addUserToProject(Global *GlobalFile, Project *newProject);	
 void ChangeTaskStatus(Global* GlobalFile, Project* project, int userID, int accessGroup);
 void addUserToProject(Global *GlobalFile, Project *newProject);
@@ -729,7 +729,7 @@ void AddTaskIDToProject(Project* project, int TaskID)
 }
 
 // 53 - create new task from project menu, done, ready for testing
-int CreateNewTask(Global *GlobalFile, Project *project,int UserID,AccessGroup group)
+int CreateNewTask(Global *GlobalFile, Project *project,int UserID,AccessGroup group,char* taskName)
 {
 	Student *student = NULL;
 	Watcher *watcher = NULL;
@@ -739,20 +739,28 @@ int CreateNewTask(Global *GlobalFile, Project *project,int UserID,AccessGroup gr
 	newTask->TaskID = GlobalFile->TaskRunID;		// set Task Run ID
 
 	GlobalFile->TaskRunID++;						// increase run id by 1
-	fflush(stdin);
-	puts("Enter your task (up to 255 chars) :");
-	gets(newTask->TaskName);
-	if (group == STUDENT)
+
+	if (taskName) strcpy(newTask->TaskName, taskName);
+	else{
+		fflush(stdin);
+		puts("Enter your task (up to 255 chars) :");
+		gets(newTask->TaskName);
+	}
+
+	if (group == STUDENT){
 		student = FindStudent(GlobalFile->StudentList, UserID);
-
-	else if (group == WATCHER)
-
+		if (!watcher) return 0;
+	}
+	
+	else if (group == WATCHER){
 		watcher = FindWatcher(GlobalFile->WatchersList, UserID);
+		if (!watcher) return 0;
+	}
 
 	else
 	{
 		puts("Incorrect access group");
-		return -1;
+		return 0;
 	}
 
 	if (group == STUDENT && student)
@@ -779,12 +787,13 @@ int CreateNewTask(Global *GlobalFile, Project *project,int UserID,AccessGroup gr
 
 	// add creation of task to project log
 	printLogToFile(project->ProjectActivityLogs, log);
-
+	if (!taskName){
 	// switch flag for watcher subscribes
 	if (project->ProgramChanges == FALSE)
 		project->ProgramChanges = TRUE;
-
 	system("pause");
+	}
+
 	return newTask->TaskID;
 }
 
