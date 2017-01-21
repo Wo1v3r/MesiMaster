@@ -33,12 +33,12 @@ Watcher* AddWatcher(Watcher *watcherHead, Watcher *addWatcher); //Test written -
 Project* AddProject(Project *projectHead, Project *addProject); //Test written - Isabelle
 Quote* AddQuote(Quote *QuoteHead, Quote *addQuote); //Test written - Isabelle
 Task *AddTask(Task *TasksHead, Task *addTask); //Test written - Isabelle
-Project *RemoveProjectFromList(Project *head, int deleteID);
-Student *RemoveStudentFromList(Student *head, int deleteID);
-Watcher *RemoveWatcherFromList(Watcher *head, int deleteID);
-Admin *RemoveAdminFromList(Admin *head, int deleteID);
-Quote *RemoveQuoteFromList(Quote *head, int deleteID);
-Task *RemoveTaskFromList(Task *head, int deleteID);
+Project *RemoveProjectFromList(Project *head, int deleteID); //Test written - Isabelle
+Student *RemoveStudentFromList(Student *head, int deleteID); //Test written - Isabelle
+Watcher *RemoveWatcherFromList(Watcher *head, int deleteID); //Test written - Isabelle
+Admin *RemoveAdminFromList(Admin *head, int deleteID); //Test written - Isabelle
+Quote *RemoveQuoteFromList(Quote *head, int deleteID); //Test written - Isabelle
+Task *RemoveTaskFromList(Task *head, int deleteID); //Test written - Isabelle
 void PrintStudentList(Student *StudentHead); //No tests needed
 void PrintAdminsList(Admin *head); //No tests needed
 void PrintWatcherList(Watcher *head); //No tests needed
@@ -313,7 +313,10 @@ Project *RemoveProjectFromList(Project *head, int deleteID)
 		if (previous)
 			previous->ProjectNext = current->ProjectNext;
 		else
+		{
 			head = current->ProjectNext;
+			current->ProjectNext = NULL;
+		}
 
 		free(current);
 	}

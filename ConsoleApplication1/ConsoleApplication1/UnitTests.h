@@ -413,7 +413,7 @@ MU_TEST(test_AddStudent)
 
 	AddStudent(global->StudentList, test_student);
 	mu_check(FindStudent(global->StudentList, test_student->StudentID) != NULL); //check if the student is found by ID 
-	mu_check(FindStudentByUN(global->StudentList, test_student->StudentUsername) != NULL); //check if the student is found by UN
+	mu_check(FindStudentByUN(global, test_student->StudentUsername) != NULL); //check if the student is found by UN
 
 	freeMemory(global);
 }
@@ -434,7 +434,7 @@ MU_TEST(test_AddAdmin)
 
 	AddAdmin(global->AdminsList, test_admin);
 	mu_check(FindAdmin(global->AdminsList, test_admin->AdminID) != NULL); //check if the admin is found by ID 
-	mu_check(FindAdminByUN(global->AdminsList, test_admin->AdminUsername) != NULL); //check is the admin is found by UN
+	mu_check(FindAdminByUN(global, test_admin->AdminUsername) != NULL); //check is the admin is found by UN
 
 	freeMemory(global);
 }
@@ -473,7 +473,7 @@ MU_TEST(test_AddProject)
 	test_proj->ProjectID = 4999;
 	strcpy(test_proj->ProjectActivityLogs, "4999_ProjectActivityLog.txt"); 
 	strcpy(test_proj->ProjectCreatorName, "izzie");
-	strcpy(test_proj->ProjectMessages, "4999)PMess.txt");
+	strcpy(test_proj->ProjectMessages, "4999_PMess.txt");
 	strcpy(test_proj->ProjectName, "Mesimaster");
 	test_proj->ProjectNext = NULL;
 	test_proj->ProjectTasksAmount = 0;
@@ -481,7 +481,7 @@ MU_TEST(test_AddProject)
 	test_proj->StudentsIDS = NULL;
 	test_proj->TasksIDS = NULL;
 
-	AddProject(global->WatchersList, test_proj);
+	AddProject(global->ProjectsList, test_proj);
 	mu_check(FindProject(global->ProjectsList, test_proj->ProjectID) != NULL); //check if the project is found by ID 
 
 	freeMemory(global);
@@ -516,8 +516,134 @@ MU_TEST(test_AddQuote)
 	test_quote->QuoteID = 6999;
 
 	AddQuote(global->QuotesList, test_quote);
-	mu_check(FindQuote(global->TaskList, test_quote->QuoteID) != NULL); //check if the quote is found by ID 
+	mu_check(FindQuote(global->QuotesList, test_quote->QuoteID) != NULL); //check if the quote is found by ID 
 
+	freeMemory(global);
+}
+
+MU_TEST(test_RemoveProjectFromList)
+{
+	//Receives a project id and removes it from the linked list
+	//Loading file:
+	Global* global = InitDataBases();
+	Project * emptyList = NULL; //should do nothing but dont crash
+	int testID = 4000; //Should delete
+	int badId = 9999; //Should do nothing (non existing item) , should not crash
+	
+	global->ProjectsList = RemoveProjectFromList(global->ProjectsList, testID);
+	mu_check(FindProject(global->ProjectsList, testID) == NULL); //check that realy removed - item is really not in the list
+	global->ProjectsList = RemoveProjectFromList(global->ProjectsList, badId); //check deleting non exosting item
+	global->ProjectsList = RemoveProjectFromList(emptyList, testID); //check deleting from empty list
+	freeMemory(global);
+}
+
+MU_TEST(test_RemoveStudentFromList)
+{
+	//Receives a student id and removes it from the linked list
+	//Loading file:
+	Global* global = InitDataBases();
+	Student * emptyList = NULL;
+	int testID = 1001; //Should delete
+	int badID = 9999;
+
+	global->StudentList = RemoveStudentFromList(global->StudentList, testID);
+	mu_check(FindStudent(global->StudentList, testID) == NULL); //check that realy removed - item is really not in the list
+	global->StudentList = RemoveStudentFromList(global->StudentList, badID); //check deleting non exosting item
+	global->StudentList = RemoveStudentFromList(emptyList, testID); //check deleting from empty list
+
+	freeMemory(global);
+}
+
+MU_TEST(test_RemoveWatcherFromList)
+{
+	//Receives a watcher id and removes it from the linked list
+	//Loading file:
+	Global* global = InitDataBases();
+	Watcher * emptyList = NULL;
+	int badID = 9999;
+	int testID = 1001; //Should delete
+
+	global->WatchersList = RemoveWatcherFromList(global->WatchersList, testID);
+	mu_check(FindWatcher(global->WatchersList, testID) == NULL); //check that realy removed - item is really not in the list
+	global->WatchersList = RemoveWatcherFromList(global->WatchersList, badID); //check deleting from empty list
+	global->WatchersList = RemoveWatcherFromList(emptyList, testID); //check deleting from empty list
+
+	freeMemory(global);
+}
+
+MU_TEST(test_RemoveAdminFromList)
+{
+	//Receives a admin id and removes it from the linked list
+	//Loading file:
+	Global* global = InitDataBases();
+	Admin * emptyList = NULL;
+	int badID = 9999;
+	int testID = 2001; //Should delete
+
+	global->AdminsList = RemoveAdminFromList(global->AdminsList, testID);
+	mu_check(FindAdmin(global->AdminsList, testID) == NULL); //check that realy removed - item is really not in the list
+	global->AdminsList = RemoveAdminFromList(global->AdminsList, badID);  //check deleting from empty list
+	global->AdminsList = RemoveAdminFromList(emptyList, testID);//check deleting from empty list
+
+	freeMemory(global);
+}
+
+MU_TEST(test_RemoveQuoteFromList)
+{
+	//Receives a quote id and removes it from the linked list
+	//Loading file:
+	Global* global = InitDataBases();
+	Quote * emptyList = NULL;
+	int badID = 9999;
+	int testID = 1; //Should delete
+
+	global->QuotesList = RemoveQuoteFromList(global->QuotesList, testID);
+	mu_check(FindQuote(global->QuotesList, testID) == NULL); //check that realy removed - item is really not in the list
+	global->QuotesList = RemoveQuoteFromList(global->QuotesList, badID);  //check deleting from empty list
+	global->QuotesList = RemoveQuoteFromList(emptyList, testID);//check deleting from empty list
+
+	freeMemory(global);
+}
+
+MU_TEST(test_RemoveTaskFromList)
+{
+	//Receives a task id and removes it from the linked list
+	//Loading file:
+	Global* global = InitDataBases();
+	Task * emptyList = NULL;
+	int badID = 9999;
+	int testID = 5000; //Should delete
+
+	global->TaskList = RemoveTaskFromList(global->TaskList, testID);
+	mu_check(FindTask(global->TaskList, testID) == NULL); //check that realy removed - item is really not in the list
+	global->TaskList = RemoveTaskFromList(global->TaskList, badID);//check deleting from empty list
+	global->TaskList = RemoveTaskFromList(emptyList, testID);//check deleting from empty list
+
+	freeMemory(global);
+}
+
+//int isStudentInProject(Project* project, int studentID);
+MU_TEST(test_findTaskInProject)
+{
+	Global* global = InitDataBases();
+	mu_check(findTaskInProject(global, FindProject(global->ProjectsList, 4000), 5000) != NULL); //check that returns smthn
+	mu_check(findTaskInProject(global, FindProject(global->ProjectsList, 4000), 5000)->TaskID == 5000); //check that returns the right thing
+	mu_check(findTaskInProject(global, FindProject(global->ProjectsList, 4000), 5007) == NULL); // check that returns null if bad id
+	freeMemory(global);
+}
+
+MU_TEST(test_convertStatusToString)
+{
+	mu_check(strcmp(convertStatusToString(NEW), "New") == 0);
+	mu_check(strcmp(convertStatusToString(APPROVED), "Approved") == 0);
+	mu_check(convertStatusToString(10) == NULL);
+}
+
+MU_TEST(test_isStudentInProject)
+{
+	Global* global = InitDataBases();
+	mu_check(isStudentInProject(FindProject(global->ProjectsList, 4001), 1001) == 1); //right student and project
+	mu_check(isStudentInProject(FindProject(global->ProjectsList, 4001), 1000) == 0); // right project wrong student
 	freeMemory(global);
 }
 
@@ -535,6 +661,15 @@ MU_TEST_SUITE(Structures_Suite)
 	MU_RUN_TEST(test_AddProject);
 	MU_RUN_TEST(test_AddTask);
 	MU_RUN_TEST(test_AddQuote);
+	MU_RUN_TEST(test_RemoveProjectFromList);
+	MU_RUN_TEST(test_findTaskInProject);
+	MU_RUN_TEST(test_RemoveStudentFromList);
+	MU_RUN_TEST(test_RemoveWatcherFromList);
+	MU_RUN_TEST(test_RemoveAdminFromList);
+	MU_RUN_TEST(test_RemoveQuoteFromList);
+	MU_RUN_TEST(test_RemoveTaskFromList);
+	MU_RUN_TEST(test_convertStatusToString);
+	MU_RUN_TEST(test_isStudentInProject);
 
 	MU_REPORT_SUITE();
 }
