@@ -298,6 +298,20 @@ MU_TEST(test_leave_message_to_students){
 	freeMemory(global);
 }
 
+MU_TEST(test_show_notifications){
+	Global* global = InitDataBases();
+	ShowNotifications(global, global->WatchersList, 'y');
+	mu_check(global->WatchersList->WatcherReceiveChanges == TRUE);
+	ShowNotifications(global, global->WatchersList, 'n');
+	mu_check(global->WatchersList->WatcherReceiveChanges == FALSE);
+	freeMemory(global);
+}
+
+MU_TEST_SUITE(Admin_Suite){
+	//MU_RUN_TEST(test_leave_message_to_students);
+	MU_RUN_TEST(test_show_notifications);
+}
+
 
 //Project Menu tests:
 

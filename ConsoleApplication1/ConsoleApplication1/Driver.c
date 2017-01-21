@@ -84,7 +84,7 @@ int ProjectMenu(Global* GlobalFile , Project* project, int accessGroup, int user
 			switch (accessGroup){
 
 			case ADMIN:
-				RemoveProject(GlobalFile, project, 'O');
+				RemoveProject(GlobalFile, project, 0);
 				break;
 			case WATCHER:
 				LeaveMessageToStudent(GlobalFile,project,watcher);
