@@ -1,7 +1,6 @@
 //Jonathan
 #include "functions.h"
 #include "UnitTests.h"
-#include "vld.h"
 ////// Menus
 
 //Project Menu : Finished ,Ready for testing - Jonathan
@@ -62,7 +61,7 @@ int ProjectMenu(Global* GlobalFile , Project* project, int accessGroup, int user
 			//Exit to upper menu
 			return 1;
 		case 1:
-			CreateNewTask(GlobalFile,project,userID,accessGroup);
+			CreateNewTask(GlobalFile,project,userID,accessGroup,NULL);
 			break;
 		case 2:
 			PrintTasksList(GlobalFile, project);
@@ -74,7 +73,7 @@ int ProjectMenu(Global* GlobalFile , Project* project, int accessGroup, int user
 			PrintProjectDetails(GlobalFile, project);
 			break;
 		case 5:
-			addUserToProject(GlobalFile, project);
+			addUserToProject(GlobalFile, project,0,0);
 			break;
 		case 6:
 			ChangeTaskStatus(GlobalFile, project, userID, accessGroup);
@@ -85,7 +84,7 @@ int ProjectMenu(Global* GlobalFile , Project* project, int accessGroup, int user
 			switch (accessGroup){
 
 			case ADMIN:
-				RemoveProject(GlobalFile, project, userID, accessGroup);
+				RemoveProject(GlobalFile, project, 'O');
 				break;
 			case WATCHER:
 				LeaveMessageToStudent(GlobalFile,project,watcher);
@@ -235,7 +234,7 @@ int AdminMenu(Global* GlobalFile ,int adminID){
 			ProjectMenu(GlobalFile, project, ADMIN, adminID);
 			break;
 		case 9: 
-			AddGlobalMessage(GlobalFile);
+			AddGlobalMessage(GlobalFile, "");
 			break;
 		case 10:
 			ManageQuotes(GlobalFile);
@@ -392,13 +391,13 @@ int main()
 	printf("Would you like to run the tests?(1 = yes)\n");
 	scanf("%d", &tests);
 	system("cls");
-	if (tests){
+	if (tests == 1){
 		MU_RUN_SUITE(Utilities);
 		MU_RUN_SUITE(InitTest);
 		MU_RUN_SUITE(Login_Suite);
 		MU_RUN_SUITE(Admin_Suite);
 		MU_RUN_SUITE(Project_Suite);
-		MU_RUN_SUITE(Structures_Suite);
+		//MU_RUN_SUITE(Structures_Suite);
 		system("pause");
 		return;
 	}

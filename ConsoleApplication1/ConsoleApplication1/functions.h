@@ -9,10 +9,9 @@
 
 //Project Functions
 int CreateNewProject(Global* GlobalFile, int userID, AccessGroup userGroup , char* projectName); //Test written
-int CreateNewTask(Global *GlobalFile, Project *project, int UserID, AccessGroup group);		
-void addUserToProject(Global *GlobalFile, Project *newProject);	
+int CreateNewTask(Global *GlobalFile, Project *project, int UserID, AccessGroup group,char* taskName);//Test written		
+int addUserToProject(Global *GlobalFile, Project *newProject,int UserID,int watcherOrStudent);//Test written	
 void ChangeTaskStatus(Global* GlobalFile, Project* project, int userID, int accessGroup);
-void addUserToProject(Global *GlobalFile, Project *newProject);
 void PrintProjectDetails(Global* GlobalFile, Project* project); //No test needed
 void PrintProjectMessages(Project *project); //No test needed
 
@@ -53,16 +52,16 @@ void ShowTasksByStatus(Global* GlobalFile, int studentID);
 
 
 //Watcher Functions
-void LeaveMessageToStudent(Global* GlobalFile, Project* project, Watcher* watcher);
-void AddProjectMessage(Global* GlobalFile, Project* project, Watcher* watcher);
-void PrintStudentActivityWatcher(Global *GlobalFile, Project *project);
+void LeaveMessageToStudent(Global* GlobalFile, Project* project, Watcher* watcher); //No test needed(writing to file)
+void AddProjectMessage(Global* GlobalFile, Project* project, Watcher* watcher); //No test needed(writing to file)
+void PrintStudentActivityWatcher(Global *GlobalFile, Project *project); //Need TXT
 BOOL ShowNotifications(Global *GlobalFile, Watcher *watcher);
 void ShowTasksByStatusWatcher(Global* GlobalFile, int WatcherID);
 
 //Admin Functions
-void RemoveProject(Global* GlobalFile, Project* project, int userID, int accessGroup);
-void AddGlobalMessage(Global* GlobalFile);
-void AddNewQuote(Global* GlobalFile); //Test written
+void RemoveProject(Global* GlobalFile, Project* project, char choice);
+void AddGlobalMessage(Global* GlobalFile, char* msg); //Test written
+void AddNewQuote(Global* GlobalFile, char* quote, char* creator); //Test written
 void ManageQuotes(Global *GlobalFile); //No test needed(switch case function)
 int AddNewUser(Global* GlobalFile); //No test needed(switch case function)
 void DeleteQuote(Global* GlobalFile, int ID); //Test written
@@ -182,38 +181,44 @@ int RemoveProjectFromUsers(Global* GlobalFile, int ProjectID)
 }
 
 // done by Alexey, ready for testing
-void RemoveProject(Global* GlobalFile, Project* project, int userID, int accessGroup){
-	char choice = 'O';
+void RemoveProject(Global* GlobalFile, Project* project, char choice){
 	int i;
-	printf("Are you sure you want to remove this project and all of its tasks (Y/N)?\n");
-
-	while (choice == 'O'){
-		choice = getchar();
-
-		switch (choice){
-		case 'Y':
-		case 'y':
-
-			// remove Project ID from all users's arrays of ProjectsID
-			RemoveProjectFromUsers(GlobalFile, project->ProjectID);
-			free(project->StudentsIDS);
-			// remove tasks belongs to project from Global task list
-			for (i = 0; i < sizeof(project->TasksIDS) / sizeof(int); i++)
-				RemoveTaskFromList(GlobalFile->TaskList, project->TasksIDS[i]);
-
-			free(project->TasksIDS);
-			// remove project from GLobal list
-			GlobalFile->ProjectsList = RemoveProjectFromList(GlobalFile->ProjectsList, project->ProjectID);
-			//delete // Need to implement functions that will remove this project id from all the users, from all the lists etc
-			break;
-		case 'N':
-		case 'n':
-			break;
-		default: printf("No such option!\n");
-			choice = 'O';
+	if (choice != 'O'){
+		choice = 'O';
+		printf("Are you sure you want to remove this project and all of its tasks (Y/N)?\n");
+		while (choice == 'O'){
+			choice = getchar();
+			switch (choice){
+			case 'Y':
+			case 'y':
+				// remove Project ID from all users's arrays of ProjectsID
+				RemoveProjectFromUsers(GlobalFile, project->ProjectID);
+				free(project->StudentsIDS);
+				// remove tasks belongs to project from Global task list
+				for (i = 0; i < project->ProjectTasksAmount; i++)
+					GlobalFile->TaskList = RemoveTaskFromList(GlobalFile->TaskList, project->TasksIDS[i]);
+				free(project->TasksIDS);
+				// remove project from GLobal list
+				GlobalFile->ProjectsList = RemoveProjectFromList(GlobalFile->ProjectsList, project->ProjectID);
+				//delete // Need to implement functions that will remove this project id from all the users, from all the lists etc
+				break;
+			case 'N':
+			case 'n':
+				break;
+			default: printf("No such option!\n");
+				choice = 'O';
+			}
 		}
+		system("pause");
 	}
-	system("pause");
+	else{
+		RemoveProjectFromUsers(GlobalFile, project->ProjectID);
+		free(project->StudentsIDS);
+		for (i = 0; i < project->ProjectTasksAmount; i++)
+			GlobalFile->TaskList = RemoveTaskFromList(GlobalFile->TaskList, project->TasksIDS[i]);
+		free(project->TasksIDS);
+		GlobalFile->ProjectsList = RemoveProjectFromList(GlobalFile->ProjectsList, project->ProjectID);
+	}
 }
 
 // choose student id in project and send message to him, done, ready for testing
@@ -514,12 +519,12 @@ int CreateNewProject(Global* GlobalFile,int userID, AccessGroup userGroup,char* 
 
 	else if (userGroup == WATCHER){
 		Watcher = FindWatcher(GlobalFile->WatchersList, userID);
-		if (!Watcher) return -1;
+		if (!Watcher) return 0;
 	}
 	else
 	{
 		if (!projectName) puts("Incorrect access group received.");
-		return -1;		// incorrect access group
+		return 0;		// incorrect access group
 	}
 
 	// allocate memory
@@ -595,7 +600,7 @@ int CreateNewProject(Global* GlobalFile,int userID, AccessGroup userGroup,char* 
 	switch (choice)
 	{
 	case 'y':
-		addUserToProject(GlobalFile, newProject);
+		addUserToProject(GlobalFile, newProject,0,0);
 		break;
 	case 'n':
 		puts("Ok!");
@@ -622,7 +627,7 @@ int CreateNewProject(Global* GlobalFile,int userID, AccessGroup userGroup,char* 
 //////////			Project create funcs end
 
 // 42 - Add user to project  , done, ready for testing
-void addUserToProject(Global *GlobalFile, Project *newProject)
+int addUserToProject(Global *GlobalFile, Project *newProject , int userID , int watcherOrStudent)
 {
 	BOOL flag = TRUE;
 	FILE *file = fopen(newProject->ProjectActivityLogs,"a");
@@ -635,23 +640,33 @@ void addUserToProject(Global *GlobalFile, Project *newProject)
 
 	while (flag)
 	{
-		puts("1. Add Student ID");
-		puts("2. Add Watcher ID");
-		puts("3. Return to main menu");
-		fflush(stdin);
-		choice = getchar();
+		if (!userID){
+			puts("1. Add Student ID");
+			puts("2. Add Watcher ID");
+			puts("3. Return to main menu");
+			fflush(stdin);
+			choice = getchar();
+		}
+		else { 
+			choice = watcherOrStudent + '0';
+			ID = userID;
+		}
+
 		switch (choice)
 		{
 		case '1':
-			fflush(stdin);
-			printf("\nStudent ID :");
-			scanf("%d", &ID);
+			if (!userID){
+				fflush(stdin);
+				printf("\nStudent ID :");
+				scanf("%d", &ID);
+			}
+			
 			student = FindStudent(GlobalFile->StudentList, ID);
 			if (student)	// student found
 			{
 				/// add project to student 
 				AddProjectIDToStudent(student, newProject->ProjectID);
-				printf("\nStudent with ID : %d was added to project!\n", ID);
+				if (!userID) printf("\nStudent with ID : %d was added to project!\n", ID);
 				fprintf(file,"Student with ID : %d was added to project!\n", ID);
 
 				
@@ -663,22 +678,28 @@ void addUserToProject(Global *GlobalFile, Project *newProject)
 				UsersID[i] = ID;
 
 				newProject->StudentsIDS = UsersID;
+				newProject->ProjectUsersAmount++;
+				return 1;
 			}
-			else
-				puts("Student ID not found. Try again.");
+			else{
+				if (!userID) puts("Student ID not found.");
+				return 0;
+			}
 			break;
 
 		case '2':
-			fflush(stdin);
-			printf("\nWatcher ID :");
-			scanf("%d", &ID);
+			if (!userID){
+				fflush(stdin);
+				printf("\nWatcher ID :");
+				scanf("%d", &ID);
+			}
 			watcher = FindWatcher(GlobalFile->WatchersList, ID);
 			if (watcher)	// watcher found
 			{
 				/// add project to watcher 
 				AddProjectIDToWatcher(watcher, newProject->ProjectID);
 
-				printf("\nWatcher with ID : %d was added to project!\n", ID);
+				if (!userID) printf("\nWatcher with ID : %d was added to project!\n", ID);
 				fprintf(file,"Watcher with ID : %d was added to project!\n", ID);
 
 				// add watcher to project
@@ -687,18 +708,21 @@ void addUserToProject(Global *GlobalFile, Project *newProject)
 				for (i = 0; i < ProjectUsersIDNewSize - 1; i++)
 					UsersID[i] = newProject->StudentsIDS[i];
 				UsersID[i] = ID;
-
+				newProject->ProjectUsersAmount++;
 				newProject->StudentsIDS = UsersID;
+				return 1;
 			}
-			else
-				puts("Watcher ID not found. Try again.");
+			else{
+				if (!userID) puts("Watcher ID not found. Try again.");
+				return 0;
+			}
 			break;
 		case '3':
-			puts("Choosen to return back");
+			if (!userID )puts("Choosen to return back");
 			flag = FALSE;
 			break;
 		default:
-			puts("Incorrect choice. Try again.");
+			if (!userID) puts("Incorrect choice. Try again.");
 			break;
 		}
 
@@ -706,7 +730,7 @@ void addUserToProject(Global *GlobalFile, Project *newProject)
 
 	fclose(file);
 
-	system("pause");
+	return 1;
 }
 
 // Add id of new task to array in project
@@ -729,7 +753,7 @@ void AddTaskIDToProject(Project* project, int TaskID)
 }
 
 // 53 - create new task from project menu, done, ready for testing
-int CreateNewTask(Global *GlobalFile, Project *project,int UserID,AccessGroup group)
+int CreateNewTask(Global *GlobalFile, Project *project,int UserID,AccessGroup group,char* taskName)
 {
 	Student *student = NULL;
 	Watcher *watcher = NULL;
@@ -739,20 +763,28 @@ int CreateNewTask(Global *GlobalFile, Project *project,int UserID,AccessGroup gr
 	newTask->TaskID = GlobalFile->TaskRunID;		// set Task Run ID
 
 	GlobalFile->TaskRunID++;						// increase run id by 1
-	fflush(stdin);
-	puts("Enter your task (up to 255 chars) :");
-	gets(newTask->TaskName);
-	if (group == STUDENT)
+
+	if (taskName) strcpy(newTask->TaskName, taskName);
+	else{
+		fflush(stdin);
+		puts("Enter your task (up to 255 chars) :");
+		gets(newTask->TaskName);
+	}
+
+	if (group == STUDENT){
 		student = FindStudent(GlobalFile->StudentList, UserID);
-
-	else if (group == WATCHER)
-
+		if (!student) return 0;
+	}
+	
+	else if (group == WATCHER){
 		watcher = FindWatcher(GlobalFile->WatchersList, UserID);
+		if (!watcher) return 0;
+	}
 
 	else
 	{
 		puts("Incorrect access group");
-		return -1;
+		return 0;
 	}
 
 	if (group == STUDENT && student)
@@ -779,12 +811,14 @@ int CreateNewTask(Global *GlobalFile, Project *project,int UserID,AccessGroup gr
 
 	// add creation of task to project log
 	printLogToFile(project->ProjectActivityLogs, log);
-
+	if (!taskName){
 	// switch flag for watcher subscribes
 	if (project->ProgramChanges == FALSE)
 		project->ProgramChanges = TRUE;
-
 	system("pause");
+	}
+
+	project->ProjectTasksAmount++;
 	return newTask->TaskID;
 }
 
@@ -982,45 +1016,52 @@ void PrintGlobalMessages(Global *GlobalFile)
 }
 
 // add message by admin, done, ready for etsting
-void AddGlobalMessage(Global* GlobalFile){
+void AddGlobalMessage(Global* GlobalFile, char* msg){
 	char temp[250];
-	printf("Enter global message (max length 255):\n");
-	do
-	gets(temp);
-	while (strlen(temp) > 255);
+	if (strcmp(msg, "") == 0){
+		printf("Enter global message (max length 255):\n");
+		fflush(stdin);
+		do{
+			gets(temp);
+		} while (strlen(temp) > 255);
+		strcpy(GlobalFile->GlobalMessages, temp);
+	}
+	else
+		strcpy(GlobalFile->GlobalMessages, msg);
 
-	strcpy(GlobalFile->GlobalMessages, temp);
-
-	system("pause");
+	//system("pause");
 }
 
 // Quotes funcs start, done, ready to testing
-void AddNewQuote(Global* GlobalFile){
+void AddNewQuote(Global* GlobalFile, char* quote, char* creator){
 	char tempQuote[300], tempAuthor[100];
 	//Creating a new quote and incrementing quoteRunID: Not sure if that's right
 	int quoteID = GlobalFile->QuoteRunID++;
 	Quote* newQuote = (Quote*) malloc(sizeof(Quote));
 	newQuote->QuoteID = quoteID;
-	printf("Enter quote (max length 256):\n");
-	do
-	{
-		fflush(stdin);
-		scanf("%s", &tempQuote);
+	if (strcmp(quote, "") == 0){
+		printf("Enter quote (max length 256):\n");
+		do
+		{
+			fflush(stdin);
+			scanf("%s", &tempQuote);
+		} while (strlen(tempQuote) > 255);
+
+		strcpy(newQuote->Quote, tempQuote);
+
+		printf("Enter quote's author (max length 30):\n");
+		do
+		{
+			fflush(stdin);
+			scanf("%s", &tempAuthor);
+		} while (strlen(tempQuote) > 30);
+
+		strcpy(newQuote->QuoteAuthor, tempAuthor);
 	}
-	while (strlen(tempQuote) > 255);
-
-	strcpy(newQuote->Quote, tempQuote);
-
-	printf("Enter quote's author (max length 30):\n");
-	do
-	{
-		fflush(stdin);
-		scanf("%s", &tempAuthor);
+	else{
+		strcpy(newQuote->Quote, quote);
+		strcpy(newQuote->QuoteAuthor, creator);
 	}
-	while (strlen(tempQuote) > 30);
-
-	strcpy(newQuote->QuoteAuthor, tempAuthor);
-
 	//Adding to global quote list:
 	AddQuote(GlobalFile->QuotesList, newQuote);
 }
@@ -1079,7 +1120,7 @@ void ManageQuotes(Global *GlobalFile)
 		if (choice == '1')
 			PrintQuotes(GlobalFile);
 		else if (choice == '2')
-			AddNewQuote(GlobalFile);
+			AddNewQuote(GlobalFile, "", "");
 		else if (choice == '3')
 			DeleteQuote(GlobalFile, 0);
 		else if (choice == '4')

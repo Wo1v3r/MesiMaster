@@ -261,9 +261,24 @@ MU_TEST(test_promote_user){
 MU_TEST(test_add_new_quote){
 	Global* global = InitDataBases();
 	int current_runID = global->QuoteRunID;
-	AddNewQuote(global);
+	AddNewQuote(global, "something", "something");
 	mu_check(FindQuote(global->QuotesList, (global->QuoteRunID) - 1) != NULL);
 	mu_assert(global->QuoteRunID - current_runID == 1, "Suppose to be 1!(1 new quote added)");
+	freeMemory(global);
+}
+
+MU_TEST(test_global_message){
+	Global* global = InitDataBases();
+	AddGlobalMessage(global, "This Message entered");
+	mu_check(strcmp(global->GlobalMessages, "This Message entered") == 0);
+	freeMemory(global);
+}
+
+//NEED THE FINAL TXT FILES
+MU_TEST(test_remove_project){
+	Global* global = InitDataBases();
+	RemoveProject(global, global->ProjectsList, 'y');
+	//mu_check(strcmp(global->GlobalMessages, "This Message entered") == 0);
 	freeMemory(global);
 }
 
@@ -272,6 +287,15 @@ MU_TEST_SUITE(Admin_Suite){
 	MU_RUN_TEST(test_delete_quote);
 	MU_RUN_TEST(test_promote_user);
 	MU_RUN_TEST(test_add_new_quote);
+	MU_RUN_TEST(test_global_message);
+	//MU_RUN_TEST(test_remove_project);
+}
+
+MU_TEST(test_leave_message_to_students){
+	Global* global = InitDataBases();
+	AddGlobalMessage(global, "This Message entered");
+	mu_check(strcmp(global->GlobalMessages, "This Message entered") == 0);
+	freeMemory(global);
 }
 
 
@@ -300,12 +324,45 @@ MU_TEST(test_create_project){
 	freeMemory(global);
 }
 MU_TEST(test_create_task){
+	char* taskName = "My Task";
+	Global* global = InitDataBases();
+	int noSuchUserID = 1058, studentID = 1001;
+	int taskID = 0;
 
+	Project *project = FindProject(global->ProjectsList, 4002); //Existing project - checked before this function
+	mu_check((taskID = CreateNewTask(global, project, noSuchUserID, STUDENT, taskName)) == 0); //No such user
+	mu_check((taskID = CreateNewTask(global, project, studentID, BAD, taskName)) == 0); //No such user acces group
+	mu_check((taskID = CreateNewTask(global, project, studentID, STUDENT, taskName)) != 0); // Should pass and create new task
+	
+	//Checking if that task was created successfuly:
+	mu_check(findTaskInProject(global, project, taskID) != NULL); //That task should exist
+
+	freeMemory(global);
+}
+
+MU_TEST(test_add_user_to_project){
+	int addStudent = 1, addWatcher = 2, Exit = 3, studentID = 1002, watcherID = 3002,doesNotExist = 1535;
+	Global* global = InitDataBases();
+	Project* project = FindProject(global->ProjectsList, 4002); //That project exists
+	//Trying to exit, should return 1:
+	mu_check(addUserToProject(global, project, studentID, Exit) == 1);
+	//Trying to add a user that does not exist:
+	mu_check(addUserToProject(global, project, doesNotExist, addStudent) == 0);
+	//Trying to check if that user is in the project:
+	mu_check(isStudentInProject(project, doesNotExist) == 0);
+	//Trying to add a student:
+	mu_check(addUserToProject(global, project, studentID, addStudent) == 1);
+	//Checking if that student is in the project:
+	mu_check(isStudentInProject(project, studentID) != 0);
 
 }
+
+
 MU_TEST_SUITE(Project_Suite){
 
 	MU_RUN_TEST(test_create_project);
+	MU_RUN_TEST(test_create_task);
+	MU_RUN_TEST(test_add_user_to_project);
 }
 
 //Structures suite tests
