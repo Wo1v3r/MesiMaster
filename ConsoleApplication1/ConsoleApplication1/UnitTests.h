@@ -261,9 +261,16 @@ MU_TEST(test_promote_user){
 MU_TEST(test_add_new_quote){
 	Global* global = InitDataBases();
 	int current_runID = global->QuoteRunID;
-	AddNewQuote(global);
+	AddNewQuote(global, "something", "something");
 	mu_check(FindQuote(global->QuotesList, (global->QuoteRunID) - 1) != NULL);
 	mu_assert(global->QuoteRunID - current_runID == 1, "Suppose to be 1!(1 new quote added)");
+	freeMemory(global);
+}
+
+MU_TEST(test_global_message){
+	Global* global = InitDataBases();
+	AddGlobalMessage(global, "This Message entered");
+	mu_check(strcmp(global->GlobalMessages, "This Message entered") == 0);
 	freeMemory(global);
 }
 
@@ -272,6 +279,7 @@ MU_TEST_SUITE(Admin_Suite){
 	MU_RUN_TEST(test_delete_quote);
 	MU_RUN_TEST(test_promote_user);
 	MU_RUN_TEST(test_add_new_quote);
+	MU_RUN_TEST(test_global_message);
 }
 
 

@@ -234,7 +234,7 @@ int AdminMenu(Global* GlobalFile ,int adminID){
 			ProjectMenu(GlobalFile, project, ADMIN, adminID);
 			break;
 		case 9: 
-			AddGlobalMessage(GlobalFile);
+			AddGlobalMessage(GlobalFile, "");
 			break;
 		case 10:
 			ManageQuotes(GlobalFile);
