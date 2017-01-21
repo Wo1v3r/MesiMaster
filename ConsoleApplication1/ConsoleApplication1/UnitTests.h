@@ -113,7 +113,7 @@ MU_TEST_SUITE(InitTest){
 }
 
 
-//Utilities Suite Test
+//Utilities Suite Tests
 
 MU_TEST(test_find_accessgroup){
 	int studentID = 1000, adminID = 2000, watcherID = 3000, badID1 = 999, badID2 = 4000;
@@ -128,6 +128,33 @@ MU_TEST(test_find_accessgroup){
 
 MU_TEST_SUITE(Utilities){
 	MU_RUN_TEST(test_find_accessgroup);
+
+	MU_REPORT_SUITE();
+}
+
+
+//Login suite tests:
+
+MU_TEST(test_check_password){
+	//A valid password is one that contains: at least 1 digit, 1 uppercase letter, 1 lowercase letter.
+	char* validPass1 = "Aa12Bb"; //A Good password
+	char* validPass2 = "Bb8"; //Good password with minimal chars
+	char* invalidPass1 = "BB8"; //Bad password with no lowercase
+	char* invalidPass2 = "bb8"; //Bad password with no uppercase
+	char* invalidPass3 = "bBeight"; //Bad password with no digits
+	char* invalidPass4 = "'#$%";//Bad password with none of the requirements
+
+
+	mu_check(CheckPassword(validPass1) == 1);
+	mu_check(CheckPassword(validPass2) == 1);
+	mu_check(CheckPassword(invalidPass1) == 0);
+	mu_check(CheckPassword(invalidPass2) == 0);
+	mu_check(CheckPassword(invalidPass3) == 0);
+	mu_check(CheckPassword(invalidPass4) == 0);
+}
+
+MU_TEST_SUITE(Login_Suite){
+	MU_RUN_TEST(test_check_password);
 
 	MU_REPORT_SUITE();
 }

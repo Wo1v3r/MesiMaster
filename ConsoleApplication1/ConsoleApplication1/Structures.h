@@ -1,4 +1,6 @@
 // Alexey
+#ifndef _STRUCTURES_
+#define _STRUCTURES_
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdlib.h>
 #include <stdio.h>
@@ -483,3 +485,4 @@ int isStudentInProject(Project* project, int studentID){
 
 	return 0;
 }
+#endif

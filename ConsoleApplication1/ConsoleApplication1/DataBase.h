@@ -1,3 +1,5 @@
+#ifndef _STRUCTURES_
+#define _STRUCTURES
 //Liran
 #include "Structures.h"
 
@@ -444,3 +446,5 @@ void Exit(Global *GlobalDB){
 	saveGlobal(GlobalDB);
 	freeMemory(GlobalDB);
 }
+
+#endif

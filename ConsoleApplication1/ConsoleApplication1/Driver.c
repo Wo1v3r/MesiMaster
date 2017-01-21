@@ -1,6 +1,6 @@
 //Jonathan
 #include "functions.h"
-
+#include "UnitTests.h"
 ////// Menus
 
 //Project Menu : Finished ,Ready for testing - Jonathan
@@ -387,6 +387,14 @@ void LoginMenu(Global* GlobalFile){
 
 int main()
 {
+	int tests = 0;
+	printf("Would you like to run the tests?(1 = yes)\n");
+	scanf("%d", &tests);
+	if (tests){
+		MU_RUN_SUITE(Utilities);
+		MU_RUN_SUITE(InitTest);
+		MU_RUN_SUITE(Login_Suite);
+	}
 	Global *GlobalFile = (Global*)malloc(sizeof(Global));
 	GlobalFile = InitDataBases();
 	//CreateNewProject(NULL, GlobalFile); TODO: WHO ADDED THIS LINE??

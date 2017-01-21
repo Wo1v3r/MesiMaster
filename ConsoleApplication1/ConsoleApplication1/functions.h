@@ -1,3 +1,5 @@
+#ifndef _FUNCTIONS_
+#define _FUNCTIONS_
 #include "DataBase.h"
 
 
@@ -1896,3 +1898,5 @@ int Login(Global *g)
 	printf("You have failed to enter you password correctly 3 times. Login failed.\n");
 	return 0;
 }
+
+#endif
