@@ -397,7 +397,8 @@ int main()
 		MU_RUN_SUITE(Login_Suite);
 		MU_RUN_SUITE(Admin_Suite);
 		MU_RUN_SUITE(Project_Suite);
-		//MU_RUN_SUITE(Structures_Suite);
+		MU_RUN_SUITE(Structures_Suite);
+		MU_RUN_SUITE(Register_Suite);
 		system("pause");
 		return;
 	}
@@ -406,5 +407,4 @@ int main()
 	GlobalFile = InitDataBases();
 	LoginMenu(GlobalFile);
 	return 1;
-	//justforpush
 }

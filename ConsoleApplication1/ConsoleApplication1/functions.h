@@ -69,10 +69,10 @@ void DeleteUser(Global *GlobalFile, int ID); //Test written(with blood)
 void PromoteUserToAdmin(Global *GlobalFile, int ID); //Test written
 
 //Login/Register Functions
-int Register(Global *g);
-int AdminRegister(Global *GlobalFile);
+int Register(Global *g); //No test needewd , Admin\Watcher\Student Register takes care of that
+int AdminRegister(Global *GlobalFile, char* nameTest, char* surnameTest, char* unTest, char* passTest);
 int WatcherRegister(Global *g);
-int StudentRegister(Global *g);
+int StudentRegister(Global *g, char* nameTest, char* surnameTest ,char* unTest, char* passTest, char* emailTest, char* departmentTest, char yearTest);
 int Login(Global *g);
 BOOL CheckPassword(char* pass); //Test written -Jonathan
 BOOL CheckIfUserExists(Global *g, char *username); //Test written -Jonathan
@@ -1598,7 +1598,7 @@ void ShowTasksByStatusWatcher(Global* GlobalFile, int WatcherID){
 }
 
 // register new admin in system
-int AdminRegister(Global *GlobalFile)
+int AdminRegister(Global *GlobalFile,char* nameTest, char* surnameTest , char* unTest, char* passTest)
 {
 	Admin* newAdmin = NULL;
 	int choice = 0;
@@ -1606,52 +1606,71 @@ int AdminRegister(Global *GlobalFile)
 
 	if (newAdmin == NULL)                                                                         //Allocation check
 	{
-		printf("Error allocating memory for the new Admin.\n");
+		if (!nameTest) printf("Error allocating memory for the new Admin.\n");
 		return 0;
 	}
 	newAdmin->AdminID = GlobalFile->AdminRunID;														//Id allocation
 	(GlobalFile->AdminRunID)++;
 
-	do{																								//Initializing username
-		_flushall();
-		printf("Enter your desired username: (Has to be less then 30 characters!)\n");
-		scanf("%s", newAdmin->AdminUsername);
-		getchar();
+	do{			
+		//Initializing username
+		if (!nameTest){
+			_flushall();
+			printf("Enter your desired username: (Has to be less then 30 characters!)\n");
+			scanf("%s", newAdmin->AdminUsername);
+			getchar();
+		}
+		else strcpy(newAdmin->AdminUsername, unTest); //For tests
+
 		if (CheckIfUserExists(GlobalFile, newAdmin->AdminName) == TRUE)
 		{
-			printf("This username already exists in the system. \n Press 1 to try again, press 2 to go back to the next menu.\n");
-			scanf("%d", &choice);
+			if (!nameTest) {
+				printf("This username already exists in the system. \n Press 1 to try again, press 2 to go back to the next menu.\n");
+				scanf("%d", &choice);
+			}
+			else return 0;//For tests
 		}
 	} while (CheckIfUserExists(GlobalFile, newAdmin->AdminUsername) == TRUE && choice == 1);
 
 	if (choice != 1 && choice != 0)
 	{
-		printf("You did not press 1 to continue. Going back to last menu.\n");
+		if (!nameTest)printf("You did not press 1 to continue. Going back to last menu.\n");
 		free(newAdmin);
 		return 0;
 	}
 	//Initializing password
 	do{
-		_flushall();
-		printf("Enter your desired password: (Has to be less then 30 characters, and contain\n");
-		printf("at least one digit, one upper case letter, one lower case letter)\n");
-		scanf("%s", newAdmin->AdminPassword);
+		if (!nameTest){
+			_flushall();
+			printf("Enter your desired password: (Has to be less then 30 characters, and contain\n");
+			printf("at least one digit, one upper case letter, one lower case letter)\n");
+			scanf("%s", newAdmin->AdminPassword);
+		}
+		else strcpy(newAdmin->AdminPassword, passTest);//For tests
+
 		if (CheckPassword(newAdmin->AdminPassword) == FALSE)
 		{
-			printf("This password is invalid.\n You need to try again.\n");
+			if (!nameTest)printf("This password is invalid.\n You need to try again.\n");
+			else return 0;
 		}
 	} while (CheckPassword(newAdmin->AdminPassword) == FALSE);
 	//Initializing other attributes that require user input
-	printf("Enter your first name: (Has to be less then 20 characters!)\n");
-	scanf("%s", newAdmin->AdminName);
-	printf("Enter your last name: (Has to be less then 20 chatacters!)\n");
-	scanf("%s", newAdmin->AdminSurename);
-
+	if (!nameTest) {
+		printf("Enter your first name: (Has to be less then 20 characters!)\n");
+		scanf("%s", newAdmin->AdminName);
+		printf("Enter your last name: (Has to be less then 20 chatacters!)\n");
+		scanf("%s", newAdmin->AdminSurename);
+	}
+	else{
+		//For tests:
+		strcpy(newAdmin->AdminName, nameTest);
+		strcpy(newAdmin->AdminSurename, surnameTest);
+	}
 	newAdmin->Group = ADMIN;
 
 	AddAdmin(GlobalFile->AdminsList, newAdmin);	// add to AdminsList
 
-	system("pause");
+	if (!nameTest)system("pause");
 	return newAdmin->AdminID;
 }
 
@@ -1668,7 +1687,7 @@ int AddNewUser(Global *GlobalFile)
 
 	if (choice == 1)                                                                                //Executing student registration
 	{
-		return StudentRegister(GlobalFile);
+		return StudentRegister(GlobalFile,NULL,NULL,NULL,NULL,NULL,NULL,'0');
 	}
 	else if (choice == 2)																			//Executing watcher registration
 	{
@@ -1676,7 +1695,7 @@ int AddNewUser(Global *GlobalFile)
 	}
 	else if (choice == 3)
 	{
-		return AdminRegister(GlobalFile);
+		return AdminRegister(GlobalFile,NULL,NULL,NULL,NULL);
 	}
 	else
 	{	//Back to last menu
@@ -1765,7 +1784,7 @@ int Register(Global *g)
 
 	if (choice == 1)                                                                                //Executing student registration
 	{
-		return StudentRegister(g);
+		return StudentRegister(g,NULL,NULL,NULL,NULL,NULL,NULL,'0');
 	}
 	else if (choice == 2)																			//Executing watcher registration
 	{
@@ -1777,7 +1796,7 @@ int Register(Global *g)
 	}
 }
 
-int StudentRegister(Global *g)
+int StudentRegister(Global *g,char* nameTest,char* surnameTest, char* unTest, char* passTest , char* emailTest, char* departmentTest, char yearTest)
 {
 	char stringID[31];
 	int choice = 0;
@@ -1786,7 +1805,7 @@ int StudentRegister(Global *g)
 
 	if (newStudent == NULL)                                                                         //Allocation check
 	{
-		printf("Error allocating memory for the new student.\n");
+		if(!nameTest)printf("Error allocating memory for the new student.\n");
 		return 0;
 	}
 
@@ -1796,44 +1815,62 @@ int StudentRegister(Global *g)
 	//Initializing username
 	do{
 		_flushall();
-		printf("Enter your desired username: (Has to be less then 30 characters!)\n");
-		scanf("%s", newStudent->StudentUsername);
-		getchar();
+		if (!nameTest){
+			printf("Enter your desired username: (Has to be less then 30 characters!)\n");
+			scanf("%s", newStudent->StudentUsername);
+			getchar();
+		}
+		else strcpy(newStudent->StudentUsername, unTest);
 		if (CheckIfUserExists(g, newStudent->StudentUsername) == TRUE)
 		{
-			printf("This username already exists in the system. \n Press 1 to try again, press 2 to go back to the next menu.\n");
-			scanf("%d", &choice);
+			if (!nameTest){
+				printf("This username already exists in the system. \n Press 1 to try again, press 2 to go back to the next menu.\n");
+				scanf("%d", &choice);
+			}
+			else return 0;
 		}
 	} while (CheckIfUserExists(g, newStudent->StudentUsername) == TRUE && choice == 1);
 
 	if (choice != 1 && choice != 0)
 	{
-		printf("You did not press 1 to continue. Going back to last menu.\n");
+		if (!nameTest) printf("You did not press 1 to continue. Going back to last menu.\n");
 		return 0;
 	}
 	//Initializing password
 	do{
-		_flushall();
-		printf("Enter your desired password: (Has to be less then 30 characters, and contain\n");
-		printf("at least one digit, one upper case letter, one lower case letter)\n");
-		scanf("%s", newStudent->StudentPassword);
+		if (!nameTest){
+			_flushall();
+			printf("Enter your desired password: (Has to be less then 30 characters, and contain\n");
+			printf("at least one digit, one upper case letter, one lower case letter)\n");
+			scanf("%s", newStudent->StudentPassword);
+		} strcpy(newStudent->StudentPassword, passTest);
 		if (CheckPassword(newStudent->StudentPassword) == FALSE)
 		{
-			printf("This password is invalid.\n You need to try again.\n");
+			if (!nameTest)printf("This password is invalid.\n You need to try again.\n");
+			else return 0;
 		}
 	} while (CheckPassword(newStudent->StudentPassword) == FALSE);
 	//Initializing other attributes that require user input
-	printf("Enter your email address: (Has to be less then 50 characters!)\n");
-	scanf("%s", newStudent->StudentEmail);
-	printf("Enter your first name: (Has to be less then 20 characters!)\n");
-	scanf("%s", newStudent->StudentName);
-	printf("Enter your last name: (Has to be less then 20 chatacters!)\n");
-	scanf("%s", newStudent->StudentSurename);
-	printf("Enter you department: (Has to be less then 20 characters!)\n");
-	scanf("%s", newStudent->StudentDepartment);
-	_flushall();
-	printf("Enter your year in the academic facility: (Has to be 1 character!)\n");
-	scanf("%c", &(newStudent->StudentYear));
+	if (!nameTest){
+		printf("Enter your email address: (Has to be less then 50 characters!)\n");
+		scanf("%s", newStudent->StudentEmail);
+		printf("Enter your first name: (Has to be less then 20 characters!)\n");
+		scanf("%s", newStudent->StudentName);
+		printf("Enter your last name: (Has to be less then 20 chatacters!)\n");
+		scanf("%s", newStudent->StudentSurename);
+		printf("Enter you department: (Has to be less then 20 characters!)\n");
+		scanf("%s", newStudent->StudentDepartment);
+		_flushall();
+		printf("Enter your year in the academic facility: (Has to be 1 character!)\n");
+		scanf("%c", &(newStudent->StudentYear));
+	}
+	else{
+		strcpy(newStudent->StudentEmail, emailTest);
+		strcpy(newStudent->StudentName, nameTest);
+		strcpy(newStudent->StudentSurename, surnameTest);
+		strcpy(newStudent->StudentDepartment, departmentTest);
+		newStudent->StudentYear = yearTest;
+	}
 	//Default initializations 
 	newStudent->Group = STUDENT;
 	newStudent->StudentProjectsAmount = 0;
