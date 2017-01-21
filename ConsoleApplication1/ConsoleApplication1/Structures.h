@@ -42,9 +42,9 @@ Task *RemoveTaskFromList(Task *head, int deleteID); //Test written - Isabelle
 void PrintStudentList(Student *StudentHead); //No tests needed
 void PrintAdminsList(Admin *head); //No tests needed
 void PrintWatcherList(Watcher *head); //No tests needed
-char* convertStatusToString(STATUS status);
-Task* findTaskInProject(Global* globalFile, Project* project, int taskID);
-int isStudentInProject(Project* project, int studentID);
+char* convertStatusToString(STATUS status);//Test written - Isabelle
+Task* findTaskInProject(Global* globalFile, Project* project, int taskID);//Test written - Isabelle
+int isStudentInProject(Project* project, int studentID);//Test written - Isabelle
 
 // structures
 typedef struct Student{
