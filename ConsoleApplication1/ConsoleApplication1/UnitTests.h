@@ -190,11 +190,33 @@ MU_TEST(test_student_register){
 	//Checking if that user exists:
 	mu_check(FindStudentByUN(global, "John") != NULL);
 
+	freeMemory(global);
 }
 
+MU_TEST(test_admin_register){
+
+	Global* global = InitDataBases();
+	//Trying to register an admin with a bad password:
+	mu_check(AdminRegister(global, "Meister", "Master", "Meister123", "aab") == 0);
+
+	//Trying to register an admin with a taken username:
+	mu_check(AdminRegister(global, "Meister", "Master", "Dubi", "Aa1") == 0);
+
+	//Trying to register an admin with valid input:
+	mu_check(AdminRegister(global, "Meister", "Master", "Meister123", "Aa1") != 0);
+
+	//Checking if that user exists:
+	mu_check(FindAdminByUN(global, "Meister123") != NULL);
+
+
+
+
+	freeMemory(global);
+}
 
 MU_TEST_SUITE(Register_Suite){
 	MU_RUN_TEST(test_student_register);
+	MU_RUN_TEST(test_admin_register);
 
 };
 //Login suite tests:

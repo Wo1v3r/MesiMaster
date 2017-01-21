@@ -70,9 +70,9 @@ void PromoteUserToAdmin(Global *GlobalFile, int ID); //Test written
 
 //Login/Register Functions
 int Register(Global *g); //No test needewd , Admin\Watcher\Student Register takes care of that
-int AdminRegister(Global *GlobalFile, char* nameTest, char* surnameTest, char* unTest, char* passTest);
+int AdminRegister(Global *GlobalFile, char* nameTest, char* surnameTest, char* unTest, char* passTest);//Test written
 int WatcherRegister(Global *g);
-int StudentRegister(Global *g, char* nameTest, char* surnameTest ,char* unTest, char* passTest, char* emailTest, char* departmentTest, char yearTest);
+int StudentRegister(Global *g, char* nameTest, char* surnameTest ,char* unTest, char* passTest, char* emailTest, char* departmentTest, char yearTest);//Test written
 int Login(Global *g);
 BOOL CheckPassword(char* pass); //Test written -Jonathan
 BOOL CheckIfUserExists(Global *g, char *username); //Test written -Jonathan
@@ -1630,7 +1630,7 @@ int AdminRegister(Global *GlobalFile,char* nameTest, char* surnameTest , char* u
 		}
 		else strcpy(newAdmin->AdminUsername, unTest); //For tests
 
-		if (CheckIfUserExists(GlobalFile, newAdmin->AdminName) == TRUE)
+		if (CheckIfUserExists(GlobalFile, newAdmin->AdminUsername) == TRUE)
 		{
 			if (!nameTest) {
 				printf("This username already exists in the system. \n Press 1 to try again, press 2 to go back to the next menu.\n");
