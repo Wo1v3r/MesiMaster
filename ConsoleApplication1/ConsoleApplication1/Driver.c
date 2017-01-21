@@ -213,7 +213,7 @@ int AdminMenu(Global* GlobalFile ,int adminID){
 			PrintUsersLists(GlobalFile);
 			break;
 		case 4:
-			PromoteUserToAdmin(GlobalFile);
+			PromoteUserToAdmin(GlobalFile, 0);
 			break;
 		case 5:
 			ShowUserDetails(GlobalFile);

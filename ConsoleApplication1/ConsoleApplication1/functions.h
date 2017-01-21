@@ -66,9 +66,9 @@ void AddGlobalMessage(Global* GlobalFile);
 void AddNewQuote(Global* GlobalFile);
 void ManageQuotes(Global *GlobalFile);
 int AddNewUser(Global* GlobalFile);
-void DeleteQuote(Global* GlobalFile);
+void DeleteQuote(Global* GlobalFile, int ID); //Test written
 void DeleteUser(Global *GlobalFile, int ID); //Test written(with blood)
-void PromoteUserToAdmin(Global *GlobalFile);
+void PromoteUserToAdmin(Global *GlobalFile, int ID); //Test written
 
 //Login/Register Functions
 int Register(Global *g);
@@ -1010,13 +1010,14 @@ void PrintQuotes(Global* GlobalFile){
 	}
 	puts("");
 }
-void DeleteQuote(Global* GlobalFile)
+void DeleteQuote(Global* GlobalFile, int ID)
 {
 	Quote *quote = NULL;
-	int ID;
-	fflush(stdin);
-	printf("Input Quote ID to delete : ");
-	scanf("%d", &ID);
+	if (!ID){
+		fflush(stdin);
+		printf("Input Quote ID to delete : ");
+		scanf("%d", &ID);
+	}
 	quote = FindQuote(GlobalFile->QuotesList, ID);
 	if (quote)
 	{
@@ -1046,7 +1047,7 @@ void ManageQuotes(Global *GlobalFile)
 		else if (choice == '2')
 			AddNewQuote(GlobalFile);
 		else if (choice == '3')
-			DeleteQuote(GlobalFile);
+			DeleteQuote(GlobalFile, 0);
 		else if (choice == '4')
 			flag=FALSE;
 		else
@@ -1321,11 +1322,12 @@ Admin * WatcherToAdmin(Global *GlobalFile, Watcher *watcher)
 }
 
 // promote user to Admin
-void PromoteUserToAdmin(Global *GlobalFile)
+void PromoteUserToAdmin(Global *GlobalFile, int ID)
 {
-	puts("List of all users in system :\n-----------------------");
-	PrintUsersLists(GlobalFile);
-	int ID;
+	if (!ID){
+		puts("List of all users in system :\n-----------------------");
+		PrintUsersLists(GlobalFile);
+	}
 	char choice;
 	BOOL flag = TRUE;
 	Student *student = NULL;
@@ -1333,9 +1335,13 @@ void PromoteUserToAdmin(Global *GlobalFile)
 	AccessGroup group = BAD;
 	while (flag)
 	{
-		printf("Input ID of user, you want to promoto to ADMIN group : ");
-		fflush(stdin);
-		scanf("%d", &ID);
+		if (!ID){
+			printf("Input ID of user, you want to promote to ADMIN group : ");
+			fflush(stdin);
+			scanf("%d", &ID);
+		}
+		else
+			flag = FALSE;
 		group = FindAccessGroup(ID);
 		switch (group)
 		{
@@ -1352,7 +1358,6 @@ void PromoteUserToAdmin(Global *GlobalFile)
 			else
 				puts("Student with this id not found");
 			break;
-
 		case WATCHER:
 			watcher = FindWatcher(GlobalFile->WatchersList, ID);
 			if (watcher)
@@ -1363,18 +1368,16 @@ void PromoteUserToAdmin(Global *GlobalFile)
 			else
 				puts("Watcher with this id not found");
 			break;
-
 		case ADMIN:
 			puts("User with this ID is admin already");
 		}
-
+		if (flag == FALSE)
+			return;
 		printf("Want to promote another user? ( Y/ N ) :");
 		choice = getchar();
 		if (choice == 'n' || choice == 'N')
 			flag = FALSE;
-	}
-
-	
+	}	
 }
 
 //// watcher notifications
