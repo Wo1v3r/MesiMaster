@@ -24,15 +24,15 @@ typedef struct Global Global;
 Student *FindStudent(Student* head, int StudentID); //Test written - Isabelle
 Admin *FindAdmin(Admin *head, int AdminID); //Test written - Isabelle
 Watcher *FindWatcher(Watcher* head, int WatcherID); //Test written - Isabelle
-Project *FindProject(Project* head, int ProjectID);
-Task *FindTask(Task* head, int TaskID);
-Quote *FindQuote(Quote* head, int QuoteID);
-Student* AddStudent(Student *studentHead, Student *addStudent);
-Admin* AddAdmin(Admin *adminHead, Admin *addAdmin);
-Watcher* AddWatcher(Watcher *watcherHead, Watcher *addWatcher);
-Project* AddProject(Project *projectHead, Project *addProject);
-Quote* AddQuote(Quote *QuoteHead, Quote *addQuote);
-Task *AddTask(Task *TasksHead, Task *addTask);
+Project *FindProject(Project* head, int ProjectID); //Test written - Isabelle
+Task *FindTask(Task* head, int TaskID); //Test written - Isabelle
+Quote *FindQuote(Quote* head, int QuoteID); //Test written - Isabelle
+Student* AddStudent(Student *studentHead, Student *addStudent); //Test written - Isabelle
+Admin* AddAdmin(Admin *adminHead, Admin *addAdmin); //Test written - Isabelle
+Watcher* AddWatcher(Watcher *watcherHead, Watcher *addWatcher); //Test written - Isabelle
+Project* AddProject(Project *projectHead, Project *addProject); //Test written - Isabelle
+Quote* AddQuote(Quote *QuoteHead, Quote *addQuote); //Test written - Isabelle
+Task *AddTask(Task *TasksHead, Task *addTask); //Test written - Isabelle
 Project *RemoveProjectFromList(Project *head, int deleteID);
 Student *RemoveStudentFromList(Student *head, int deleteID);
 Watcher *RemoveWatcherFromList(Watcher *head, int deleteID);
@@ -45,6 +45,7 @@ void PrintWatcherList(Watcher *head); //No tests needed
 char* convertStatusToString(STATUS status);
 Task* findTaskInProject(Global* globalFile, Project* project, int taskID);
 int isStudentInProject(Project* project, int studentID);
+
 // structures
 typedef struct Student{
 	AccessGroup Group;

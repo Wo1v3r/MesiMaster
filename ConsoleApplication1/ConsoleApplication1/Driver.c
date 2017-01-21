@@ -1,6 +1,7 @@
 //Jonathan
 #include "functions.h"
 #include "UnitTests.h"
+#include "vld.h"
 ////// Menus
 
 //Project Menu : Finished ,Ready for testing - Jonathan

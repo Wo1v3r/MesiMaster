@@ -1799,8 +1799,6 @@ int StudentRegister(Global *g)
 
 	AddStudent(g->StudentList, newStudent);
 	return newStudent->StudentID;
-
-
 }
 
 int WatcherRegister(Global *g)
