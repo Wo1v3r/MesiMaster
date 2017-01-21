@@ -62,9 +62,9 @@ void ShowTasksByStatusWatcher(Global* GlobalFile, int WatcherID);
 //Admin Functions
 void RemoveProject(Global* GlobalFile, Project* project, int userID, int accessGroup);
 void AddGlobalMessage(Global* GlobalFile);
-void AddNewQuote(Global* GlobalFile);
-void ManageQuotes(Global *GlobalFile);
-int AddNewUser(Global* GlobalFile);
+void AddNewQuote(Global* GlobalFile); //Test written
+void ManageQuotes(Global *GlobalFile); //No test needed(switch case function)
+int AddNewUser(Global* GlobalFile); //No test needed(switch case function)
 void DeleteQuote(Global* GlobalFile, int ID); //Test written
 void DeleteUser(Global *GlobalFile, int ID); //Test written(with blood)
 void PromoteUserToAdmin(Global *GlobalFile, int ID); //Test written
@@ -203,7 +203,7 @@ void RemoveProject(Global* GlobalFile, Project* project, int userID, int accessG
 
 			free(project->TasksIDS);
 			// remove project from GLobal list
-			RemoveProjectFromList(GlobalFile->ProjectsList, project->ProjectID);
+			GlobalFile->ProjectsList = RemoveProjectFromList(GlobalFile->ProjectsList, project->ProjectID);
 			//delete // Need to implement functions that will remove this project id from all the users, from all the lists etc
 			break;
 		case 'N':
@@ -1023,10 +1023,6 @@ void AddNewQuote(Global* GlobalFile){
 
 	//Adding to global quote list:
 	AddQuote(GlobalFile->QuotesList, newQuote);
-	GlobalFile->QuoteRunID++;
-
-	system("pause");
-
 }
 void PrintQuotes(Global* GlobalFile){
 	Quote* quote = GlobalFile->QuotesList;
@@ -1045,20 +1041,24 @@ void PrintQuotes(Global* GlobalFile){
 void DeleteQuote(Global* GlobalFile, int ID)
 {
 	Quote *quote = NULL;
+	BOOL flag = TRUE;
 	if (!ID){
 		fflush(stdin);
 		printf("Input Quote ID to delete : ");
 		scanf("%d", &ID);
 	}
+	else
+		flag = FALSE;
 	quote = FindQuote(GlobalFile->QuotesList, ID);
 	if (quote)
 	{
-		RemoveQuoteFromList(GlobalFile->QuotesList, ID);
+		GlobalFile->QuotesList = RemoveQuoteFromList(GlobalFile->QuotesList, ID);
 		printf("Quote with id : %d found and deleted.\n", ID);
 	}
 	else
 		puts("ID not found in database");
-
+	if (flag == FALSE)
+		return;
 	system("pause");
 }
 void ManageQuotes(Global *GlobalFile)
@@ -1293,7 +1293,7 @@ void DeleteUser(Global *GlobalFile, int ID)
 			watcher = FindWatcher(GlobalFile->WatchersList, ID);
 			if (watcher)
 			{
-				RemoveWatcherFromList(GlobalFile->WatchersList, ID);
+				GlobalFile->WatchersList = RemoveWatcherFromList(GlobalFile->WatchersList, ID);
 				RemoveUserFromProjects(GlobalFile, ID);
 			}
 			else
@@ -1303,7 +1303,7 @@ void DeleteUser(Global *GlobalFile, int ID)
 			student = FindStudent(GlobalFile->StudentList, ID);
 			if (student)
 			{
-				RemoveStudentFromList(GlobalFile->StudentList, ID);
+				GlobalFile->StudentList = RemoveStudentFromList(GlobalFile->StudentList, ID);
 				RemoveUserFromProjects(GlobalFile, ID);
 			}
 			else
@@ -1312,7 +1312,7 @@ void DeleteUser(Global *GlobalFile, int ID)
 		case ADMIN:
 			admin = FindAdmin(GlobalFile->AdminsList, ID);
 			if (admin)
-				RemoveAdminFromList(GlobalFile->AdminsList, ID);
+				GlobalFile->AdminsList = RemoveAdminFromList(GlobalFile->AdminsList, ID);
 			else
 				puts("Admin not found in database");
 			break;
@@ -1344,7 +1344,7 @@ Admin *StudentToAdmin(Global *GlobalFile, Student *student)
 	
 	// delete old fields of student
 	free(student->ProjectIDS);		// free array
-	RemoveStudentFromList(GlobalFile->StudentList, student->StudentID);		// remove student from list 
+	GlobalFile->StudentList = RemoveStudentFromList(GlobalFile->StudentList, student->StudentID);		// remove student from list 
 
 	return newAdmin;
 }
@@ -1363,7 +1363,7 @@ Admin * WatcherToAdmin(Global *GlobalFile, Watcher *watcher)
 
 	// delete old fields of student
 	free(watcher->ProjectIDS);		// free array
-	RemoveWatcherFromList(GlobalFile->WatchersList, watcher->WatcherID);		// remove student from list 
+	GlobalFile->WatchersList = RemoveWatcherFromList(GlobalFile->WatchersList, watcher->WatcherID);		// remove student from list 
 
 	return newAdmin;
 }

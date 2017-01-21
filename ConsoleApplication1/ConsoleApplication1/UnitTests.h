@@ -231,7 +231,7 @@ MU_TEST(test_delete_quote){
 	int id = 1;
 	mu_check(FindQuote(global->QuotesList, id) != NULL);
 	DeleteQuote(global, id);
-	//mu_check(FindQuote(global->QuotesList, id) != NULL);
+	mu_check(FindQuote(global->QuotesList, id) == NULL);
 	freeMemory(global);
 }
 
@@ -258,11 +258,20 @@ MU_TEST(test_promote_user){
 	freeMemory(global);
 }
 
+MU_TEST(test_add_new_quote){
+	Global* global = InitDataBases();
+	int current_runID = global->QuoteRunID;
+	AddNewQuote(global);
+	mu_check(FindQuote(global->QuotesList, (global->QuoteRunID) - 1) != NULL);
+	mu_assert(global->QuoteRunID - current_runID == 1, "Suppose to be 1!(1 new quote added)");
+	freeMemory(global);
+}
 
 MU_TEST_SUITE(Admin_Suite){
 	MU_RUN_TEST(test_delete_user);
-	//MU_RUN_TEST(test_delete_quote);
+	MU_RUN_TEST(test_delete_quote);
 	MU_RUN_TEST(test_promote_user);
+	MU_RUN_TEST(test_add_new_quote);
 }
 
 
