@@ -75,8 +75,8 @@ int Register(Global *g);
 int Login(Global *g);
 int AdminRegister(Global *GlobalFile);
 int StudentRegister(Global *g);
-BOOL CheckPassword(char* pass);
-BOOL CheckIfUserExists(Global *g, char *username);
+BOOL CheckPassword(char* pass); //Test written
+BOOL CheckIfUserExists(Global *g, char *username); //Test written
 int WatcherRegister(Global *g);
 
 

@@ -390,11 +390,14 @@ int main()
 	int tests = 0;
 	printf("Would you like to run the tests?(1 = yes)\n");
 	scanf("%d", &tests);
+	system("cls");
 	if (tests){
 		MU_RUN_SUITE(Utilities);
 		MU_RUN_SUITE(InitTest);
 		MU_RUN_SUITE(Login_Suite);
 	}
+	system("pause");
+	system("cls");
 	Global *GlobalFile = (Global*)malloc(sizeof(Global));
 	GlobalFile = InitDataBases();
 	//CreateNewProject(NULL, GlobalFile); TODO: WHO ADDED THIS LINE??

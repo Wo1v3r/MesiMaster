@@ -153,8 +153,24 @@ MU_TEST(test_check_password){
 	mu_check(CheckPassword(invalidPass4) == 0);
 }
 
+MU_TEST(test_check_if_user_exists){
+	//Checks if user exists by username, we will provide with both options:
+	char* adminUN = "Dubi";
+	char* studentUN = "alex";
+	char* watcherUN = "watcher";
+	char* badUN = "Wo1v3r";
+	//Loading file:
+	Global* global = InitDataBases();
+
+	mu_check(CheckIfUserExists(global, adminUN) == 1);
+	mu_check(CheckIfUserExists(global, studentUN) == 1);
+	mu_check(CheckIfUserExists(global, watcherUN) == 1);
+	mu_check(CheckIfUserExists(global, badUN) == 0);
+
+}
 MU_TEST_SUITE(Login_Suite){
 	MU_RUN_TEST(test_check_password);
+	MU_RUN_TEST(test_check_if_user_exists);
 
 	MU_REPORT_SUITE();
 }
