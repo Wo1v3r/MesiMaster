@@ -8,23 +8,23 @@
 // 2) Please add a test to the tests file for each functions, mark "Test Written" as needed
 
 //Project Functions
-int CreateNewProject(Global* GlobalFile, int userID, AccessGroup userGroup);
-void CreateNewTask(Global *GlobalFile, Project *project, int UserID, AccessGroup group);		//53
-void addUserToProject(Global *GlobalFile, Project *newProject);									//42
+int CreateNewProject(Global* GlobalFile, int userID, AccessGroup userGroup , char* projectName); //Test written
+void CreateNewTask(Global *GlobalFile, Project *project, int UserID, AccessGroup group);		
+void addUserToProject(Global *GlobalFile, Project *newProject);	
 void ChangeTaskStatus(Global* GlobalFile, Project* project, int userID, int accessGroup);
 void addUserToProject(Global *GlobalFile, Project *newProject);
 void ChangeTaskStatus(Global* GlobalFile, Project* project, int userID, int accessGroup);
-void PrintProjectDetails(Global* GlobalFile, Project* project);
-void PrintProjectMessages(Project *project);
+void PrintProjectDetails(Global* GlobalFile, Project* project); //No test needed
+void PrintProjectMessages(Project *project); //No test needed
 
 //Utilities
-void ShowUserDetails(Global *GlobalFile);
-void PrintUsersLists(Global* GlobalFile);
-void PrintUsersByID(Global *GlobalFile, Project *project);
-int PrintTasksList(Global* GlobalFile, Project* Project);
-void PrintTasksByID(Task *head, int indexes[], int size, char *creator);
-void PrintProjectsList(Global *GlobalFile, int UserID, AccessGroup group);						//44
-void PrintProjectsByID(Global *GlobalFile, int indexes[], int size, char *creator);
+void ShowUserDetails(Global *GlobalFile); //No test needed
+void PrintUsersLists(Global* GlobalFile);//No test needed
+void PrintUsersByID(Global *GlobalFile, Project *project);//No test needed
+int PrintTasksList(Global* GlobalFile, Project* Project);//No test needed
+void PrintTasksByID(Task *head, int indexes[], int size, char *creator);//No test needed
+void PrintProjectsList(Global *GlobalFile, int UserID, AccessGroup group);//No test needed
+void PrintProjectsByID(Global *GlobalFile, int indexes[], int size, char *creator);//No test needed
 int* RemoveProjectIDFromArray(int Array[], int ProjectID);
 int RemoveProjectFromUsers(Global* GlobalFile, int ProjectID);
 void RemoveUserFromProjects(Global *GlobalFile, int UserID);
@@ -41,12 +41,12 @@ void UpdateDetails(Global* GlobalFile, int userID);
 Admin * WatcherToAdmin(Global *GlobalFile, Watcher *watcher);
 
 //Log functions
-void PrintStudentLog(Student* student);
-void printLogToFile(char file[], char msg[500]);
-void PrintProjectChanges(Global *GlobalFile, Project* project, Watcher *watcher);
-void PrintGlobalMessages(Global *GlobalFile);
-void PrintActivityLog(char* filePath);
-void PrintQuotes(Global* GlobalFile);
+void PrintStudentLog(Student* student);//No test needed
+void printLogToFile(char file[], char msg[500]);//No test needed
+void PrintProjectChanges(Global *GlobalFile, Project* project, Watcher *watcher);//No test needed
+void PrintGlobalMessages(Global *GlobalFile);//No test needed
+void PrintActivityLog(char* filePath);//No test needed
+void PrintQuotes(Global* GlobalFile);//No test needed
 
 //Student Functions
 void ShowMessagesToStudent(Global * Global, Student *student);
@@ -72,15 +72,12 @@ void PromoteUserToAdmin(Global *GlobalFile, int ID); //Test written
 
 //Login/Register Functions
 int Register(Global *g);
-int Login(Global *g);
 int AdminRegister(Global *GlobalFile);
+int WatcherRegister(Global *g);
 int StudentRegister(Global *g);
+int Login(Global *g);
 BOOL CheckPassword(char* pass); //Test written
 BOOL CheckIfUserExists(Global *g, char *username); //Test written
-int WatcherRegister(Global *g);
-
-
-
 
 
 // change status of choosen task, done, ready for testing
@@ -487,27 +484,34 @@ void AddProjectIDToWatcher(Watcher * Watcher, int ProjectID)
 	Watcher->WatcherProjectsAmount++;								// update size of projects amount to watcher
 }
 // 46 - Create new project by STUDENT or WATCHER only, UNDONE, should to split
-int CreateNewProject(Global* GlobalFile,int userID, AccessGroup userGroup)
+int CreateNewProject(Global* GlobalFile,int userID, AccessGroup userGroup,char* projectName)
 {
 	Student *Student=NULL;
 	Watcher *Watcher=NULL;
 	FILE *file = NULL;
-	puts("Input Name of your project (maximum 127 characters) : ");
-	char buffer[128];		// get name
+	char buffer[128];
 	char logText[500];
-	fflush(stdin);
-	gets(buffer);
-	
-	// check if student or watcher and get pointer to him
-	if (userGroup == STUDENT)
-		Student = FindStudent(GlobalFile->StudentList, userID);
+	if (projectName) strcpy(buffer, projectName); //For tests
+	else{
+		puts("Input Name of your project (maximum 127 characters) : ");
+		fflush(stdin);
+		gets(buffer);
+	}
 
-	else if (userGroup == WATCHER)
+	// check if student or watcher and get pointer to him
+	if (userGroup == STUDENT){	
+		Student = FindStudent(GlobalFile->StudentList, userID);
+		if (!Student) return 0;
+	}
+
+	else if (userGroup == WATCHER){
 		Watcher = FindWatcher(GlobalFile->WatchersList, userID);
+		if (!Watcher) return 0;
+	}
 	else
 	{
-		puts("Incorrect access group received.");
-		return 1;		// incorrect access group
+		if (!projectName) puts("Incorrect access group received.");
+		return 0;		// incorrect access group
 	}
 
 	// allocate memory
@@ -575,7 +579,7 @@ int CreateNewProject(Global* GlobalFile,int userID, AccessGroup userGroup)
 
 	}
 	//---------------------
-
+	if (projectName) return 1; //For Tests
 	char choice;
 	printf("Project \"%s\" created!\nWant to add collaborators to this project? (y / n) :", newProject->ProjectName);
 	fflush(stdin);

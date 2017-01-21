@@ -133,7 +133,7 @@ int StudentMenu(Global *GlobalFile, int studentID){
 		case 0:
 			return 1;
 		case 1:
-			CreateNewProject(GlobalFile,studentID,STUDENT); //3
+			CreateNewProject(GlobalFile,studentID,STUDENT,NULL); //3
 			break;
 		case 2:
 			PrintProjectsList(GlobalFile,studentID,STUDENT); // 13
@@ -277,7 +277,7 @@ int WatcherMenu(Global* GlobalFile, int watcherID){
 			PrintProjectsListWatcher(GlobalFile, watcherID, WATCHER);
 			break;
 		case 2:
-			CreateNewProject(GlobalFile, watcherID, WATCHER);
+			CreateNewProject(GlobalFile, watcherID, WATCHER,NULL);
 			break;
 		case 3:
 			printf("Enter Project ID:\n");
@@ -396,13 +396,13 @@ int main()
 		MU_RUN_SUITE(InitTest);
 		MU_RUN_SUITE(Login_Suite);
 		MU_RUN_SUITE(Admin_Suite);
+		MU_RUN_SUITE(Project_Suite);
 		system("pause");
 		return;
 	}
 	system("cls");
 	Global *GlobalFile = (Global*)malloc(sizeof(Global));
 	GlobalFile = InitDataBases();
-	//CreateNewProject(NULL, GlobalFile); TODO: WHO ADDED THIS LINE??
 	LoginMenu(GlobalFile);
 	return 1;
 	//justforpush
