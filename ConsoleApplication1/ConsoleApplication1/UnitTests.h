@@ -288,6 +288,14 @@ MU_TEST_SUITE(Admin_Suite){
 	MU_RUN_TEST(test_promote_user);
 	MU_RUN_TEST(test_add_new_quote);
 	MU_RUN_TEST(test_global_message);
+	//MU_RUN_TEST(test_remove_project);
+}
+
+MU_TEST(test_leave_message_to_students){
+	Global* global = InitDataBases();
+	AddGlobalMessage(global, "This Message entered");
+	mu_check(strcmp(global->GlobalMessages, "This Message entered") == 0);
+	freeMemory(global);
 }
 
 
