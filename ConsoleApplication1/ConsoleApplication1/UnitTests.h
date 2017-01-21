@@ -189,3 +189,34 @@ MU_TEST(test_delete_user){
 MU_TEST_SUITE(Admin_Suite){
 	MU_RUN_TEST(test_delete_user);
 }
+
+
+//Project Menu tests:
+
+MU_TEST(test_create_project){
+	char* projectName = "MyNewProject";
+	Global* global = InitDataBases();
+	int noSuchUserID = 1058, studentID = 1001;
+	int projectFound = 0;
+	Project* project;
+	//Trying to create a new project using a user id that doesnt exist:
+	mu_check(CreateNewProject(global, noSuchUserID, STUDENT, projectName) == 0); //Should not create the project
+	//Trying to create a new project using an invalid access group:
+	mu_check(CreateNewProject(global, studentID, BAD, projectName) == 0);
+	//Trying to create a new project using normal paramaters:
+	mu_check(CreateNewProject(global, studentID, STUDENT, projectName) == 1);
+	//Check if that project exists:
+	project = global->ProjectsList;
+	while (project) {
+		if (strcmp(project->ProjectName, projectName) == 0) projectFound = 1;
+		project = project->ProjectNext;
+	}
+	mu_check(projectFound);
+
+	freeMemory(global);
+}
+
+MU_TEST_SUITE(Project_Suite){
+
+	MU_RUN_TEST(test_create_project);
+}
