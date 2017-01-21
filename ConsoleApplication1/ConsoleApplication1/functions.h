@@ -55,7 +55,7 @@ void ShowTasksByStatus(Global* GlobalFile, int studentID);
 void LeaveMessageToStudent(Global* GlobalFile, Project* project, Watcher* watcher); //No test needed(writing to file)
 void AddProjectMessage(Global* GlobalFile, Project* project, Watcher* watcher); //No test needed(writing to file)
 void PrintStudentActivityWatcher(Global *GlobalFile, Project *project); //Need TXT
-BOOL ShowNotifications(Global *GlobalFile, Watcher *watcher);
+BOOL ShowNotifications(Global *GlobalFile, Watcher *watcher, char choice);
 void ShowTasksByStatusWatcher(Global* GlobalFile, int WatcherID);
 
 //Admin Functions
@@ -192,10 +192,10 @@ int RemoveProjectFromUsers(Global* GlobalFile, int ProjectID)
 // done by Alexey, ready for testing
 void RemoveProject(Global* GlobalFile, Project* project, char choice){
 	int i;
-	if (choice != 'O'){
-		choice = 'O';
+	if (choice != 0){
+		choice = 0;
 		printf("Are you sure you want to remove this project and all of its tasks (Y/N)?\n");
-		while (choice == 'O'){
+		while (choice == 0){
 			choice = getchar();
 			switch (choice){
 			case 'Y':
@@ -215,7 +215,7 @@ void RemoveProject(Global* GlobalFile, Project* project, char choice){
 			case 'n':
 				break;
 			default: printf("No such option!\n");
-				choice = 'O';
+				choice = 0;
 			}
 		}
 		system("pause");
@@ -1481,36 +1481,42 @@ void PromoteUserToAdmin(Global *GlobalFile, int ID)
 
 //// watcher notifications
 // Turns on / off watcher notifications, return true if status changed, false if not changed
-BOOL ShowNotifications(Global *GlobalFile, Watcher *watcher)
+BOOL ShowNotifications(Global *GlobalFile, Watcher *watcher, char choice)
 {
-	char choice;
-
-	printf("\nCurrent status of Subscription : ");
-	if (watcher->WatcherReceiveChanges == FALSE)
-		puts("OFF");
-	if (watcher->WatcherReceiveChanges == TRUE)
-		puts("ON");
-
-	printf("\nChange status? ( Y/N ) : ");
-	fflush(stdin);
-	choice = getchar();
-	if (choice == 'y' || choice == 'Y')
-	{
-		puts("New status : ON");
-		watcher->WatcherReceiveChanges = TRUE;
-		return TRUE;
-	}
-	else if (choice == 'n' || choice == 'N')
-	{
-		puts("New status : OFF");
-		watcher->WatcherReceiveChanges = FALSE;
-		return TRUE;
-	}
-	puts("Incorrect choice, status not been changed");
+	if (choice != 0){
+		printf("\nCurrent status of Subscription : ");
+		if (watcher->WatcherReceiveChanges == FALSE)
+			puts("OFF");
+		if (watcher->WatcherReceiveChanges == TRUE)
+			puts("ON");
+		printf("\nChange status? ( Y/N ) : ");
+		fflush(stdin);
+		choice = getchar();
+		if (choice == 'y' || choice == 'Y')
+		{
+			puts("New status : ON");
+			watcher->WatcherReceiveChanges = TRUE;
+			return TRUE;
+		}
+		else if (choice == 'n' || choice == 'N')
+		{
+			puts("New status : OFF");
+			watcher->WatcherReceiveChanges = FALSE;
+			return TRUE;
+		}
+		puts("Incorrect choice, status not been changed");
 		return FALSE;
-	
 		system("pause");
-
+	}
+	else{
+		if (choice == 'y' || choice == 'Y'){
+			watcher->WatcherReceiveChanges = TRUE;
+			return TRUE;
+		else if (choice == 'n' || choice == 'N'){
+			watcher->WatcherReceiveChanges = FALSE;
+			return FALSE;
+		}
+	}
 }
 
 // print changes in project to watcher, done,ready for testing
