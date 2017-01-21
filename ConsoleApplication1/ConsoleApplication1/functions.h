@@ -61,8 +61,8 @@ void ShowTasksByStatusWatcher(Global* GlobalFile, int WatcherID);
 
 //Admin Functions
 void RemoveProject(Global* GlobalFile, Project* project, int userID, int accessGroup);
-void AddGlobalMessage(Global* GlobalFile);
-void AddNewQuote(Global* GlobalFile); //Test written
+void AddGlobalMessage(Global* GlobalFile, char* msg); //Test written
+void AddNewQuote(Global* GlobalFile, char* quote, char* creator); //Test written
 void ManageQuotes(Global *GlobalFile); //No test needed(switch case function)
 int AddNewUser(Global* GlobalFile); //No test needed(switch case function)
 void DeleteQuote(Global* GlobalFile, int ID); //Test written
@@ -982,45 +982,52 @@ void PrintGlobalMessages(Global *GlobalFile)
 }
 
 // add message by admin, done, ready for etsting
-void AddGlobalMessage(Global* GlobalFile){
+void AddGlobalMessage(Global* GlobalFile, char* msg){
 	char temp[250];
-	printf("Enter global message (max length 255):\n");
-	do
-	gets(temp);
-	while (strlen(temp) > 255);
+	if (strcmp(msg, "") == 0){
+		printf("Enter global message (max length 255):\n");
+		fflush(stdin);
+		do{
+			gets(temp);
+		} while (strlen(temp) > 255);
+		strcpy(GlobalFile->GlobalMessages, temp);
+	}
+	else
+		strcpy(GlobalFile->GlobalMessages, msg);
 
-	strcpy(GlobalFile->GlobalMessages, temp);
-
-	system("pause");
+	//system("pause");
 }
 
 // Quotes funcs start, done, ready to testing
-void AddNewQuote(Global* GlobalFile){
+void AddNewQuote(Global* GlobalFile, char* quote, char* creator){
 	char tempQuote[300], tempAuthor[100];
 	//Creating a new quote and incrementing quoteRunID: Not sure if that's right
 	int quoteID = GlobalFile->QuoteRunID++;
 	Quote* newQuote = (Quote*) malloc(sizeof(Quote));
 	newQuote->QuoteID = quoteID;
-	printf("Enter quote (max length 256):\n");
-	do
-	{
-		fflush(stdin);
-		scanf("%s", &tempQuote);
+	if (strcmp(quote, "") == 0){
+		printf("Enter quote (max length 256):\n");
+		do
+		{
+			fflush(stdin);
+			scanf("%s", &tempQuote);
+		} while (strlen(tempQuote) > 255);
+
+		strcpy(newQuote->Quote, tempQuote);
+
+		printf("Enter quote's author (max length 30):\n");
+		do
+		{
+			fflush(stdin);
+			scanf("%s", &tempAuthor);
+		} while (strlen(tempQuote) > 30);
+
+		strcpy(newQuote->QuoteAuthor, tempAuthor);
 	}
-	while (strlen(tempQuote) > 255);
-
-	strcpy(newQuote->Quote, tempQuote);
-
-	printf("Enter quote's author (max length 30):\n");
-	do
-	{
-		fflush(stdin);
-		scanf("%s", &tempAuthor);
+	else{
+		strcpy(newQuote->Quote, quote);
+		strcpy(newQuote->QuoteAuthor, creator);
 	}
-	while (strlen(tempQuote) > 30);
-
-	strcpy(newQuote->QuoteAuthor, tempAuthor);
-
 	//Adding to global quote list:
 	AddQuote(GlobalFile->QuotesList, newQuote);
 }
@@ -1079,7 +1086,7 @@ void ManageQuotes(Global *GlobalFile)
 		if (choice == '1')
 			PrintQuotes(GlobalFile);
 		else if (choice == '2')
-			AddNewQuote(GlobalFile);
+			AddNewQuote(GlobalFile, "", "");
 		else if (choice == '3')
 			DeleteQuote(GlobalFile, 0);
 		else if (choice == '4')
@@ -1799,8 +1806,6 @@ int StudentRegister(Global *g)
 
 	AddStudent(g->StudentList, newStudent);
 	return newStudent->StudentID;
-
-
 }
 
 int WatcherRegister(Global *g)

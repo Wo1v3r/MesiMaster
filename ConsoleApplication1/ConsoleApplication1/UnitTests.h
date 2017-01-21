@@ -261,9 +261,16 @@ MU_TEST(test_promote_user){
 MU_TEST(test_add_new_quote){
 	Global* global = InitDataBases();
 	int current_runID = global->QuoteRunID;
-	AddNewQuote(global);
+	AddNewQuote(global, "something", "something");
 	mu_check(FindQuote(global->QuotesList, (global->QuoteRunID) - 1) != NULL);
 	mu_assert(global->QuoteRunID - current_runID == 1, "Suppose to be 1!(1 new quote added)");
+	freeMemory(global);
+}
+
+MU_TEST(test_global_message){
+	Global* global = InitDataBases();
+	AddGlobalMessage(global, "This Message entered");
+	mu_check(strcmp(global->GlobalMessages, "This Message entered") == 0);
 	freeMemory(global);
 }
 
@@ -272,6 +279,7 @@ MU_TEST_SUITE(Admin_Suite){
 	MU_RUN_TEST(test_delete_quote);
 	MU_RUN_TEST(test_promote_user);
 	MU_RUN_TEST(test_add_new_quote);
+	MU_RUN_TEST(test_global_message);
 }
 
 
@@ -349,57 +357,192 @@ MU_TEST(test_FindAdmin_structures)
 	freeMemory(global);
 }
 
-/*
-Project *FindProject(Project* head, int ProjectID);
-Task *FindTask(Task* head, int TaskID);
-Quote *FindQuote(Quote* head, int QuoteID);
-*/
-
 MU_TEST(test_FindProject_structures)
 {
-	//Finds admin by ID
-	int adminID = 2001; //Good ID - sould provide the right info
+	//Finds project by ID
+	int projID = 4002; //Good ID - sould provide the right info
 	int badID = 9999;//Bad ID - should return NULL
 	//Loading file:
 	Global* global = InitDataBases();
-	mu_check(FindAdmin(global->AdminsList, adminID) != NULL);//Check that the admin was found
-	mu_check(FindAdmin(global->AdminsList, adminID)->AdminID == adminID); //Check that the admin is actually the right one
-	mu_check(FindAdmin(global->AdminsList, badID) == NULL); //Check that bad username not found
+	mu_check(FindProject(global->ProjectsList, projID) != NULL);//Check that the proj. was found
+	mu_check(FindProject(global->ProjectsList, projID)->ProjectID == projID); //Check that the porj. is actually the right one
+	mu_check(FindProject(global->ProjectsList, badID) == NULL); //Check that bad id not found
 	freeMemory(global);
 }
 
 MU_TEST(test_FindTask_structures)
 {
-	//Finds admin by ID
-	int adminID = 2001; //Good ID - sould provide the right info
+	//Finds task by ID
+	int taskID = 5000; //Good ID - sould provide the right info
 	int badID = 9999;//Bad ID - should return NULL
 	//Loading file:
 	Global* global = InitDataBases();
-	mu_check(FindAdmin(global->AdminsList, adminID) != NULL);//Check that the admin was found
-	mu_check(FindAdmin(global->AdminsList, adminID)->AdminID == adminID); //Check that the admin is actually the right one
-	mu_check(FindAdmin(global->AdminsList, badID) == NULL); //Check that bad username not found
+	mu_check(FindTask(global->TaskList, taskID) != NULL);//Check that the task was found
+	mu_check(FindTask(global->TaskList, taskID) ->TaskID == taskID); //Check that the task is actually the right one
+	mu_check(FindTask(global->TaskList, badID) == NULL); //Check that bad id not found
 	freeMemory(global);
 }
 
 MU_TEST(test_FindQuote_structures)
 {
-	//Finds admin by ID
-	int adminID = 2001; //Good ID - sould provide the right info
+	//Finds quote by ID
+	int quoteID = 1; //Good ID - sould provide the right info
 	int badID = 9999;//Bad ID - should return NULL
 	//Loading file:
 	Global* global = InitDataBases();
-	mu_check(FindAdmin(global->AdminsList, adminID) != NULL);//Check that the admin was found
-	mu_check(FindAdmin(global->AdminsList, adminID)->AdminID == adminID); //Check that the admin is actually the right one
-	mu_check(FindAdmin(global->AdminsList, badID) == NULL); //Check that bad username not found
+	mu_check(FindQuote(global->QuotesList, quoteID) != NULL);//Check that the admin was found
+	mu_check(FindQuote(global->QuotesList, quoteID)->QuoteID == quoteID); //Check that the admin is actually the right one
+	mu_check(FindQuote(global->QuotesList, badID) == NULL); //Check that bad username not found
 	freeMemory(global);
 }
 
+/* מה עם סטודנט בלי פרוייקטים ? */
+MU_TEST(test_AddStudent)
+{
+	//Receives a student object and inserts it to the end of the linked list
+	//Loading file:
+	Global* global = InitDataBases();
+	Student * test_student = (Student*)malloc(sizeof(Student));
+	test_student->Group = 1;
+	test_student->ProjectIDS = NULL;
+	test_student->StudentID = 1999;
+	strcpy(test_student->StudentActivityLog, "1999_SLog.txt");
+	strcpy(test_student->StudentDepartment, "SoftwareEng.");
+	strcpy(test_student->StudentEmail, "email@gmail");
+	strcpy(test_student->StudentMessages, "1999_SMess.txt");
+	strcpy(test_student->StudentName, "hadas");
+	test_student->StudentNext = NULL;
+	strcpy(test_student->StudentPassword, "AAaa11");
+	test_student->StudentProjectsAmount = 0;
+	strcpy(test_student->StudentSurename, "hasidim");
+	test_student->StudentTasksAmount = 0;
+	strcpy(test_student->StudentUsername, "hHasidim");
+	test_student->StudentYear = 'a';
+
+	AddStudent(global->StudentList, test_student);
+	mu_check(FindStudent(global->StudentList, test_student->StudentID) != NULL); //check if the student is found by ID 
+	mu_check(FindStudentByUN(global->StudentList, test_student->StudentUsername) != NULL); //check if the student is found by UN
+
+	freeMemory(global);
+}
+
+MU_TEST(test_AddAdmin)
+{
+	//Receives an admin object and inserts it to the end of the linked list
+	//Loading file:
+	Global* global = InitDataBases();
+	Admin * test_admin = (Admin*)malloc(sizeof(Admin));
+	test_admin->AdminID = 2999;
+	strcpy(test_admin->AdminName, "mr.admin");
+	strcpy(test_admin->AdminPassword, "BBcc22");
+	test_admin->AdminNext = NULL;
+	strcpy(test_admin->AdminSurename, "adminovich");
+	strcpy(test_admin->AdminUsername, "adminadmin");
+	test_admin->Group = 2;
+
+	AddAdmin(global->AdminsList, test_admin);
+	mu_check(FindAdmin(global->AdminsList, test_admin->AdminID) != NULL); //check if the admin is found by ID 
+	mu_check(FindAdminByUN(global->AdminsList, test_admin->AdminUsername) != NULL); //check is the admin is found by UN
+
+	freeMemory(global);
+}
+
+MU_TEST(test_AddWatcher)
+{
+	//Receives a watcher object and inserts it to the end of the linked list
+	//Loading file:
+	Global* global = InitDataBases();
+	Watcher * test_watch = (Watcher*)malloc(sizeof(Watcher));
+	test_watch->Group = 3;
+	test_watch->ProjectIDS = NULL;
+	strcpy(test_watch->WatcherEmail, "gmail@email");
+	test_watch->WatcherID = 3999;
+	strcpy(test_watch->WatcherName, "svetlana");
+	strcpy(test_watch->WatcherPassword, "CCdd33");
+	test_watch->WatcherNext = NULL;
+	test_watch->WatcherProjectsAmount = 0;
+	test_watch->WatcherReceiveChanges = 0;
+	strcpy(test_watch->WatcherSurename, "rusin");
+	strcpy(test_watch->WatcherUsername, "svetar");
+
+	AddWatcher(global->WatchersList, test_watch);
+	mu_check(FindWatcher(global->WatchersList, test_watch->WatcherID) != NULL); //check if the watcher is found by ID 
+
+	freeMemory(global);
+}
+
+MU_TEST(test_AddProject)
+{
+	//Receives a project object and inserts it to the end of the linked list
+	//Loading file:
+	Global* global = InitDataBases();
+	Project * test_proj = (Project*)malloc(sizeof(Project));
+	test_proj->ProgramChanges = 0;
+	test_proj->ProjectID = 4999;
+	strcpy(test_proj->ProjectActivityLogs, "4999_ProjectActivityLog.txt"); 
+	strcpy(test_proj->ProjectCreatorName, "izzie");
+	strcpy(test_proj->ProjectMessages, "4999)PMess.txt");
+	strcpy(test_proj->ProjectName, "Mesimaster");
+	test_proj->ProjectNext = NULL;
+	test_proj->ProjectTasksAmount = 0;
+	test_proj->ProjectUsersAmount = 0;
+	test_proj->StudentsIDS = NULL;
+	test_proj->TasksIDS = NULL;
+
+	AddProject(global->WatchersList, test_proj);
+	mu_check(FindProject(global->ProjectsList, test_proj->ProjectID) != NULL); //check if the project is found by ID 
+
+	freeMemory(global);
+}
+
+MU_TEST(test_AddTask)
+{
+	//Receives a task object and inserts it to the end of the linked list
+	//Loading file:
+	Global* global = InitDataBases();
+	Task * test_task = (Task*)malloc(sizeof(Task));
+	strcpy(test_task->TaskCreatorName, "isabelle");
+	test_task->TaskID = 5999;
+	strcpy(test_task->TaskName, "doSomething");
+	test_task->TaskNext = NULL;
+	test_task->TaskStatus = NEW;
+
+	AddTask(global->TaskList, test_task);
+	mu_check(FindTask(global->TaskList, test_task->TaskID) != NULL); //check if the task is found by ID 
+
+	freeMemory(global);
+}
+
+MU_TEST(test_AddQuote)
+{
+	//Receives a quote object and inserts it to the end of the linked list
+	//Loading file:
+	Global* global = InitDataBases();
+	Quote * test_quote = (Quote*)malloc(sizeof(Quote));
+	strcpy(test_quote->Quote, "If not me, Who?");
+	strcpy(test_quote->QuoteAuthor, "Anonymous dude");
+	test_quote->QuoteID = 6999;
+
+	AddQuote(global->QuotesList, test_quote);
+	mu_check(FindQuote(global->TaskList, test_quote->QuoteID) != NULL); //check if the quote is found by ID 
+
+	freeMemory(global);
+}
 
 MU_TEST_SUITE(Structures_Suite)
 {
 	MU_RUN_TEST(test_FindStudent_structures);
 	MU_RUN_TEST(test_FindWatcher_structures);
 	MU_RUN_TEST(test_FindAdmin_structures);
+	MU_RUN_TEST(test_FindProject_structures);
+	MU_RUN_TEST(test_FindTask_structures);
+	MU_RUN_TEST(test_FindQuote_structures);
+	MU_RUN_TEST(test_AddStudent);
+	MU_RUN_TEST(test_AddAdmin);
+	MU_RUN_TEST(test_AddWatcher);
+	MU_RUN_TEST(test_AddProject);
+	MU_RUN_TEST(test_AddTask);
+	MU_RUN_TEST(test_AddQuote);
 
 	MU_REPORT_SUITE();
 }

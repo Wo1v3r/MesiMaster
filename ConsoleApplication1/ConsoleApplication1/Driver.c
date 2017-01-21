@@ -1,6 +1,7 @@
 //Jonathan
 #include "functions.h"
 #include "UnitTests.h"
+#include "vld.h"
 ////// Menus
 
 //Project Menu : Finished ,Ready for testing - Jonathan
@@ -234,7 +235,7 @@ int AdminMenu(Global* GlobalFile ,int adminID){
 			ProjectMenu(GlobalFile, project, ADMIN, adminID);
 			break;
 		case 9: 
-			AddGlobalMessage(GlobalFile);
+			AddGlobalMessage(GlobalFile, "");
 			break;
 		case 10:
 			ManageQuotes(GlobalFile);
