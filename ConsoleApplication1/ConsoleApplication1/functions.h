@@ -52,9 +52,9 @@ void ShowTasksByStatus(Global* GlobalFile, int studentID);
 
 
 //Watcher Functions
-void LeaveMessageToStudent(Global* GlobalFile, Project* project, Watcher* watcher);
-void AddProjectMessage(Global* GlobalFile, Project* project, Watcher* watcher);
-void PrintStudentActivityWatcher(Global *GlobalFile, Project *project);
+void LeaveMessageToStudent(Global* GlobalFile, Project* project, Watcher* watcher); //No test needed(writing to file)
+void AddProjectMessage(Global* GlobalFile, Project* project, Watcher* watcher); //No test needed(writing to file)
+void PrintStudentActivityWatcher(Global *GlobalFile, Project *project); //Need TXT
 BOOL ShowNotifications(Global *GlobalFile, Watcher *watcher);
 void ShowTasksByStatusWatcher(Global* GlobalFile, int WatcherID);
 
