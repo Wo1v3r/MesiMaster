@@ -391,7 +391,7 @@ int main()
 	printf("Would you like to run the tests?(1 = yes)\n");
 	scanf("%d", &tests);
 	system("cls");
-	if (tests){
+	if (tests == 1){
 		MU_RUN_SUITE(Utilities);
 		MU_RUN_SUITE(InitTest);
 		MU_RUN_SUITE(Login_Suite);
