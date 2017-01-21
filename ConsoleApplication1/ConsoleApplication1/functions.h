@@ -32,9 +32,9 @@ void AddProjectIDToStudent(Student * Student, int ProjectID);
 void AddProjectIDToWatcher(Watcher * Watcher, int ProjectID);
 void AddTaskIDToProject(Project* project, int TaskID);
 int FindAccessGroup(int ID);  //Test Written
-Admin* FindAdminByUN(Global *g, char *username);
-Student* FindStudentByUN(Global *g, char *username);
-Watcher* FindWatcherByUN(Global *g, char *username);
+Admin* FindAdminByUN(Global *g, char *username); //Test written - Isabelle
+Student* FindStudentByUN(Global *g, char *username); //Test written - Isabelle
+Watcher* FindWatcherByUN(Global *g, char *username); //Test written - Isabelle
 Admin *StudentToAdmin(Global *GlobalFile, Student *student);
 void UpdateDetails(Global* GlobalFile, int userID);
 Admin * WatcherToAdmin(Global *GlobalFile, Watcher *watcher);
@@ -78,7 +78,7 @@ int Login(Global *g);
 BOOL CheckPassword(char* pass); //Test written
 BOOL CheckIfUserExists(Global *g, char *username); //Test written
 
-
+//
 // change status of choosen task, done, ready for testing
 void ChangeTaskStatus(Global* GlobalFile, Project* project, int userID, int accessGroup){
 	int taskID, status;
@@ -1797,8 +1797,7 @@ int StudentRegister(Global *g)
 	strcpy(newStudent->StudentMessages, stringID); //insert id string to messages string
 	strcat(newStudent->StudentMessages, "_SMess.txt"); // cat the rest of the file name
 
-	newStudent->StudentNext = g->StudentList;
-	g->StudentList = newStudent;
+	AddStudent(g->StudentList, newStudent);
 	return newStudent->StudentID;
 
 
@@ -1859,8 +1858,7 @@ int WatcherRegister(Global *g)
 	newWatcher->WatcherProjectsAmount = 0;
 	newWatcher->WatcherReceiveChanges = FALSE;
 
-	newWatcher->WatcherNext = g->WatchersList;
-	g->WatchersList = newWatcher;
+	AddWatcher(g->WatchersList, newWatcher);
 	return newWatcher->WatcherID;
 }
 

@@ -124,10 +124,50 @@ MU_TEST(test_find_accessgroup){
 	mu_check(FindAccessGroup(badID2) == 0);
 }
 
+MU_TEST(test_FindAdminByUN){
+	//Finds admin by username
+	char* adminUN = "Dubi"; //Good username - sould provide the right info
+	char* badUN = "Wo1v3r";//Bad username - should return NULL
+	//Loading file:
+	Global* global = InitDataBases();
+	mu_check(FindAdminByUN(global, adminUN) != NULL); //Check that the admin was found
+	mu_check(strcmp(FindAdminByUN(global, adminUN)->AdminUsername, adminUN) == 0); //Check that the admin is actually the right one
+	mu_check(FindAdminByUN(global, badUN) == NULL); //Check that bad username not found
+	freeMemory(global);
+}
+
+MU_TEST(test_FindWatcherByUN){
+	//Finds watcher by username
+	char* watcherUN = "liranr"; //Good username - sould provide the right info
+	char* badUN = "Wo1v3r";//Bad username - should return NULL
+	//Loading file:
+	Global* global = InitDataBases();
+	mu_check(FindWatcherByUN(global, watcherUN) != NULL); //Check that the admin was found
+	mu_check(strcmp(FindWatcherByUN(global, watcherUN)->WatcherUsername, watcherUN) == 0); //Check that the admin is actually the right one
+	mu_check(FindWatcherByUN(global, badUN) == NULL); //Check that bad username not found
+	freeMemory(global);
+}
+
+MU_TEST(test_FindStudentByUN){
+	//Finds student by username
+	char* studentUN = "isabeme"; //Good username - sould provide the right info
+	char* badUN = "Wo1v3r";//Bad username - should return NULL
+	//Loading file:
+	Global* global = InitDataBases();
+	mu_check(FindStudentByUN(global, studentUN) != NULL); //Check that the admin was found
+	mu_check(strcmp(FindStudentByUN(global, studentUN)->StudentUsername, studentUN) == 0); //Check that the admin is actually the right one
+	mu_check(FindStudentByUN(global, badUN) == NULL); //Check that bad username not found
+	freeMemory(global);
+}
+
+
 //Utilities suite
 
 MU_TEST_SUITE(Utilities){
 	MU_RUN_TEST(test_find_accessgroup);
+	MU_RUN_TEST(test_FindAdminByUN);
+	MU_RUN_TEST(test_FindWatcherByUN);
+	MU_RUN_TEST(test_FindStudentByUN);
 
 	MU_REPORT_SUITE();
 }
@@ -257,4 +297,100 @@ MU_TEST(test_create_task){
 MU_TEST_SUITE(Project_Suite){
 
 	MU_RUN_TEST(test_create_project);
+}
+
+//Structures suite tests
+
+MU_TEST(test_FindStudent_structures)
+{
+	//Finds student by ID
+	int studentID = 1001; //Good ID - sould provide the right info
+	int badID = 9999;//Bad ID - should return NULL
+	//Loading file:
+	Global* global = InitDataBases();
+	mu_check(FindStudent(global->StudentList, studentID) != NULL);//Check that the student was found
+	mu_check(FindStudent(global->StudentList, studentID)->StudentID == studentID); //Check that the student is actually the right one
+	mu_check(FindStudent(global->StudentList, badID) == NULL); //Check that bad username not found
+	freeMemory(global);
+}
+
+MU_TEST(test_FindWatcher_structures)
+{
+	//Finds wathcer by ID
+	int watcherID = 3002; //Good ID - sould provide the right info
+	int badID = 9999;//Bad ID - should return NULL
+	//Loading file:
+	Global* global = InitDataBases();
+	mu_check(FindWatcher(global->WatchersList, watcherID) != NULL);//Check that the watcher was found
+	mu_check(FindWatcher(global->WatchersList, watcherID)->WatcherID == watcherID); //Check that the watcher is actually the right one
+	mu_check(FindWatcher(global->WatchersList, badID) == NULL); //Check that bad username not found
+	freeMemory(global);
+}
+
+MU_TEST(test_FindAdmin_structures)
+{
+	//Finds admin by ID
+	int adminID = 2001; //Good ID - sould provide the right info
+	int badID = 9999;//Bad ID - should return NULL
+	//Loading file:
+	Global* global = InitDataBases();
+	mu_check(FindAdmin(global->AdminsList, adminID) != NULL);//Check that the admin was found
+	mu_check(FindAdmin(global->AdminsList, adminID)->AdminID == adminID); //Check that the admin is actually the right one
+	mu_check(FindAdmin(global->AdminsList, badID) == NULL); //Check that bad username not found
+	freeMemory(global);
+}
+
+/*
+Project *FindProject(Project* head, int ProjectID);
+Task *FindTask(Task* head, int TaskID);
+Quote *FindQuote(Quote* head, int QuoteID);
+*/
+
+MU_TEST(test_FindProject_structures)
+{
+	//Finds admin by ID
+	int adminID = 2001; //Good ID - sould provide the right info
+	int badID = 9999;//Bad ID - should return NULL
+	//Loading file:
+	Global* global = InitDataBases();
+	mu_check(FindAdmin(global->AdminsList, adminID) != NULL);//Check that the admin was found
+	mu_check(FindAdmin(global->AdminsList, adminID)->AdminID == adminID); //Check that the admin is actually the right one
+	mu_check(FindAdmin(global->AdminsList, badID) == NULL); //Check that bad username not found
+	freeMemory(global);
+}
+
+MU_TEST(test_FindTask_structures)
+{
+	//Finds admin by ID
+	int adminID = 2001; //Good ID - sould provide the right info
+	int badID = 9999;//Bad ID - should return NULL
+	//Loading file:
+	Global* global = InitDataBases();
+	mu_check(FindAdmin(global->AdminsList, adminID) != NULL);//Check that the admin was found
+	mu_check(FindAdmin(global->AdminsList, adminID)->AdminID == adminID); //Check that the admin is actually the right one
+	mu_check(FindAdmin(global->AdminsList, badID) == NULL); //Check that bad username not found
+	freeMemory(global);
+}
+
+MU_TEST(test_FindQuote_structures)
+{
+	//Finds admin by ID
+	int adminID = 2001; //Good ID - sould provide the right info
+	int badID = 9999;//Bad ID - should return NULL
+	//Loading file:
+	Global* global = InitDataBases();
+	mu_check(FindAdmin(global->AdminsList, adminID) != NULL);//Check that the admin was found
+	mu_check(FindAdmin(global->AdminsList, adminID)->AdminID == adminID); //Check that the admin is actually the right one
+	mu_check(FindAdmin(global->AdminsList, badID) == NULL); //Check that bad username not found
+	freeMemory(global);
+}
+
+
+MU_TEST_SUITE(Structures_Suite)
+{
+	MU_RUN_TEST(test_FindStudent_structures);
+	MU_RUN_TEST(test_FindWatcher_structures);
+	MU_RUN_TEST(test_FindAdmin_structures);
+
+	MU_REPORT_SUITE();
 }

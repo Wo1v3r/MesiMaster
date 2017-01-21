@@ -19,6 +19,32 @@ typedef struct Watcher Watcher;
 typedef struct Task Task;
 typedef struct Quote Quote;
 typedef struct Global Global;
+
+//struct function declarations 
+Student *FindStudent(Student* head, int StudentID); //Test written - Isabelle
+Admin *FindAdmin(Admin *head, int AdminID); //Test written - Isabelle
+Watcher *FindWatcher(Watcher* head, int WatcherID); //Test written - Isabelle
+Project *FindProject(Project* head, int ProjectID);
+Task *FindTask(Task* head, int TaskID);
+Quote *FindQuote(Quote* head, int QuoteID);
+Student* AddStudent(Student *studentHead, Student *addStudent);
+Admin* AddAdmin(Admin *adminHead, Admin *addAdmin);
+Watcher* AddWatcher(Watcher *watcherHead, Watcher *addWatcher);
+Project* AddProject(Project *projectHead, Project *addProject);
+Quote* AddQuote(Quote *QuoteHead, Quote *addQuote);
+Task *AddTask(Task *TasksHead, Task *addTask);
+Project *RemoveProjectFromList(Project *head, int deleteID);
+Student *RemoveStudentFromList(Student *head, int deleteID);
+Watcher *RemoveWatcherFromList(Watcher *head, int deleteID);
+Admin *RemoveAdminFromList(Admin *head, int deleteID);
+Quote *RemoveQuoteFromList(Quote *head, int deleteID);
+Task *RemoveTaskFromList(Task *head, int deleteID);
+void PrintStudentList(Student *StudentHead); //No tests needed
+void PrintAdminsList(Admin *head); //No tests needed
+void PrintWatcherList(Watcher *head); //No tests needed
+char* convertStatusToString(STATUS status);
+Task* findTaskInProject(Global* globalFile, Project* project, int taskID);
+int isStudentInProject(Project* project, int studentID);
 // structures
 typedef struct Student{
 	AccessGroup Group;
