@@ -218,8 +218,10 @@ int AdminMenu(Global* GlobalFile ,int adminID){
 			break;
 		case 5:
 			ShowUserDetails(GlobalFile);
+			break;
 		case 6:
 			UpdateDetails(GlobalFile, adminID);
+			break;
 		case 7:
 			PrintProjectsList(GlobalFile, adminID, ADMIN);
 			system("pause");
@@ -308,8 +310,9 @@ int WatcherMenu(Global* GlobalFile, int watcherID){
 		default:
 			printf("No such option!\n");
 			system("pause");
-			opt = -1;
 			}
+		opt = -1;
+
 	}
 	return 0;
 
