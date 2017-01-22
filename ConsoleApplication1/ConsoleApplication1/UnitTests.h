@@ -312,7 +312,7 @@ MU_TEST(test_delete_user){
 
 MU_TEST(test_delete_quote){
 	Global* global = InitDataBases();
-	int id = 1;
+	int id = 5000;
 	mu_check(FindQuote(global->QuotesList, id) != NULL);
 	DeleteQuote(global, id);
 	mu_check(FindQuote(global->QuotesList, id) == NULL);
@@ -330,7 +330,7 @@ MU_TEST(test_promote_user){
 	mu_check(FindAccessGroup(id) == 2);
 	PromoteUserToAdmin(global, id);
 	mu_check(FindAccessGroup((global->AdminRunID) - 1) == 2);
-	id = 3002;//Watcher
+	id = 3001;//Watcher
 	mu_check(FindAccessGroup(id) == 3);
 	PromoteUserToAdmin(global, id);
 	mu_check(FindAccessGroup((global->AdminRunID) - 1) == 2);
@@ -427,7 +427,7 @@ MU_TEST(test_create_task){
 	int noSuchUserID = 1058, studentID = 1001;
 	int taskID = 0;
 
-	Project *project = FindProject(global->ProjectsList, 4002); //Existing project - checked before this function
+	Project *project = FindProject(global->ProjectsList, 4001); //Existing project - checked before this function
 	mu_check((taskID = CreateNewTask(global, project, noSuchUserID, STUDENT, taskName)) == 0); //No such user
 	mu_check((taskID = CreateNewTask(global, project, studentID, BAD, taskName)) == 0); //No such user acces group
 	mu_check((taskID = CreateNewTask(global, project, studentID, STUDENT, taskName)) != 0); // Should pass and create new task
@@ -441,7 +441,7 @@ MU_TEST(test_create_task){
 MU_TEST(test_add_user_to_project){
 	int addStudent = 1, addWatcher = 2, Exit = 3, studentID = 1002, watcherID = 3002,doesNotExist = 1535;
 	Global* global = InitDataBases();
-	Project* project = FindProject(global->ProjectsList, 4002); //That project exists
+	Project* project = FindProject(global->ProjectsList, 4001); //That project exists
 	//Trying to exit, should return 1:
 	mu_check(addUserToProject(global, project, studentID, Exit) == 1);
 	//Trying to add a user that does not exist:
@@ -459,7 +459,7 @@ MU_TEST(test_change_task_status){
 	//int ChangeTaskStatus(Global* GlobalFile, Project* project, int userID, int accessGroup, int tasktest, int statustest); //Test written - Jonathan
 	Global* global = InitDataBases();
 	Project* project = FindProject(global->ProjectsList, 4000); //That projects exists for testing
-	int studentID = 1000, watcherID = 3001, badID = 1956, taskID = 6000;
+	int studentID = 1000, watcherID = 3000, badID = 1956, taskID = 6000;
 	Task* task = findTaskInProject(global, project, taskID);
 
 	//Trying to change status to Approved by student : should not work:
