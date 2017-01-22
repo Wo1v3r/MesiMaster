@@ -14,55 +14,58 @@ if you wish to run the programm as usual comment this whole file.
 //Init Suite tests:
 MU_TEST(test_init_student){
 	Student *check = initStudents();
-	mu_check(check->StudentID == 1);
+	mu_check(check->StudentID == 1000);
 	mu_check(strcmp(check->StudentUsername, "isabeme") == 0);
-	mu_check(strcmp(check->StudentPassword, "A1b") == 0);
-	mu_check(strcmp(check->StudentName, "izzie") == 0);
-	mu_check(strcmp(check->StudentSurename, "me") == 0);
-	mu_check(strcmp(check->StudentEmail, "ii@f") == 0);
-	mu_check(strcmp(check->StudentDepartment, "Mechanical") == 0);
+	mu_check(strcmp(check->StudentPassword, "AAbb12") == 0);
+	mu_check(strcmp(check->StudentName, "Isabelle") == 0);
+	mu_check(strcmp(check->StudentSurename, "Meif") == 0);
+	mu_check(strcmp(check->StudentEmail, "isabeme@sce.ac.il") == 0);
+	mu_check(strcmp(check->StudentDepartment, "Chemistry") == 0);
 	mu_check(check->StudentYear == 'b');
-	mu_check(strcmp(check->StudentActivityLog, "1002_SLog.txt") == 0);
+	mu_check(strcmp(check->StudentActivityLog, "1000_SLog.txt") == 0);
 	mu_check(check->Group == 1);
-	mu_check(check->StudentProjectsAmount == 0);
-	mu_check(check->StudentTasksAmount == 0);
-	mu_check(strcmp(check->StudentMessages, "1002_SMess.txt") == 0);
+	mu_check(check->StudentProjectsAmount == 1);
+	mu_check(check->ProjectIDS[0] == 4000);
+	mu_check(check->StudentTasksAmount == 2);
+	mu_check(strcmp(check->StudentMessages, "1000_SMess.txt") == 0);
 	freeStudents(check);
 }
 
 MU_TEST(test_init_projects){
 	Project *check = initProjects();
-	mu_check(check->ProjectID == 6);
-	mu_check(strcmp(check->ProjectName, "projectest") == 0);
-	mu_check(strcmp(check->ProjectCreatorName, "me") == 0);
-	mu_check(strcmp(check->ProjectActivityLogs, "none") == 0);
+	mu_check(check->ProjectID == 4000);
+	mu_check(strcmp(check->ProjectName, "meistertask") == 0);
+	mu_check(strcmp(check->ProjectCreatorName, "Isabelle") == 0);
+	mu_check(strcmp(check->ProjectActivityLogs, "4000_ProjectActivityLog.txt") == 0);
 	mu_check(check->ProjectUsersAmount == 2);
-	mu_check(check->StudentsIDS[0] == 3);
-	mu_check(check->StudentsIDS[1] == 4);
-	mu_check(check->ProjectTasksAmount == 1);
-	mu_check(check->TasksIDS[0] == 1);
-	mu_check(strcmp(check->ProjectMessages, "6_Pmsg.txt") == 0);
+	mu_check(check->StudentsIDS[0] == 1000);
+	mu_check(check->StudentsIDS[1] == 1001);
+	mu_check(check->ProjectTasksAmount == 3);
+	mu_check(check->TasksIDS[0] == 6000);
+	mu_check(check->TasksIDS[1] == 6001);
+	mu_check(check->TasksIDS[2] == 6002);
+	mu_check(strcmp(check->ProjectMessages, "4000_ProjectMessages.txt") == 0);
 	freeProjects(check);
 }
 
 MU_TEST(test_init_watchers){
 	Watcher *check = initWatchers();
-	mu_check(check->WatcherID == 2001);
-	mu_check(strcmp(check->WatcherUsername, "watcher") == 0);
-	mu_check(strcmp(check->WatcherPassword, "jipwa#$%sfjip") == 0);
-	mu_check(strcmp(check->WatcherName, "DUDU") == 0);
-	mu_check(strcmp(check->WatcherSurename, "BEN-HATUL") == 0);
-	mu_check(strcmp(check->WatcherEmail, "DUDU@gmail.com") == 0);
+	mu_check(check->WatcherID == 3000);
+	mu_check(strcmp(check->WatcherUsername, "hHasidim") == 0);
+	mu_check(strcmp(check->WatcherPassword, "pasS987") == 0);
+	mu_check(strcmp(check->WatcherName, "Hadas") == 0);
+	mu_check(strcmp(check->WatcherSurename, "Hasidim") == 0);
+	mu_check(strcmp(check->WatcherEmail, "hadas@sce.ac.il") == 0);
 	mu_check(check->Group == 3);
 	mu_check(check->WatcherReceiveChanges == 0);
 	mu_check(check->WatcherProjectsAmount == 1);
-	mu_check(check->ProjectIDS[0] == 6);
+	mu_check(check->ProjectIDS[0] == 4001);
 	freeWatchers(check);
 }
 
 MU_TEST(test_init_admins){
 	Admin *check = initAdmins();
-	mu_check(check->AdminID == 1001);
+	mu_check(check->AdminID == 2000);
 	mu_check(strcmp(check->AdminUsername, "Dubi") == 0);
 	mu_check(strcmp(check->AdminPassword, "purr") == 0);
 	mu_check(strcmp(check->AdminName, "Kuki") == 0);
@@ -73,30 +76,30 @@ MU_TEST(test_init_admins){
 
 MU_TEST(test_init_tasks){
 	Task *check = initTasks();
-	mu_check(check->TaskID == 1);
-	mu_check(strcmp(check->TaskName, "Check") == 0);
-	mu_check(check->TaskStatus == 1);
-	mu_check(strcmp(check->TaskCreatorName, "ME") == 0);
+	mu_check(check->TaskID == 6000);
+	mu_check(strcmp(check->TaskName, "do something please #1") == 0);
+	mu_check(check->TaskStatus == 0);
+	mu_check(strcmp(check->TaskCreatorName, "Isabelle") == 0);
 	freeTasks(check);
 }
 
 MU_TEST(test_init_quotes){
 	Quote *check = initQuotes();
-	mu_check(check->QuoteID == 1);
-	mu_check(strcmp(check->Quote, "master check quote") == 0);
-	mu_check(strcmp(check->QuoteAuthor, "me") == 0);
+	mu_check(check->QuoteID == 5000);
+	mu_check(strcmp(check->Quote, "You have to think anyway, so why not think big? ") == 0);
+	mu_check(strcmp(check->QuoteAuthor, "D.Trump") == 0);
 	freeQuotes(check);
 }
 
 MU_TEST(test_init_global){
 	Global *check = initGlobal();
-	mu_check(check->StudentRunID == 4);
-	mu_check(check->AdminRunID == 1003);
-	mu_check(check->WatcherRunID == 2003);
-	mu_check(check->ProjectRunID == 4000);
-	mu_check(check->QuoteRunID == 5000);
-	mu_check(check->TaskRunID == 6000);
-	mu_check(strcmp(check->GlobalMessages, "globalMsg.txt") == 0);
+	mu_check(check->StudentRunID == 1004);
+	mu_check(check->AdminRunID == 2003);
+	mu_check(check->WatcherRunID == 3002);
+	mu_check(check->ProjectRunID == 4002);
+	mu_check(check->QuoteRunID == 5025);
+	mu_check(check->TaskRunID == 6006);
+	mu_check(strcmp(check->GlobalMessages, "Good Luck on the exams everyone!") == 0);
 	free(check);
 }
 
