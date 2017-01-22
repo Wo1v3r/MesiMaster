@@ -37,6 +37,7 @@ Watcher* FindWatcherByUN(Global *g, char *username); //Test written - Isabelle
 Admin *StudentToAdmin(Global *GlobalFile, Student *student);
 void UpdateDetails(Global* GlobalFile, int userID);
 Admin * WatcherToAdmin(Global *GlobalFile, Watcher *watcher);
+void Output(char* message); // No test needed , prints and prompts for enter
 
 //Log functions
 void PrintStudentLog(Student* student);//No test needed
@@ -1366,8 +1367,7 @@ int DeleteUser(Global *GlobalFile, int id)
 			}
 			else{
 				if (flag) {
-					puts("Watcher not found in database");
-					system("pause");
+					Output("Watcher not found in database");
 				}
 				return 0;
 
@@ -1382,29 +1382,28 @@ int DeleteUser(Global *GlobalFile, int id)
 			}
 			else{
 				if (flag) {
-					puts("Student not found in database");
-					system("pause");
+					Output("Student not found in database");
 				}
 				return 0;
 			}
 			break;
 		case ADMIN:
-			admin = FindAdmin(GlobalFile->AdminsList, ID);
+			Output("Admin cannot be deleted");
+			return 0;
+		/*	admin = FindAdmin(GlobalFile->AdminsList, ID);
 			if (admin)
 				GlobalFile->AdminsList = RemoveAdminFromList(GlobalFile->AdminsList, ID);
 			else{
 				if (flag) {
-					puts("Admin not found in database"); 
-					system("pause");
+					Output("Admin not found in database"); 
 				}
 				return 0;
 			}
-			break;
+			break;*/
 
 		default:
 			if (flag){
-				puts("Error : No such user group");
-				system("pause");
+				Output("Error : No such user group");
 			}
 			return 0;
 		}
@@ -1418,7 +1417,7 @@ int DeleteUser(Global *GlobalFile, int id)
 	}
 
 
-	system("pause");
+	Output("User(s) successfuly deleted");
 	return 1;
 }
 
@@ -2143,4 +2142,14 @@ int Login(Global *g, char* UN, char* PW)
 		
 }
 
+
+void Output(char* message){
+	//Prints , prompts for enter, clears screen and buffer:
+	char junk[50];
+	puts(message);
+	puts("Press ENTER to continue");
+	fflush(stdin);
+	gets(junk);
+	system("cls");
+}
 #endif
