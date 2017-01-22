@@ -200,6 +200,7 @@ int AdminMenu(Global* GlobalFile ,int adminID){
 		printf("9) Add a global message\n");
 		printf("10) Manage Quotes\n");
 		printf("11) Exit Mesimaster\n");
+		fflush(stdin);
 		scanf("%d", &opt);
 		switch (opt){
 		case 0:
@@ -379,7 +380,7 @@ void LoginMenu(Global* GlobalFile){
 			//If user chose to exit to upper menu,Setting opt to -1 to reset the menu
 			system("cls");
 			opt = -1;
-			system("pause");
+			//system("pause");
 		}
 		else{
 			//If user chose to exit completely, exiting mesimaster:
