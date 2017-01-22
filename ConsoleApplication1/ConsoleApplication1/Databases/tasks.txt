@@ -1,2 +1,18 @@
-6004 newTask1 0 Isabelle
-6005 newTask2 0 Johnathan
+6000
+do something please #1
+0 Isabelle
+6001
+do something please #2
+0 Isabelle
+6002
+do something please #3
+0 Alexey
+6003
+please do something #4
+0 Johnathan
+6004
+please do something #5
+0 Liran
+6005
+please do something #6
+0 Liran
