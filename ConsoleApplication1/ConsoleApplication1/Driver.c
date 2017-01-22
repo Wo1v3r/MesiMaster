@@ -76,6 +76,7 @@ int ProjectMenu(Global* GlobalFile , Project* project, int accessGroup, int user
 			break;
 		case 5:
 			addUserToProject(GlobalFile, project,0,0);
+			Output("");
 			break;
 		case 6:
 			ChangeTaskStatus(GlobalFile, project, userID, accessGroup,0,0);

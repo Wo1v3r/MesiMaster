@@ -643,7 +643,7 @@ int CreateNewProject(Global* GlobalFile,int userID, AccessGroup userGroup,char* 
 
 // 42 - Add user to project  , done, ready for testing
 int addUserToProject(Global *GlobalFile, Project *newProject , int userID , int watcherOrStudent)
-{
+{	
 	BOOL flag = TRUE;
 	FILE *file = fopen(newProject->ProjectActivityLogs,"a");
 	Student *student=NULL;
@@ -652,6 +652,7 @@ int addUserToProject(Global *GlobalFile, Project *newProject , int userID , int 
 	int   i, ProjectUsersIDNewSize, ID;
 	int *UsersID;	//create new increased array
 
+	//First making sure user is not already in project:
 
 	while (flag)
 	{
@@ -675,7 +676,12 @@ int addUserToProject(Global *GlobalFile, Project *newProject , int userID , int 
 				printf("\nStudent ID :");
 				scanf("%d", &ID);
 			}
-			
+			for (i = 0; i < newProject->ProjectUsersAmount; i++) if (newProject->StudentsIDS[i] == ID){
+
+				fclose(file);
+				Output("User already in project");
+				return 0;
+			}
 			student = FindStudent(GlobalFile->StudentList, ID);
 			if (student)	// student found
 			{
@@ -707,6 +713,12 @@ int addUserToProject(Global *GlobalFile, Project *newProject , int userID , int 
 				fflush(stdin);
 				printf("\nWatcher ID :");
 				scanf("%d", &ID);
+			}
+			for (i = 0; i < newProject->ProjectUsersAmount; i++) if (newProject->StudentsIDS[i] == ID){
+
+				fclose(file);
+				Output("User already in project");
+				return 0;
 			}
 			watcher = FindWatcher(GlobalFile->WatchersList, ID);
 			if (watcher)	// watcher found
