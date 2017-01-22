@@ -409,7 +409,7 @@ int main()
 	system("cls");
 	if (tests == 1){
 		//MU_RUN_SUITE(Utilities);
-		//MU_RUN_SUITE(InitTest);
+		MU_RUN_SUITE(InitTest);
 		//MU_RUN_SUITE(Login_Suite);
 		//MU_RUN_SUITE(Admin_Suite);
 		//MU_RUN_SUITE(Watcher_Suite);
