@@ -1,2 +1,2 @@
-3000 hHasidim pasS987 Hadas Hasidim hadas@sce.ac.il 3 0 0 
+3000 hHasidim pasS987 Hadas Hasidim hadas@sce.ac.il 3 0 1 4001
 3001 davidBI Pass135 David Ben-Ishay david@sce.ac.il 3 0 0 

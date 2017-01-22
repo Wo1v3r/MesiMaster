@@ -943,7 +943,7 @@ void PrintProjectsListWatcher(Global *GlobalFile, int UserID, AccessGroup group)
 		int arraySize = sizeof(ProjectsIDS) / sizeof(int);
 		puts("List of your projects :");
 		printf("ID\tName\tUsers\tTasks\n");
-		for (i = 0; i < arraySize; i++)
+		for (i = 0; i < arraySize; i++) 
 		{
 			current = FindProject(GlobalFile->ProjectsList, watcher->ProjectIDS[i]);
 			if (current)
