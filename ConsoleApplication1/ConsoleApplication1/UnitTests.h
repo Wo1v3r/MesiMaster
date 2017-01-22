@@ -112,7 +112,6 @@ MU_TEST_SUITE(InitTest){
 	MU_RUN_TEST(test_init_tasks);
 	MU_RUN_TEST(test_init_quotes);
 	MU_RUN_TEST(test_init_global);
-	MU_REPORT_SUITE();
 }
 
 
@@ -171,8 +170,6 @@ MU_TEST_SUITE(Utilities){
 	MU_RUN_TEST(test_FindAdminByUN);
 	MU_RUN_TEST(test_FindWatcherByUN);
 	MU_RUN_TEST(test_FindStudentByUN);
-
-	MU_REPORT_SUITE();
 }
 
 //Register suite tests:
@@ -296,8 +293,6 @@ MU_TEST(test_check_if_user_exists){
 MU_TEST_SUITE(Login_Suite){
 	MU_RUN_TEST(test_check_password);
 	MU_RUN_TEST(test_check_if_user_exists);
-
-	MU_REPORT_SUITE();
 }
 
 
@@ -513,7 +508,7 @@ MU_TEST(test_FindStudent_structures)
 MU_TEST(test_FindWatcher_structures)
 {
 	//Finds wathcer by ID
-	int watcherID = 3002; //Good ID - sould provide the right info
+	int watcherID = 3000; //Good ID - sould provide the right info
 	int badID = 9999;//Bad ID - should return NULL
 	//Loading file:
 	Global* global = InitDataBases();
@@ -526,7 +521,7 @@ MU_TEST(test_FindWatcher_structures)
 MU_TEST(test_FindAdmin_structures)
 {
 	//Finds admin by ID
-	int adminID = 2001; //Good ID - sould provide the right info
+	int adminID = 2000; //Good ID - sould provide the right info
 	int badID = 9999;//Bad ID - should return NULL
 	//Loading file:
 	Global* global = InitDataBases();
@@ -539,7 +534,7 @@ MU_TEST(test_FindAdmin_structures)
 MU_TEST(test_FindProject_structures)
 {
 	//Finds project by ID
-	int projID = 4002; //Good ID - sould provide the right info
+	int projID = 4001; //Good ID - sould provide the right info
 	int badID = 9999;//Bad ID - should return NULL
 	//Loading file:
 	Global* global = InitDataBases();
@@ -565,7 +560,7 @@ MU_TEST(test_FindTask_structures)
 MU_TEST(test_FindQuote_structures)
 {
 	//Finds quote by ID
-	int quoteID = 1; //Good ID - sould provide the right info
+	int quoteID = 5020; //Good ID - sould provide the right info
 	int badID = 9999;//Bad ID - should return NULL
 	//Loading file:
 	Global* global = InitDataBases();
@@ -815,8 +810,8 @@ MU_TEST(test_RemoveTaskFromList)
 MU_TEST(test_findTaskInProject)
 {
 	Global* global = InitDataBases();
-	mu_check(findTaskInProject(global, FindProject(global->ProjectsList, 4000), 5000) != NULL); //check that returns smthn
-	mu_check(findTaskInProject(global, FindProject(global->ProjectsList, 4000), 5000)->TaskID == 5000); //check that returns the right thing
+	mu_check(findTaskInProject(global, FindProject(global->ProjectsList, 4000), 6001) != NULL); //check that returns smthn
+	mu_check(findTaskInProject(global, FindProject(global->ProjectsList, 4000), 6001)->TaskID == 6001); //check that returns the right thing
 	mu_check(findTaskInProject(global, FindProject(global->ProjectsList, 4000), 5007) == NULL); // check that returns null if bad id
 	freeMemory(global);
 }
@@ -831,8 +826,8 @@ MU_TEST(test_convertStatusToString)
 MU_TEST(test_isStudentInProject)
 {
 	Global* global = InitDataBases();
-	mu_check(isStudentInProject(FindProject(global->ProjectsList, 4001), 1001) == 1); //right student and project
-	mu_check(isStudentInProject(FindProject(global->ProjectsList, 4001), 1000) == 0); // right project wrong student
+	mu_check(isStudentInProject(FindProject(global->ProjectsList, 4000), 1001) == 1); //right student and project
+	mu_check(isStudentInProject(FindProject(global->ProjectsList, 4001), 9999) == 0); // right project wrong student
 	freeMemory(global);
 }
 
@@ -859,6 +854,4 @@ MU_TEST_SUITE(Structures_Suite)
 	MU_RUN_TEST(test_RemoveTaskFromList);
 	MU_RUN_TEST(test_convertStatusToString);
 	MU_RUN_TEST(test_isStudentInProject);
-
-	MU_REPORT_SUITE();
 }
