@@ -401,7 +401,7 @@ void UpdateDetails(Global* GlobalFile, int userID){
 	Admin* admin = NULL;
 	Student* student = NULL;
 	BOOL passCorrectness;
-	char *name, *surname, input,*password,*tempPass;
+	char *name, *surname, input,*password,tempPass[31];
 	int AG = FindAccessGroup(userID);
 
 	switch (AG){
@@ -427,6 +427,7 @@ void UpdateDetails(Global* GlobalFile, int userID){
 		break;
 	}
 
+	_flushall();
 	printf("\nDo you want to change your first name?(y/n)\n");
 	input = getchar();
 	if (input == 'y') {
@@ -435,6 +436,7 @@ void UpdateDetails(Global* GlobalFile, int userID){
 		input = 'n';
 	}
 
+	_flushall();
 	printf("Do you want to change your last name?(y/n)\n");
 	input = getchar();
 	if (input == 'y') {
@@ -443,6 +445,7 @@ void UpdateDetails(Global* GlobalFile, int userID){
 		input = 'n';
 	}
 
+	_flushall();
 	printf("Do you want to change your password?(y/n)\n");
 	input = getchar();
 	if (input == 'y') {
@@ -450,9 +453,12 @@ void UpdateDetails(Global* GlobalFile, int userID){
 		scanf("%s", &tempPass);
 		passCorrectness = CheckPassword(tempPass);
 		if (passCorrectness)
-			password = tempPass;
+			strcpy(password,tempPass);
 		input = 'n';
 	}
+	_flushall();
+
+	printf("Details changed!\n");
 	system("pause");
 }
 
@@ -2127,9 +2133,12 @@ int Login(Global *g, char* UN, char* PW)
 				return admLogin->AdminID;
 		}
 	}
-	if (flag == TRUE)
+	if (flag == TRUE){
 		printf("You have failed to enter you password correctly 3 times. Login failed.\n");
+	}
 	return 0;
+
+		
 }
 
 #endif

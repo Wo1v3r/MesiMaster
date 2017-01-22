@@ -360,8 +360,10 @@ void LoginMenu(Global* GlobalFile){
 		system("cls");
 		if (ID) accessGroup = FindAccessGroup(ID);
 		switch (accessGroup){
-		case 0: //This should not run but here for safety reasons for the meantime
-			opt = -1;
+		case 0: //User tried to enter a wrong password three times in a row, exiting the program
+			printf("You failed to log in 3 times in a row, exiting the program, a report was sent to the system\n");
+			Exit(GlobalFile);
+			system("pause");
 			break;
 		case 1:
 			menuReturn = StudentMenu(GlobalFile, ID);
@@ -400,15 +402,15 @@ int main()
 	scanf("%d", &tests);
 	system("cls");
 	if (tests == 1){
-		MU_RUN_SUITE(Utilities);
-		MU_RUN_SUITE(InitTest);
-		MU_RUN_SUITE(Login_Suite);
-		MU_RUN_SUITE(Admin_Suite);
-		MU_RUN_SUITE(Watcher_Suite);
-		MU_RUN_SUITE(Project_Suite);
-		MU_RUN_SUITE(Structures_Suite);
-		MU_RUN_SUITE(Register_Suite);
-		MU_RUN_SUITE(Login_func_Suite);
+		//MU_RUN_SUITE(Utilities);
+		//MU_RUN_SUITE(InitTest);
+		//MU_RUN_SUITE(Login_Suite);
+		//MU_RUN_SUITE(Admin_Suite);
+		//MU_RUN_SUITE(Watcher_Suite);
+		//MU_RUN_SUITE(Project_Suite);
+		//MU_RUN_SUITE(Structures_Suite);
+		//MU_RUN_SUITE(Register_Suite);
+		//MU_RUN_SUITE(Login_func_Suite);
 		system("pause");
 		return;
 	}
