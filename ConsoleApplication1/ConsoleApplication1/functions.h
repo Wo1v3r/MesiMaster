@@ -364,6 +364,8 @@ void PrintActivityLog(char* filePath){
 
 	while (fgets(BUFFER, 400, file)) printf("%s\n", BUFFER);
 	fclose(file);
+
+	Output("Activity log printed!");
 }
 
 void PrintProjectDetails(Global* GlobalFile, Project* project){
@@ -428,7 +430,7 @@ void UpdateDetails(Global* GlobalFile, int userID){
 		break;
 	}
 
-	_flushall();
+	fflush(stdin);
 	printf("\nDo you want to change your first name?(y/n)\n");
 	input = getchar();
 	if (input == 'y') {
@@ -437,7 +439,7 @@ void UpdateDetails(Global* GlobalFile, int userID){
 		input = 'n';
 	}
 
-	_flushall();
+	fflush(stdin);
 	printf("Do you want to change your last name?(y/n)\n");
 	input = getchar();
 	if (input == 'y') {
@@ -446,7 +448,7 @@ void UpdateDetails(Global* GlobalFile, int userID){
 		input = 'n';
 	}
 
-	_flushall();
+	fflush(stdin);
 	printf("Do you want to change your password?(y/n)\n");
 	input = getchar();
 	if (input == 'y') {
@@ -455,12 +457,11 @@ void UpdateDetails(Global* GlobalFile, int userID){
 		passCorrectness = CheckPassword(tempPass);
 		if (passCorrectness)
 			strcpy(password,tempPass);
+		else Output("Password is invalid, Keeping old password");
 		input = 'n';
 	}
-	_flushall();
 
-	printf("Details changed!\n");
-	system("pause");
+	Output("Details changed!\n");
 }
 
 
@@ -1164,12 +1165,6 @@ void PrintUsersLists(Global* GlobalFile)
 	puts("Watchers :");
 	PrintWatcherList(GlobalFile->WatchersList);
 	puts("");
-
-	//This is a replacement for system pause , need to implement it in all the functions
-	getchar();
-	getchar();
-	//system("pause");
-
 }
 
 // print all tasks with ID's from received array, done, ready for testing
@@ -1237,7 +1232,7 @@ void ShowUserDetails(Global *GlobalFile)
 	fflush(stdin);
 	scanf("%d",&ID);
 	if (ID < 1000 || ID >=4000)
-		puts("incorrect ID , correct range 1000-3999");
+		Output("incorrect ID , correct range 1000-3999");
 	else if (ID >= 1000 && ID <= 1999)
 	{
 		student = FindStudent(GlobalFile->StudentList, ID);
@@ -1250,7 +1245,7 @@ void ShowUserDetails(Global *GlobalFile)
 			
 		}
 		else
-			puts("Student with this id not found");
+			Output("Student with this id not found");
 
 	}
 	else if (ID >= 2000 && ID <= 2999)
@@ -1262,7 +1257,7 @@ void ShowUserDetails(Global *GlobalFile)
 			printf("\nUsername : %s\nPassword :%s\nName : %s\n%Surename\n\n", admin->AdminUsername, admin->AdminPassword, admin->AdminName, admin->AdminSurename);
 		}
 		else
-			puts("Admin with this ID not found");
+			Output("Admin with this ID not found");
 
 	}
 	else if (ID >= 3000 && ID <= 3999)
@@ -1274,7 +1269,7 @@ void ShowUserDetails(Global *GlobalFile)
 			printf("Username : %s\nPassword :%s\nName : %s\n%Surename\nEmail : %s\nProjects Amount : %d\n\n", watcher->WatcherUsername, watcher->WatcherPassword, watcher->WatcherName, watcher->WatcherSurename, watcher->WatcherProjectsAmount);
 		}
 		else
-			puts("Watcher with this ID not found");
+			Output("Watcher with this ID not found");
 	}
 
 	//THIS INDUCES BUGS, REMOVING IT FOR NOW.. JONATHAN
@@ -1287,9 +1282,6 @@ void ShowUserDetails(Global *GlobalFile)
 	//	Exit(GlobalFile);											//////// check correct option for this
 	//else
 	//	puts("Incorrect choice, returning to previous menu");
-
-	system("pause");
-	fflush(stdin);
 }
 
 
