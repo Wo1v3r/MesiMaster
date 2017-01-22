@@ -873,6 +873,7 @@ void PrintProjectsList(Global *GlobalFile, int UserID, AccessGroup group)
 		admin = FindAdmin(GlobalFile->AdminsList, UserID);
 		if (!admin) return ;
 		adminFlag = 1;
+		current = GlobalFile->ProjectsList;
 		break;
 
 	case WATCHER:
@@ -899,6 +900,7 @@ void PrintProjectsList(Global *GlobalFile, int UserID, AccessGroup group)
 				current->ProjectName,
 				current->ProjectUsersAmount,
 				current->ProjectTasksAmount);
+			current = current->ProjectNext;
 		}
 	}
 	else{
