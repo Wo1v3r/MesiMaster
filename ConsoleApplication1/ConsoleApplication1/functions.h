@@ -822,7 +822,7 @@ int CreateNewTask(Global *GlobalFile, Project *project,int UserID,AccessGroup gr
 
 	// add new task to global list of Tasks
 	GlobalFile->TaskList = AddTask(GlobalFile->TaskList, newTask);
-	printf("%s created task \" %s\"\n",newTask->TaskName);
+	printf("%s created task \"%s\"\n",newTask->TaskCreatorName, newTask->TaskName);
 
 	// add creation of task to project log
 	printLogToFile(project->ProjectActivityLogs, log);
