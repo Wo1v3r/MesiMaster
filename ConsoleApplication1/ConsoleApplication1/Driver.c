@@ -408,15 +408,15 @@ int main()
 	scanf("%d", &tests);
 	system("cls");
 	if (tests == 1){
-		//MU_RUN_SUITE(Utilities);
+		MU_RUN_SUITE(Utilities);
 		//MU_RUN_SUITE(InitTest);
 		//MU_RUN_SUITE(Login_Suite);
 		//MU_RUN_SUITE(Admin_Suite);
 		//MU_RUN_SUITE(Watcher_Suite);
 		//MU_RUN_SUITE(Project_Suite);
 		//MU_RUN_SUITE(Structures_Suite);
-		//MU_RUN_SUITE(Register_Suite);
-		//MU_RUN_SUITE(Login_func_Suite);
+		MU_RUN_SUITE(Register_Suite);
+		MU_RUN_SUITE(Login_func_Suite);
 		Output("Tests over, closing program, relaunch to choose between tests\mesimaster");
 		return;
 	}

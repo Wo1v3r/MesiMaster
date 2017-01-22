@@ -138,7 +138,7 @@ MU_TEST(test_FindAdminByUN){
 
 MU_TEST(test_FindWatcherByUN){
 	//Finds watcher by username
-	char* watcherUN = "liranr"; //Good username - sould provide the right info
+	char* watcherUN = "davidBI"; //Good username - sould provide the right info
 	char* badUN = "Wo1v3r";//Bad username - should return NULL
 	//Loading file:
 	Global* global = InitDataBases();
@@ -182,13 +182,13 @@ MU_TEST(test_student_register){
 	mu_check(StudentRegister(global, "Jonathan","Leon", "Johnleon24", "aab", "johnleon24@gmail.com", "Software", '2') == 0);
 
 	//Trying to register a student with a taken username:
-	mu_check(StudentRegister(global, "Jonathan", "Leon", "John", "A1b", "johnleon24@gmail.com", "Software", '2') == 0);
+	mu_check(StudentRegister(global, "Jonathan", "Leon", "johnnyL", "A1b", "johnleon24@gmail.com", "Software", '2') == 0);
 
 	//Trying to register a student with valid input:
 	mu_check(StudentRegister(global, "Jonathan", "Leon", "Johnleon24", "A1b", "johnleon24@gmail.com", "Software", '2') != 0);
 
 	//Checking if that user exists:
-	mu_check(FindStudentByUN(global, "John") != NULL);
+	mu_check(FindStudentByUN(global, "Johnleon24") != NULL);
 
 	freeMemory(global);
 }
@@ -220,7 +220,7 @@ MU_TEST(test_watcher_register){
 	mu_check(WatcherRegister(global, "Peter", "Parker", "Spiderman", "aab", "spiderman@marvel.com") == 0);
 
 	//Trying to register a watcher with a taken username:
-	mu_check(WatcherRegister(global, "Peter", "Parker", "liranr", "Aa1", "spiderman@marvel.com") == 0);
+	mu_check(WatcherRegister(global, "Peter", "Parker", "davidBI", "Aa1", "spiderman@marvel.com") == 0);
 
 	//Trying to register a watcher with valid input:
 	mu_check(WatcherRegister(global, "Peter", "Parker", "Spiderman", "Aa1", "spiderman@marvel.com") != 0);
@@ -240,11 +240,11 @@ MU_TEST(test_login){
 	//admin check
 	mu_check(Login(global, "Dubi", "purr") == 2000);
 	//watcher check
-	mu_check(Login(global, "watcher", "jipwa#$%sfjip") == 3001);
+	mu_check(Login(global, "davidBI", "EErrDD1") == 3001);
 	//student check
-	mu_check(Login(global, "alex", "Az1") == 1003);
+	mu_check(Login(global, "johnnyL", "eLr45e") == 1002);
 	//bad check username
-	mu_check(Login(global, "asdbfdgsdfg", "asd") == 0);
+	mu_check(Login(global, "asdbfdgsdfg", "asd") == -1);
 	//bad check password
 	mu_check(Login(global, "Dubi", "asd") == 0);
 	freeMemory(global);
