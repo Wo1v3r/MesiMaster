@@ -280,8 +280,8 @@ MU_TEST(test_check_password){
 MU_TEST(test_check_if_user_exists){
 	//Checks if user exists by username, we will provide with both options:
 	char* adminUN = "Dubi";
-	char* studentUN = "alex";
-	char* watcherUN = "watcher";
+	char* studentUN = "johnnyL";
+	char* watcherUN = "davidBI";
 	char* badUN = "Wo1v3r";
 	//Loading file:
 	Global* global = InitDataBases();
