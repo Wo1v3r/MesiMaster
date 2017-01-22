@@ -1041,10 +1041,12 @@ void AddGlobalMessage(Global* GlobalFile, char* msg){
 		} while (strlen(temp) > 255);
 		strcpy(GlobalFile->GlobalMessages, temp);
 	}
-	else
+	else{
 		strcpy(GlobalFile->GlobalMessages, msg);
-
-	//system("pause");
+		return;
+	}
+	printf("Global message added!\n");
+	system("pause");
 }
 
 // Quotes funcs start, done, ready to testing
