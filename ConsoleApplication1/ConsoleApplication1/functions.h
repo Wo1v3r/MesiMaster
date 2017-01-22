@@ -1682,7 +1682,7 @@ int AdminRegister(Global *GlobalFile,char* nameTest, char* surnameTest , char* u
 	}
 	newAdmin->Group = ADMIN;
 
-	AddAdmin(GlobalFile->AdminsList, newAdmin);	// add to AdminsList
+	GlobalFile->AdminsList = AddAdmin(GlobalFile->AdminsList, newAdmin);	// add to AdminsList
 	(GlobalFile->AdminRunID)++;
 
 	if (!nameTest)system("pause");
@@ -1898,7 +1898,7 @@ int StudentRegister(Global *g,char* nameTest,char* surnameTest, char* unTest, ch
 	strcpy(newStudent->StudentMessages, stringID); //insert id string to messages string
 	strcat(newStudent->StudentMessages, "_SMess.txt"); // cat the rest of the file name
 
-	AddStudent(g->StudentList, newStudent);
+	g->StudentList = AddStudent(g->StudentList, newStudent);
 	(g->StudentRunID)++;
 	return newStudent->StudentID;
 }
@@ -1978,7 +1978,7 @@ int WatcherRegister(Global *g,char* nameTest, char* surnameTest, char* unTest, c
 	newWatcher->WatcherProjectsAmount = 0;
 	newWatcher->WatcherReceiveChanges = FALSE;
 
-	AddWatcher(g->WatchersList, newWatcher);
+	g->WatchersList = AddWatcher(g->WatchersList, newWatcher);
 	(g->WatcherRunID)++;
 	return newWatcher->WatcherID;
 }

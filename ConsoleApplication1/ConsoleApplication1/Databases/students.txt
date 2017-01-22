@@ -1,4 +1,4 @@
-1003 alex Az1 alexey sil asd Soft A 1003_SLog.txt 1 1 4003 0 1003_SMess.txt
-1000 isabeme A1b izzie me ii@f Mechanical b 1002_SLog.txt 1 0 0 1002_SMess.txt
-1001 John pass123 Michael Leon h4x0r@gmail.com Software a 4_Slog.txt 1 1 6000 0 4_Smsg.txt
-1002 John pass123 Michael Leon h4x0r@gmail.com Software a 3_Slog.txt 1 1 6001 0 3_Smsg.txt
+1000 isabeme AAbb12 Isabelle Meif isabeme@sce.ac.il Chemistry b 1000_SLog.txt 1 1 4000 0 1000_SMess.txt
+1001 alexsi jjK23 Alexey Silyuk alexey@sce.ac.il SoftwareEng. a 1001_SLog.txt 1 1 4000 0 1001_SMess.txt
+1002 johnnyL eLr45e Johnathan Leon johnny@sce.ac.il Electronics a 1002_SLog.txt 1 0 0 1002_SMess.txt
+1003 liranRo gg54$F Liran Rotenberg liran@sce.ac.il SocialSciences c 1003_SLog.txt 1 0 0 1003_SMess.txt
