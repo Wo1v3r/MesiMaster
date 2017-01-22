@@ -1190,8 +1190,6 @@ void PrintTasksByID(Task *head, int indexes[], int size, char *creator)
 	}
 	if (CreatedTasks == 0)
 		puts("User not created any task in this project");
-
-	system("pause");
 }
 
 // print projects by ID's array, done, ready for testing
@@ -1214,8 +1212,6 @@ void PrintProjectsByID(Global *GlobalFile, int indexes[],int size,char *creator)
 			PrintTasksByID(GlobalFile->TaskList, current->TasksIDS, current->ProjectTasksAmount,creator);
 		}
 	}
-
-	system("pause");
 }
 
 // print all users in system, gives option to chooce user for more information, done, ready for testing
