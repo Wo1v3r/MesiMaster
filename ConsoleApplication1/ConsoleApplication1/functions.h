@@ -1850,7 +1850,7 @@ int StudentRegister(Global *g,char* nameTest,char* surnameTest, char* unTest, ch
 			printf("Enter your desired password: (Has to be less then 30 characters, and contain\n");
 			printf("at least one digit, one upper case letter, one lower case letter)\n");
 			scanf("%s", newStudent->StudentPassword);
-		} strcpy(newStudent->StudentPassword, passTest);
+		} else strcpy(newStudent->StudentPassword, passTest);
 		if (CheckPassword(newStudent->StudentPassword) == FALSE)
 		{
 			if (!nameTest)printf("This password is invalid.\n You need to try again.\n");
