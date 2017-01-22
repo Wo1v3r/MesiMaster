@@ -1155,7 +1155,11 @@ void PrintUsersLists(Global* GlobalFile)
 	PrintWatcherList(GlobalFile->WatchersList);
 	puts("");
 
-	system("pause");
+	//This is a replacement for system pause , need to implement it in all the functions
+	getchar();
+	getchar();
+	//system("pause");
+
 }
 
 // print all tasks with ID's from received array, done, ready for testing
@@ -1262,17 +1266,20 @@ void ShowUserDetails(Global *GlobalFile)
 		else
 			puts("Watcher with this ID not found");
 	}
-		printf("Return to previous menu ( Y / N for Exit ) :");
-		fflush(stdin);
-	choice = getchar();
-	if (choice == 'Y' || choice == 'y')
-		return;
-	else if (choice == 'N' || choice == 'n')
-		Exit(GlobalFile);											//////// check correct option for this
-	else
-		puts("Incorrect choice, returning to previous menu");
+
+	//THIS INDUCES BUGS, REMOVING IT FOR NOW.. JONATHAN
+	//printf("Return to previous menu ( Y / N for Exit ) :");
+	//fflush(stdin);
+	//scanf("%c", &choice);
+	//if (choice == 'Y' || choice == 'y')
+	//	return;
+	//else if (choice == 'N' || choice == 'n')
+	//	Exit(GlobalFile);											//////// check correct option for this
+	//else
+	//	puts("Incorrect choice, returning to previous menu");
 
 	system("pause");
+	fflush(stdin);
 }
 
 
