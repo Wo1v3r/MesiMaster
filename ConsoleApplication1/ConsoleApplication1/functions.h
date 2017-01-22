@@ -1009,7 +1009,7 @@ void PrintProjectsListWatcher(Global *GlobalFile, int UserID, AccessGroup group)
 			return;
 		}
 
-		int arraySize = sizeof(ProjectsIDS) / sizeof(int);
+		int arraySize = watcher->WatcherProjectsAmount;
 		puts("List of your projects :");
 		printf("%-10s%-20s%-10s%-10s\n","ID","Name","Users","Tasks");
 		for (i = 0; i < arraySize; i++) 
