@@ -137,6 +137,7 @@ int StudentMenu(Global *GlobalFile, int studentID){
 			break;
 		case 2:
 			PrintProjectsList(GlobalFile,studentID,STUDENT); // 13
+			system("pause");
 			break;
 
 		case 3:
@@ -221,6 +222,7 @@ int AdminMenu(Global* GlobalFile ,int adminID){
 			UpdateDetails(GlobalFile, adminID);
 		case 7:
 			PrintProjectsList(GlobalFile, adminID, ADMIN);
+			system("pause");
 			break;
 		case 8:
 			printf("Enter Project ID:\n");
@@ -275,6 +277,7 @@ int WatcherMenu(Global* GlobalFile, int watcherID){
 			return 1;
 		case 1:
 			PrintProjectsListWatcher(GlobalFile, watcherID, WATCHER);
+			system("pause");
 			break;
 		case 2:
 			CreateNewProject(GlobalFile, watcherID, WATCHER,NULL);
