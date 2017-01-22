@@ -332,8 +332,8 @@ int PrintTasksList(Global* GlobalFile, Project* Project){
 	printf("Tasks in project:\n");
 	if (Project->ProjectTasksAmount == 0)
 	{
-		puts("No Tasks created in this project");
-		return -1;		// No tasks returned value
+		Output("No Tasks created in this project");
+		return 0; //Fail
 	}
 
 	for (j = 1, i = 0; i < Project->ProjectTasksAmount; i++){
@@ -351,8 +351,8 @@ int PrintTasksList(Global* GlobalFile, Project* Project){
 		j++;
 	}
 
-	system("pause");
-	return 0;	// planned end of function
+	Output("");
+	return 1;	//Success
 }
 
 // signature was changed to print all types of logs
@@ -849,7 +849,7 @@ void PrintProjectsList(Global *GlobalFile, int UserID, AccessGroup group)
 
 	if (GlobalFile->ProjectsList == NULL)
 	{
-		puts("No Projects in database");
+		Output("No Projects in database");
 		return;
 	}
 
@@ -859,7 +859,7 @@ void PrintProjectsList(Global *GlobalFile, int UserID, AccessGroup group)
 		student = FindStudent(GlobalFile->StudentList, UserID);
 		if (student->StudentProjectsAmount == 0)
 		{
-			puts("Student not in any project");
+			Output("Student not in any project");
 			return;
 		}
 		ProjectsIDS = student->ProjectIDS;
@@ -880,7 +880,7 @@ void PrintProjectsList(Global *GlobalFile, int UserID, AccessGroup group)
 		ProjectsIDS = watcher->ProjectIDS;
 		if (watcher->WatcherProjectsAmount == 0)
 		{
-			puts("Watcher not in any project");
+			Output("Watcher not in any project");
 			return;
 		}
 
@@ -896,11 +896,12 @@ void PrintProjectsList(Global *GlobalFile, int UserID, AccessGroup group)
 	}
 	else
 	{
-		puts("Incorrect access group");
+		Output("Incorrect access group");
 		return;
 	}
 
-	system("pause");
+	Output("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
+	return;
 }
 
 // print users list by ID array in project, done,ready fro testing
@@ -1564,14 +1565,14 @@ BOOL ShowNotifications(Global *GlobalFile, Watcher *watcher, char choice)
 }
 
 // print changes in project to watcher, done,ready for testing
-void PrintProjectChanges(Global *GlobalFile, Project* project, Watcher *watcher)
-{
+void PrintProjectChanges(Global *GlobalFile, Project* project, Watcher *watcher){
+	if (!watcher) return;
 	if (watcher->WatcherReceiveChanges == TRUE)
 	{
 		puts("Last changes in this project : ");
 		PrintActivityLog(project->ProjectActivityLogs);
 	}
-	system("pause");
+	Output("");
 }
 //// watcher notifications end
 
@@ -2146,7 +2147,8 @@ int Login(Global *g, char* UN, char* PW)
 void Output(char* message){
 	//Prints , prompts for enter, clears screen and buffer:
 	char junk[50];
-	puts(message);
+	if (message!= "") 
+		puts(message);
 	puts("Press ENTER to continue");
 	fflush(stdin);
 	gets(junk);
