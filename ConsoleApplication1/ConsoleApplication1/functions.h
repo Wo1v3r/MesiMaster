@@ -1892,7 +1892,7 @@ int Register(Global *g)
 	}
 	else
 	{																								//Back to last menu
-		return 0;
+		return -1;
 	}
 }
 
@@ -2141,8 +2141,8 @@ int Login(Global *g, char* UN, char* PW)
 	if (studLogin == NULL && watchLogin == NULL && admLogin == NULL)								//If not fount in any database - return 0.
 	{
 		if (flag == TRUE)
-			printf("No such user in our system.\n");
-		return 0;
+			Output("No such user in our system.\n");
+		return -1;
 	}
 
 	if (studLogin)																					//User inputs a password up to 3 times.

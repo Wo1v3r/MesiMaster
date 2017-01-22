@@ -344,9 +344,11 @@ void LoginMenu(Global* GlobalFile){
 			Exit(GlobalFile);
 			return;
 		case 1:
-			ID = Login(GlobalFile, NULL, NULL); //If ID = 0 means there was a problem with the login
+			system("cls");
+			ID = Login(GlobalFile, NULL, NULL); //If ID = -1 means there was a problem with the login
 			break;
 		case 2:
+			system("cls");
 			ID = Register(GlobalFile); //If ID = 0 means there was problem with the register
 			break;
 
@@ -359,8 +361,12 @@ void LoginMenu(Global* GlobalFile){
 
 		//If an ID was found, launching the relevant menu, if it returns 1 it means user exited back to login menu, doing the loop again.
 		system("cls");
-		if (ID) accessGroup = FindAccessGroup(ID);
+		if (ID == -1) accessGroup = -1; // When went back to this menu from register instead of registering a user
+		else if (ID) accessGroup = FindAccessGroup(ID);
 		switch (accessGroup){
+		case -1:
+			menuReturn = 1;
+			break;
 		case 0: //User tried to enter a wrong password three times in a row, exiting the program
 			printf("You failed to log in 3 times in a row, exiting the program, a report was sent to the system\n");
 			Exit(GlobalFile);
