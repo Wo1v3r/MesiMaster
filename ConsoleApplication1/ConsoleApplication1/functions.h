@@ -472,7 +472,7 @@ void printLogToFile(char file[], char msg[500])
 	FILE *fp = fopen(file, "a");
 	if (fp!=NULL)
 	{
-		fprintf(fp, "%s", msg);
+		fprintf(fp, "%s\n", msg);
 		fclose(fp);
 	}
 }
