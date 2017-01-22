@@ -325,6 +325,8 @@ void LoginMenu(Global* GlobalFile){
 
 		printf("Welcome to the MesiMaster:\n");
 		printf("##########################\n");
+		PrintGlobalMessages(GlobalFile);
+		printf("##########################\n");
 		printf("Choose an option: (Int)\n\n");
 		printf("0) Exit MesiMaster\n");
 		printf("1) Login with an existing user\n");
