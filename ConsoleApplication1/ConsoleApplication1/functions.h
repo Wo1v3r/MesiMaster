@@ -37,6 +37,7 @@ Watcher* FindWatcherByUN(Global *g, char *username); //Test written - Isabelle
 Admin *StudentToAdmin(Global *GlobalFile, Student *student);
 void UpdateDetails(Global* GlobalFile, int userID);
 Admin * WatcherToAdmin(Global *GlobalFile, Watcher *watcher);
+void Output(char* message); // No test needed , prints and prompts for enter
 
 //Log functions
 void PrintStudentLog(Student* student);//No test needed
@@ -331,8 +332,8 @@ int PrintTasksList(Global* GlobalFile, Project* Project){
 	printf("Tasks in project:\n");
 	if (Project->ProjectTasksAmount == 0)
 	{
-		puts("No Tasks created in this project");
-		return -1;		// No tasks returned value
+		Output("No Tasks created in this project");
+		return 0; //Fail
 	}
 
 	for (j = 1, i = 0; i < Project->ProjectTasksAmount; i++){
@@ -350,8 +351,8 @@ int PrintTasksList(Global* GlobalFile, Project* Project){
 		j++;
 	}
 
-	system("pause");
-	return 0;	// planned end of function
+	Output("");
+	return 1;	//Success
 }
 
 // signature was changed to print all types of logs
@@ -363,6 +364,8 @@ void PrintActivityLog(char* filePath){
 
 	while (fgets(BUFFER, 400, file)) printf("%s\n", BUFFER);
 	fclose(file);
+
+	Output("Activity log printed!");
 }
 
 void PrintProjectDetails(Global* GlobalFile, Project* project){
@@ -401,7 +404,7 @@ void UpdateDetails(Global* GlobalFile, int userID){
 	Admin* admin = NULL;
 	Student* student = NULL;
 	BOOL passCorrectness;
-	char *name, *surname, input,*password,*tempPass;
+	char *name, *surname, input,*password,tempPass[31];
 	int AG = FindAccessGroup(userID);
 
 	switch (AG){
@@ -427,6 +430,7 @@ void UpdateDetails(Global* GlobalFile, int userID){
 		break;
 	}
 
+	fflush(stdin);
 	printf("\nDo you want to change your first name?(y/n)\n");
 	input = getchar();
 	if (input == 'y') {
@@ -435,6 +439,7 @@ void UpdateDetails(Global* GlobalFile, int userID){
 		input = 'n';
 	}
 
+	fflush(stdin);
 	printf("Do you want to change your last name?(y/n)\n");
 	input = getchar();
 	if (input == 'y') {
@@ -443,6 +448,7 @@ void UpdateDetails(Global* GlobalFile, int userID){
 		input = 'n';
 	}
 
+	fflush(stdin);
 	printf("Do you want to change your password?(y/n)\n");
 	input = getchar();
 	if (input == 'y') {
@@ -450,10 +456,12 @@ void UpdateDetails(Global* GlobalFile, int userID){
 		scanf("%s", &tempPass);
 		passCorrectness = CheckPassword(tempPass);
 		if (passCorrectness)
-			password = tempPass;
+			strcpy(password,tempPass);
+		else Output("Password is invalid, Keeping old password");
 		input = 'n';
 	}
-	system("pause");
+
+	Output("Details changed!\n");
 }
 
 
@@ -842,7 +850,7 @@ void PrintProjectsList(Global *GlobalFile, int UserID, AccessGroup group)
 
 	if (GlobalFile->ProjectsList == NULL)
 	{
-		puts("No Projects in database");
+		Output("No Projects in database");
 		return;
 	}
 
@@ -852,7 +860,7 @@ void PrintProjectsList(Global *GlobalFile, int UserID, AccessGroup group)
 		student = FindStudent(GlobalFile->StudentList, UserID);
 		if (student->StudentProjectsAmount == 0)
 		{
-			puts("Student not in any project");
+			Output("Student not in any project");
 			return;
 		}
 		ProjectsIDS = student->ProjectIDS;
@@ -873,7 +881,7 @@ void PrintProjectsList(Global *GlobalFile, int UserID, AccessGroup group)
 		ProjectsIDS = watcher->ProjectIDS;
 		if (watcher->WatcherProjectsAmount == 0)
 		{
-			puts("Watcher not in any project");
+			Output("Watcher not in any project");
 			return;
 		}
 
@@ -889,11 +897,12 @@ void PrintProjectsList(Global *GlobalFile, int UserID, AccessGroup group)
 	}
 	else
 	{
-		puts("Incorrect access group");
+		Output("Incorrect access group");
 		return;
 	}
 
-	system("pause");
+	Output("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
+	return;
 }
 
 // print users list by ID array in project, done,ready fro testing
@@ -1035,10 +1044,12 @@ void AddGlobalMessage(Global* GlobalFile, char* msg){
 		} while (strlen(temp) > 255);
 		strcpy(GlobalFile->GlobalMessages, temp);
 	}
-	else
+	else{
 		strcpy(GlobalFile->GlobalMessages, msg);
-
-	//system("pause");
+		return;
+	}
+	printf("Global message added!\n");
+	system("pause");
 }
 
 // Quotes funcs start, done, ready to testing
@@ -1154,12 +1165,6 @@ void PrintUsersLists(Global* GlobalFile)
 	puts("Watchers :");
 	PrintWatcherList(GlobalFile->WatchersList);
 	puts("");
-
-	//This is a replacement for system pause , need to implement it in all the functions
-	getchar();
-	getchar();
-	//system("pause");
-
 }
 
 // print all tasks with ID's from received array, done, ready for testing
@@ -1227,7 +1232,7 @@ void ShowUserDetails(Global *GlobalFile)
 	fflush(stdin);
 	scanf("%d",&ID);
 	if (ID < 1000 || ID >=4000)
-		puts("incorrect ID , correct range 1000-3999");
+		Output("incorrect ID , correct range 1000-3999");
 	else if (ID >= 1000 && ID <= 1999)
 	{
 		student = FindStudent(GlobalFile->StudentList, ID);
@@ -1240,7 +1245,7 @@ void ShowUserDetails(Global *GlobalFile)
 			
 		}
 		else
-			puts("Student with this id not found");
+			Output("Student with this id not found");
 
 	}
 	else if (ID >= 2000 && ID <= 2999)
@@ -1252,7 +1257,7 @@ void ShowUserDetails(Global *GlobalFile)
 			printf("\nUsername : %s\nPassword :%s\nName : %s\n%Surename\n\n", admin->AdminUsername, admin->AdminPassword, admin->AdminName, admin->AdminSurename);
 		}
 		else
-			puts("Admin with this ID not found");
+			Output("Admin with this ID not found");
 
 	}
 	else if (ID >= 3000 && ID <= 3999)
@@ -1264,7 +1269,7 @@ void ShowUserDetails(Global *GlobalFile)
 			printf("Username : %s\nPassword :%s\nName : %s\n%Surename\nEmail : %s\nProjects Amount : %d\n\n", watcher->WatcherUsername, watcher->WatcherPassword, watcher->WatcherName, watcher->WatcherSurename, watcher->WatcherProjectsAmount);
 		}
 		else
-			puts("Watcher with this ID not found");
+			Output("Watcher with this ID not found");
 	}
 
 	//THIS INDUCES BUGS, REMOVING IT FOR NOW.. JONATHAN
@@ -1277,9 +1282,6 @@ void ShowUserDetails(Global *GlobalFile)
 	//	Exit(GlobalFile);											//////// check correct option for this
 	//else
 	//	puts("Incorrect choice, returning to previous menu");
-
-	system("pause");
-	fflush(stdin);
 }
 
 
@@ -1358,8 +1360,7 @@ int DeleteUser(Global *GlobalFile, int id)
 			}
 			else{
 				if (flag) {
-					puts("Watcher not found in database");
-					system("pause");
+					Output("Watcher not found in database");
 				}
 				return 0;
 
@@ -1374,29 +1375,28 @@ int DeleteUser(Global *GlobalFile, int id)
 			}
 			else{
 				if (flag) {
-					puts("Student not found in database");
-					system("pause");
+					Output("Student not found in database");
 				}
 				return 0;
 			}
 			break;
 		case ADMIN:
-			admin = FindAdmin(GlobalFile->AdminsList, ID);
+			Output("Admin cannot be deleted");
+			return 0;
+		/*	admin = FindAdmin(GlobalFile->AdminsList, ID);
 			if (admin)
 				GlobalFile->AdminsList = RemoveAdminFromList(GlobalFile->AdminsList, ID);
 			else{
 				if (flag) {
-					puts("Admin not found in database"); 
-					system("pause");
+					Output("Admin not found in database"); 
 				}
 				return 0;
 			}
-			break;
+			break;*/
 
 		default:
 			if (flag){
-				puts("Error : No such user group");
-				system("pause");
+				Output("Error : No such user group");
 			}
 			return 0;
 		}
@@ -1410,7 +1410,7 @@ int DeleteUser(Global *GlobalFile, int id)
 	}
 
 
-	system("pause");
+	Output("User(s) successfuly deleted");
 	return 1;
 }
 
@@ -1557,14 +1557,14 @@ BOOL ShowNotifications(Global *GlobalFile, Watcher *watcher, char choice)
 }
 
 // print changes in project to watcher, done,ready for testing
-void PrintProjectChanges(Global *GlobalFile, Project* project, Watcher *watcher)
-{
+void PrintProjectChanges(Global *GlobalFile, Project* project, Watcher *watcher){
+	if (!watcher) return;
 	if (watcher->WatcherReceiveChanges == TRUE)
 	{
 		puts("Last changes in this project : ");
 		PrintActivityLog(project->ProjectActivityLogs);
 	}
-	system("pause");
+	Output("");
 }
 //// watcher notifications end
 
@@ -2127,9 +2127,23 @@ int Login(Global *g, char* UN, char* PW)
 				return admLogin->AdminID;
 		}
 	}
-	if (flag == TRUE)
+	if (flag == TRUE){
 		printf("You have failed to enter you password correctly 3 times. Login failed.\n");
+	}
 	return 0;
+
+		
 }
 
+
+void Output(char* message){
+	//Prints , prompts for enter, clears screen and buffer:
+	char junk[50];
+	if (message!= "") 
+		puts(message);
+	puts("Press ENTER to continue");
+	fflush(stdin);
+	gets(junk);
+	system("cls");
+}
 #endif

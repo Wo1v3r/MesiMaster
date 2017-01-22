@@ -22,10 +22,12 @@ int ProjectMenu(Global* GlobalFile , Project* project, int accessGroup, int user
 	case ADMIN:
 		admin = FindAdmin(GlobalFile->AdminsList, userID);
 		username = admin->AdminUsername;
+		break;
 	case WATCHER:
 		watcher = FindWatcher(GlobalFile->WatchersList, userID);
 		username = watcher->WatcherUsername;
 		PrintProjectChanges(GlobalFile, project, watcher);
+		break;
 	default:
 		//Error
 		printf("ERROR\n\n"); //Should not happen because accessgroup is evaluated in login function
@@ -137,7 +139,7 @@ int StudentMenu(Global *GlobalFile, int studentID){
 			break;
 		case 2:
 			PrintProjectsList(GlobalFile,studentID,STUDENT); // 13
-			system("pause");
+			Output("");
 			break;
 
 		case 3:
@@ -146,14 +148,13 @@ int StudentMenu(Global *GlobalFile, int studentID){
 			project = FindProject(GlobalFile->ProjectsList, projectID);
 			if (project == NULL){
 				//Project not found 
-				printf("No project of that ID\n");
+				Output("No project of that ID\n");
 				break;
 			}
 			if (isStudentInProject(project, studentID))
 				ProjectMenu(GlobalFile, project, STUDENT, studentID);
 			else{
-				printf("The student doesn't belong to this project\n");
-				system("pause");
+				Output("The student doesn't belong to this project\n");
 			}	
 			break;
 		case 4:
@@ -172,8 +173,7 @@ int StudentMenu(Global *GlobalFile, int studentID){
 			return 0;
 		default:
 			//Dosomething
-			printf("No such option!\n");
-			system("pause");
+			Output("No such option!");
 		}
 		system("cls");
 		opt = -1;
@@ -200,6 +200,7 @@ int AdminMenu(Global* GlobalFile ,int adminID){
 		printf("9) Add a global message\n");
 		printf("10) Manage Quotes\n");
 		printf("11) Exit Mesimaster\n");
+		fflush(stdin);
 		scanf("%d", &opt);
 		switch (opt){
 		case 0:
@@ -228,11 +229,11 @@ int AdminMenu(Global* GlobalFile ,int adminID){
 			break;
 		case 8:
 			printf("Enter Project ID:\n");
-			scanf("%d\n", &projectID);
+			scanf("%d", &projectID);
 			project = FindProject(GlobalFile->ProjectsList, projectID);
 			if (project == NULL){
 				//Project not found 
-				printf("No project of that ID!\n");
+				Output("No project of that ID!");
 				break;
 			}
 			ProjectMenu(GlobalFile, project, ADMIN, adminID);
@@ -246,8 +247,7 @@ int AdminMenu(Global* GlobalFile ,int adminID){
 		case 11:
 			return 0;
 		default:
-			printf("No such option!\n");
-			system("pause");
+			Output("No such option!");
 			opt = -1;
 		}
 		system("cls");
@@ -338,8 +338,7 @@ void LoginMenu(Global* GlobalFile){
 		scanf("%d", &opt);
 		switch (opt){
 		case 0:
-			printf("Thank you for using MesiMaster, have a fruitful day!\n\n");
-			system("pause");
+			Output("Thank you for using MesiMaster, have a fruitful day!\n\n");
 			Exit(GlobalFile);
 			return;
 		case 1:
@@ -360,8 +359,10 @@ void LoginMenu(Global* GlobalFile){
 		system("cls");
 		if (ID) accessGroup = FindAccessGroup(ID);
 		switch (accessGroup){
-		case 0: //This should not run but here for safety reasons for the meantime
-			opt = -1;
+		case 0: //User tried to enter a wrong password three times in a row, exiting the program
+			printf("You failed to log in 3 times in a row, exiting the program, a report was sent to the system\n");
+			Exit(GlobalFile);
+			system("pause");
 			break;
 		case 1:
 			menuReturn = StudentMenu(GlobalFile, ID);
@@ -377,12 +378,10 @@ void LoginMenu(Global* GlobalFile){
 			//If user chose to exit to upper menu,Setting opt to -1 to reset the menu
 			system("cls");
 			opt = -1;
-			system("pause");
 		}
 		else{
 			//If user chose to exit completely, exiting mesimaster:
-			printf("Thank you for using MesiMaster, have a fruitful day!\n\n");
-			system("pause");
+			Output("Thank you for using MesiMaster, have a fruitful day!\n\n");
 			Exit(GlobalFile);
 			return;
 		}
@@ -400,16 +399,16 @@ int main()
 	scanf("%d", &tests);
 	system("cls");
 	if (tests == 1){
-		MU_RUN_SUITE(Utilities);
-		MU_RUN_SUITE(InitTest);
-		MU_RUN_SUITE(Login_Suite);
-		MU_RUN_SUITE(Admin_Suite);
-		MU_RUN_SUITE(Watcher_Suite);
-		MU_RUN_SUITE(Project_Suite);
-		MU_RUN_SUITE(Structures_Suite);
-		MU_RUN_SUITE(Register_Suite);
-		MU_RUN_SUITE(Login_func_Suite);
-		system("pause");
+		//MU_RUN_SUITE(Utilities);
+		//MU_RUN_SUITE(InitTest);
+		//MU_RUN_SUITE(Login_Suite);
+		//MU_RUN_SUITE(Admin_Suite);
+		//MU_RUN_SUITE(Watcher_Suite);
+		//MU_RUN_SUITE(Project_Suite);
+		//MU_RUN_SUITE(Structures_Suite);
+		//MU_RUN_SUITE(Register_Suite);
+		//MU_RUN_SUITE(Login_func_Suite);
+		Output("Tests over, closing program, relaunch to choose between tests\mesimaster");
 		return;
 	}
 	system("cls");
