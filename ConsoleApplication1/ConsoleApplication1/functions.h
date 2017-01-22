@@ -901,7 +901,7 @@ void PrintProjectsList(Global *GlobalFile, int UserID, AccessGroup group)
 		return;
 	}
 
-	Output("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
+	Output("");
 	return;
 }
 
