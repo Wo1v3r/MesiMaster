@@ -479,11 +479,11 @@ void PrintStudentList(Student *StudentHead){
 	if (student == NULL)
 		puts("No students in system");
 
-	printf("ID\tName\tSurename\tDepartment\tYear\tProjects\tTasks\n");
+	printf("%-10s%-20s%-20s%-25s%-10s%-10s%-10s\n","ID","Name","Surename","Department","Year","Projects","Tasks");
 	while (student){
 
 		// print all student fields
-		printf("%d\t%s\t%s\t\t%s\t%c\t%d\t\t%d\n", student->StudentID, student->StudentName, student->StudentSurename, student->StudentDepartment, student->StudentYear, student->StudentProjectsAmount, student->StudentTasksAmount);
+		printf("%-10d%-20s%-20s%-25s%-10c%-10d%-10d\n", student->StudentID, student->StudentName, student->StudentSurename, student->StudentDepartment, student->StudentYear, student->StudentProjectsAmount, student->StudentTasksAmount);
 		student = student->StudentNext;
 	}
 }
@@ -494,24 +494,23 @@ void PrintAdminsList(Admin *head)
 	if (admin == NULL)
 		puts("No admins in system");
 
-	printf("ID\tName\tSurename\n");
+	printf("%-10s%-20s%-20s\n","ID","Name","Surename");
 	while (admin){
 		// print all admin fields
-		printf("%d\t%s\t%s\n",admin->AdminID, admin->AdminName, admin->AdminSurename);
+		printf("%-10d%-20s%-20s\n",admin->AdminID, admin->AdminName, admin->AdminSurename);
 		admin = admin->AdminNext;
 	}
 }
 void PrintWatcherList(Watcher *head)
 {
-
 	Watcher *watcher = head;
 	if (head == NULL)
 		puts("No watchers in system");
 
-	printf("ID\tName\tSurename\tProjects\n");
+	printf("%-10s%-20s%-20s%-10s\n","ID","Name","Surename","Projects");
 	while (watcher){
 		// print all watcher fields
-		printf("%d\t%s\t%s\t%d\n", watcher->WatcherID, watcher->WatcherName, watcher->WatcherSurename,watcher->WatcherProjectsAmount);
+		printf("%-10d%-20s%-20s%-10d\n", watcher->WatcherID, watcher->WatcherName, watcher->WatcherSurename,watcher->WatcherProjectsAmount);
 		watcher = watcher->WatcherNext;
 	}
 }
