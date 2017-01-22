@@ -224,7 +224,11 @@ Global *initGlobal(){
 	fscanf(globalFile, "%d", &GlobalDB->ProjectRunID);
 	fscanf(globalFile, "%d", &GlobalDB->QuoteRunID);
 	fscanf(globalFile, "%d", &GlobalDB->TaskRunID);
-	fscanf(globalFile, "%s", &GlobalDB->GlobalMessages);
+	fgetc(globalFile);
+	int i = 0;
+	fgets(GlobalDB->GlobalMessages, sizeof(GlobalDB->GlobalMessages), globalFile);
+	while (GlobalDB->GlobalMessages[i++] != '\n' && GlobalDB->GlobalMessages[i++] != '\0');
+	GlobalDB->GlobalMessages[i - 1] = '\0';
 	fclose(globalFile);
 	return GlobalDB;
 }

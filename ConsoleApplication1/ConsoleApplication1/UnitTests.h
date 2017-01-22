@@ -549,7 +549,7 @@ MU_TEST(test_FindProject_structures)
 MU_TEST(test_FindTask_structures)
 {
 	//Finds task by ID
-	int taskID = 5000; //Good ID - sould provide the right info
+	int taskID = 6000; //Good ID - sould provide the right info
 	int badID = 9999;//Bad ID - should return NULL
 	//Loading file:
 	Global* global = InitDataBases();
