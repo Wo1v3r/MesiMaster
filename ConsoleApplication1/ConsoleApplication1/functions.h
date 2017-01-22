@@ -375,12 +375,10 @@ void PrintProjectDetails(Global* GlobalFile, Project* project){
 	char* creator = project->ProjectCreatorName, *projectName = project->ProjectName;
 
 	printf("Project Details:\n");
-	printf("-------------------");
-	printf("ID: %d , Number of tasks: %d , Number of users: %d , Creator: %s\n", projectID, numOfTasks, numOfUsers, creator);
+	printf("-------------------\n");
+	printf("ID: %d , Number of tasks: %d , Number of users: %d , Creator: %s\n\n", projectID, numOfTasks, numOfUsers, creator);
 
 	//Need to print details of student here too.
-	printf("Students in project:\n");
-	printf("----------------------");
 	PrintUsersByID(GlobalFile, project);
 	//Need to add a helper function for that
 
@@ -892,10 +890,10 @@ void PrintProjectsList(Global *GlobalFile, int UserID, AccessGroup group)
 	}
 
 	puts("List of your projects:");
-	printf("ID\tName\tUsers\tTasks");
+	printf("%-10s%-25s%-10s%-10s\n","ID","Name","Users","Tasks");
 	if (adminFlag){
 		while (current != NULL){
-			printf("%d\t%s\t%d\t%d\n",
+			printf("%-10d%-25s%-10d%-10d\n",
 				current->ProjectID,
 				current->ProjectName,
 				current->ProjectUsersAmount,
@@ -906,7 +904,7 @@ void PrintProjectsList(Global *GlobalFile, int UserID, AccessGroup group)
 	else{
 		for (i = 0; i < amount; i++){
 			current = FindProject(GlobalFile->ProjectsList, projectIDs[i]);
-			printf("%d\t%s\t%d\t%d\n",
+			printf("%-10d%-25s%-10d%-10d\n",
 				current->ProjectID,
 				current->ProjectName,
 				current->ProjectUsersAmount,
@@ -971,15 +969,16 @@ void PrintUsersByID(Global *GlobalFile, Project *project)
 {
 	int i;
 	Student *student = NULL;
-	puts("Collaborators in project");
+	puts("Collaborators in project:");
+	printf("-------------------\n");
 	if (project->ProjectUsersAmount == 0)
 		puts("No users added.");
-	printf("Username\t\tName\t\tSurename\t\tDepartment\tEmail\t");
+	printf("%-20s%-20s%-20s%-20s%-25s\n","Username","Name","Surename","Department","Email");
 	for (i = 0; i < project->ProjectUsersAmount; i++)
 	{
 		student = FindStudent(GlobalFile->StudentList, project->StudentsIDS[i]);
 		if (student)
-			printf("%s\t\t%s\t%s\t%d\t%s", student->StudentUsername, student->StudentName, student->StudentSurename, student->StudentDepartment, student ->StudentEmail);
+			printf("%-20s%-20s%-20s%-20s%-25s\n", student->StudentUsername, student->StudentName, student->StudentSurename, student->StudentDepartment, student->StudentEmail);
 	}
 	system("pause");
 }
@@ -1012,13 +1011,13 @@ void PrintProjectsListWatcher(Global *GlobalFile, int UserID, AccessGroup group)
 
 		int arraySize = sizeof(ProjectsIDS) / sizeof(int);
 		puts("List of your projects :");
-		printf("ID\tName\tUsers\tTasks\n");
+		printf("%-10s%-20s%-10s%-10s\n","ID","Name","Users","Tasks");
 		for (i = 0; i < arraySize; i++) 
 		{
 			current = FindProject(GlobalFile->ProjectsList, watcher->ProjectIDS[i]);
 			if (current)
 			{
-				printf("%d\t%s\t%d\t%d\n", current->ProjectID, current->ProjectName, current->ProjectUsersAmount, current->ProjectTasksAmount);
+				printf("%-10d%-20s%-10d%-10d\n", current->ProjectID, current->ProjectName, current->ProjectUsersAmount, current->ProjectTasksAmount);
 				PrintUsersByID(GlobalFile, current);				
 			}
 		}
