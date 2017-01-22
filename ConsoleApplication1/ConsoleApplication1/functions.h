@@ -65,7 +65,7 @@ void AddNewQuote(Global* GlobalFile, char* quote, char* creator); //Test written
 void ManageQuotes(Global *GlobalFile); //No test needed(switch case function)
 int AddNewUser(Global* GlobalFile); //No test needed(switch case function)
 void DeleteQuote(Global* GlobalFile, int ID); //Test written
-void DeleteUser(Global *GlobalFile, int ID); //Test written(with blood)
+int DeleteUser(Global *GlobalFile, int ID); //Test written(with blood)
 void PromoteUserToAdmin(Global *GlobalFile, int ID); //Test written
 
 //Login/Register Functions
@@ -1321,28 +1321,31 @@ void RemoveUserFromProjects(Global *GlobalFile, int UserID)
 }
 
 // print all users in database for admin, admin chooce user id for delete, done, ready for testing
-void DeleteUser(Global *GlobalFile, int ID)
+int DeleteUser(Global *GlobalFile, int id)
 {
-	//int ID;
+	int ID;
 	AccessGroup group;
 	Student *student = NULL;
 	Watcher *watcher = NULL;
 	Admin *admin = NULL;
 	BOOL flag = TRUE;
 	char choice;
-	if (!ID){
+	if (!id){
 		puts("List of all users in system :\n-----------------------");
 		PrintUsersLists(GlobalFile);
 	}
 	while (flag)
 	{
-		if (!ID){
+		if (!id){
 			printf("Enter ID of user you want to remove: ");
 			fflush(stdin);
 			scanf("%d", &ID);
 		}
 		else
+		{
+			ID = id;
 			flag = FALSE;
+		}
 		group = FindAccessGroup(ID);
 		switch (group)
 		{
@@ -1353,8 +1356,14 @@ void DeleteUser(Global *GlobalFile, int ID)
 				GlobalFile->WatchersList = RemoveWatcherFromList(GlobalFile->WatchersList, ID);
 				RemoveUserFromProjects(GlobalFile, ID);
 			}
-			else
-				puts("Watcher not found in database");
+			else{
+				if (flag) {
+					puts("Watcher not found in database");
+					system("pause");
+				}
+				return 0;
+
+			}
 			break;
 		case STUDENT:
 			student = FindStudent(GlobalFile->StudentList, ID);
@@ -1363,27 +1372,46 @@ void DeleteUser(Global *GlobalFile, int ID)
 				GlobalFile->StudentList = RemoveStudentFromList(GlobalFile->StudentList, ID);
 				RemoveUserFromProjects(GlobalFile, ID);
 			}
-			else
-				puts("Student not found in database");
+			else{
+				if (flag) {
+					puts("Student not found in database");
+					system("pause");
+				}
+				return 0;
+			}
 			break;
 		case ADMIN:
 			admin = FindAdmin(GlobalFile->AdminsList, ID);
 			if (admin)
 				GlobalFile->AdminsList = RemoveAdminFromList(GlobalFile->AdminsList, ID);
-			else
-				puts("Admin not found in database");
+			else{
+				if (flag) {
+					puts("Admin not found in database"); 
+					system("pause");
+				}
+				return 0;
+			}
 			break;
+
+		default:
+			if (flag){
+				puts("Error : No such user group");
+				system("pause");
+			}
+			return 0;
 		}
 		if (flag == FALSE)
-			return;
+			return 0 ;
 		printf("Want to delete another user? ( Y/ N ) :");
+		_flushall();
 		choice = getchar();
-		if (choice == 'n' || choice == 'N')
+		if (choice != 'y' && choice != 'Y')
 			flag = FALSE;
 	}
 
 
 	system("pause");
+	return 1;
 }
 
 // promote Student to be Admin
