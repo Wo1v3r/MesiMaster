@@ -346,7 +346,7 @@ int PrintTasksList(Global* GlobalFile, Project* Project){
 		taskName = task->TaskName;
 
 		printf("---\n");
-		printf("%d) ID: %d Creator: %s Status: %d\n", j, taskID, creator, status);
+		printf("%d) ID: %d Creator: %s Status: %s\n", j, taskID, creator, convertStatusToString(status));
 		printf("Task: %s\n\n", taskName);
 		j++;
 	}

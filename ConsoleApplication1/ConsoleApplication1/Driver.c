@@ -139,7 +139,6 @@ int StudentMenu(Global *GlobalFile, int studentID){
 			break;
 		case 2:
 			PrintProjectsList(GlobalFile,studentID,STUDENT); // 13
-			Output("");
 			break;
 
 		case 3:
@@ -151,6 +150,7 @@ int StudentMenu(Global *GlobalFile, int studentID){
 				Output("No project of that ID\n");
 				break;
 			}
+			system("cls");
 			if (isStudentInProject(project, studentID))
 				ProjectMenu(GlobalFile, project, STUDENT, studentID);
 			else{
