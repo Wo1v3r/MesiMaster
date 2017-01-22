@@ -172,7 +172,11 @@ Task* initTasks(){
 				free(newTask);
 				break;
 			}
-			fscanf(read, "%s", &newTask->TaskName);
+			int i = 0;
+			fgetc(read);
+			fgets(newTask->TaskName, sizeof(newTask->TaskName), read);
+			while (newTask->TaskName[i++] != '\n');
+			newTask->TaskName[i - 1] = '\0';
 			fscanf(read, "%d", &newTask->TaskStatus);
 			fscanf(read, "%s", &newTask->TaskCreatorName);
 			head = AddTask(head, newTask);
@@ -347,7 +351,7 @@ void saveTasks(Task *TaskList){
 		exit(1);
 	}
 	while (TaskList){
-		fprintf(saveFile, "%d %s %d %s\n", TaskList->TaskID, TaskList->TaskName,
+		fprintf(saveFile, "%d\n%s\n%d %s\n", TaskList->TaskID, TaskList->TaskName,
 			TaskList->TaskStatus, TaskList->TaskCreatorName);
 		TaskList = TaskList->TaskNext;
 	}
