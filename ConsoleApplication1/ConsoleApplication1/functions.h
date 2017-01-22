@@ -845,8 +845,12 @@ void PrintProjectsList(Global *GlobalFile, int UserID, AccessGroup group)
 	int i;
 	Student* student=NULL;
 	Watcher *watcher = NULL;
+	Admin *admin = NULL;
 	Project *current = NULL;
-	int *ProjectsIDS;
+	int* projectIDs = NULL;
+	int amount = 0;
+	int adminFlag = 0;
+	//int *ProjectsIDS;
 
 	if (GlobalFile->ProjectsList == NULL)
 	{
@@ -854,55 +858,110 @@ void PrintProjectsList(Global *GlobalFile, int UserID, AccessGroup group)
 		return;
 	}
 
-	// find user
-	if (group == STUDENT)
-	{
+	switch (group){
+	case STUDENT:
 		student = FindStudent(GlobalFile->StudentList, UserID);
-		if (student->StudentProjectsAmount == 0)
-		{
-			Output("Student not in any project");
+		if (!student) return ;
+		if (!(amount = student->StudentProjectsAmount)) { 
+			Output("Student has no projects");
 			return;
 		}
-		ProjectsIDS = student->ProjectIDS;
+		projectIDs = student->ProjectIDS;
+		break;
 
-		int arraySize = sizeof(ProjectsIDS) / sizeof(int);
-		puts("List of your projects :");
-		printf("ID\tName\tUsers\tTasks");
-		for (i = 0; i < arraySize; i++)
-		{
-			current = FindProject(GlobalFile->ProjectsList, student->ProjectIDS[i]);
-			if (current)
-				printf("%d\t%s\t%d\t%d",current->ProjectID,current->ProjectName,current->ProjectUsersAmount,current->ProjectTasksAmount);
-		}
-	}// in case of watcher
-	else if (group == WATCHER)
-	{
+	case ADMIN:
+		admin = FindAdmin(GlobalFile->AdminsList, UserID);
+		if (!admin) return ;
+		adminFlag = 1;
+		break;
+
+	case WATCHER:
 		watcher = FindWatcher(GlobalFile->WatchersList, UserID);
-		ProjectsIDS = watcher->ProjectIDS;
-		if (watcher->WatcherProjectsAmount == 0)
-		{
-			Output("Watcher not in any project");
+		if (!(amount = watcher->WatcherProjectsAmount)) {
+			Output("Watcher has no projects");
 			return;
 		}
+		projectIDs = watcher->ProjectIDS;
+		if (!watcher) return ;
 
-		int arraySize = sizeof(ProjectsIDS) / sizeof(int);
-		puts("List of your projects :");
-		printf("ID\tName\tUsers\tTasks");
-		for (i = 0; i < arraySize; i++)
-		{
-			current = FindProject(GlobalFile->ProjectsList, watcher->ProjectIDS[i]);
-			if (current)
-				printf("%d\t%s\t%d\t%d", current->ProjectID, current->ProjectName, current->ProjectUsersAmount, current->ProjectTasksAmount);	
-		}
-	}
-	else
-	{
-		Output("Incorrect access group");
+	default:
+		//Not a valid accessgroup:
+		Output("Incorrect Access Group");
 		return;
 	}
 
+	puts("List of your projects:");
+	printf("ID\tName\tUsers\tTasks");
+	if (adminFlag){
+		while (current != NULL){
+			printf("%d\t%s\t%d\t%d\n",
+				current->ProjectID,
+				current->ProjectName,
+				current->ProjectUsersAmount,
+				current->ProjectTasksAmount);
+		}
+	}
+	else{
+		for (i = 0; i < amount; i++){
+			current = FindProject(GlobalFile->ProjectsList, projectIDs[i]);
+			printf("%d\t%s\t%d\t%d\n",
+				current->ProjectID,
+				current->ProjectName,
+				current->ProjectUsersAmount,
+				current->ProjectTasksAmount);
+		}
+	}
 	Output("");
 	return;
+	//// find user
+	//if (group == STUDENT)
+	//{
+	//	student = FindStudent(GlobalFile->StudentList, UserID);
+	//	if (student->StudentProjectsAmount == 0)
+	//	{
+	//		Output("Student not in any project");
+	//		return;
+	//	}
+	//	ProjectsIDS = student->ProjectIDS;
+
+	//	int arraySize = sizeof(ProjectsIDS) / sizeof(int);
+	//	puts("List of your projects :");
+	//	printf("ID\tName\tUsers\tTasks");
+	//	for (i = 0; i < arraySize; i++)
+	//	{
+	//		current = FindProject(GlobalFile->ProjectsList, student->ProjectIDS[i]);
+	//		if (current)
+	//			printf("%d\t%s\t%d\t%d",current->ProjectID,current->ProjectName,current->ProjectUsersAmount,current->ProjectTasksAmount);
+	//	}
+	//}// in case of watcher
+	//else if (group == WATCHER)
+	//{
+	//	watcher = FindWatcher(GlobalFile->WatchersList, UserID);
+	//	ProjectsIDS = watcher->ProjectIDS;
+	//	if (watcher->WatcherProjectsAmount == 0)
+	//	{
+	//		Output("Watcher not in any project");
+	//		return;
+	//	}
+
+	//	int arraySize = sizeof(ProjectsIDS) / sizeof(int);
+	//	puts("List of your projects :");
+	//	printf("ID\tName\tUsers\tTasks");
+	//	for (i = 0; i < arraySize; i++)
+	//	{
+	//		current = FindProject(GlobalFile->ProjectsList, watcher->ProjectIDS[i]);
+	//		if (current)
+	//			printf("%d\t%s\t%d\t%d", current->ProjectID, current->ProjectName, current->ProjectUsersAmount, current->ProjectTasksAmount);	
+	//	}
+	//}
+	//else
+	//{
+	//	Output("Incorrect access group");
+	//	return;
+	//}
+
+	//Output("");
+	//return;
 }
 
 // print users list by ID array in project, done,ready fro testing
