@@ -834,7 +834,7 @@ int CreateNewTask(Global *GlobalFile, Project *project,int UserID,AccessGroup gr
 
 	// add new task to global list of Tasks
 	GlobalFile->TaskList = AddTask(GlobalFile->TaskList, newTask);
-	printf("%s created task \" %s\"\n",newTask->TaskName);
+	printf("%s created task \"%s\"\n",newTask->TaskCreatorName, newTask->TaskName);
 
 	// add creation of task to project log
 	printLogToFile(project->ProjectActivityLogs, log);
@@ -1021,7 +1021,7 @@ void PrintProjectsListWatcher(Global *GlobalFile, int UserID, AccessGroup group)
 			return;
 		}
 
-		int arraySize = sizeof(ProjectsIDS) / sizeof(int);
+		int arraySize = watcher->WatcherProjectsAmount;
 		puts("List of your projects :");
 		printf("%-10s%-20s%-10s%-10s\n","ID","Name","Users","Tasks");
 		for (i = 0; i < arraySize; i++) 
