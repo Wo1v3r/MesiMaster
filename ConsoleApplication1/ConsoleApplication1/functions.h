@@ -576,7 +576,7 @@ int CreateNewProject(Global* GlobalFile,int userID, AccessGroup userGroup,char* 
 	strcpy(newProject->ProjectMessages, MessagesFileName);
 
 	// add new project to list of projects Global
-	AddProject(GlobalFile->ProjectsList, newProject); 
+	GlobalFile->ProjectsList = AddProject(GlobalFile->ProjectsList, newProject); 
 
 	//add id of new project to creator
 	if (userGroup == STUDENT)			// add project ID to student 
@@ -815,7 +815,7 @@ int CreateNewTask(Global *GlobalFile, Project *project,int UserID,AccessGroup gr
 	AddTaskIDToProject(project, newTask->TaskID);
 
 	// add new task to global list of Tasks
-	AddTask(GlobalFile->TaskList, newTask);
+	GlobalFile->TaskList = AddTask(GlobalFile->TaskList, newTask);
 	printf("%s created task \" %s\"\n",newTask->TaskName);
 
 	// add creation of task to project log
