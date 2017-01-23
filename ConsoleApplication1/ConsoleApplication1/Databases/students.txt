@@ -1,4 +1,4 @@
-1000 isabeme AAbb12 Isabelle Meif isabeme@sce.ac.il Chemistry b 1000_SLog.txt 1 1 4000 2 1000_SMess.txt
-1001 alexsi jjK23 Alexey Silyuk alexey@sce.ac.il SoftwareEng. a 1001_SLog.txt 1 1 4000 1 1001_SMess.txt
-1002 johnnyL eLr45e Johnathan Leon johnny@sce.ac.il Electronics a 1002_SLog.txt 1 1 4001 1 1002_SMess.txt
-1003 liranRo gg54$F Liran Rotenberg liran@sce.ac.il SocialSciences c 1003_SLog.txt 1 1 4001 2 1003_SMess.txt
+1000 isabeme AAbb12 Isabelle Meif isabeme@sce.ac.il Chemistry b 1000_SLog.txt 1 1 4000 3 1000_SMess.txt
+1001 alexsi jjK23 Alexey Silyuk alexey@sce.ac.il SoftwareEng. a 1001_SLog.txt 1 1 4000 3 1001_SMess.txt
+1002 johnnyL eLr45e Johnathan Leon johnny@sce.ac.il Electronics a 1002_SLog.txt 1 1 4001 3 1002_SMess.txt
+1003 liranRo gg54$F Liran Rotenberg liran@sce.ac.il SocialSciences c 1003_SLog.txt 1 1 4001 3 1003_SMess.txt

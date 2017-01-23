@@ -60,7 +60,7 @@ BOOL ShowNotifications(Global *GlobalFile, Watcher *watcher, char choice); // Te
 void ShowTasksByStatusWatcher(Global* GlobalFile, int WatcherID); //No test needed(printing to stdout)
 
 //Admin Functions
-void RemoveProject(Global* GlobalFile, Project* project, char choice);
+void RemoveProject(Global* GlobalFile, Project* project, char choice); //Test written
 void AddGlobalMessage(Global* GlobalFile, char* msg); //Test written
 void AddNewQuote(Global* GlobalFile, char* quote, char* creator); //Test written
 void ManageQuotes(Global *GlobalFile); //No test needed(switch case function)
@@ -135,11 +135,11 @@ int ChangeTaskStatus(Global* GlobalFile, Project* project, int userID, int acces
 
 
 //remove project id from received array, and return new array 
-int* RemoveProjectIDFromArray(int Array[], int ProjectID)
+int* RemoveProjectIDFromArray(int Array[], int ProjectID, int size)
 {
-	int size = (sizeof(Array) / sizeof(int));
+	if (size - 1 == 0)
+		return NULL;
 	int *ProjectsIDs = (int*)malloc((size - 1) * sizeof(int)), i, newindex = 0;
-
 	for (i = 0; i < size; i++, newindex++)
 	{
 		if (Array[i] != ProjectID)
@@ -147,7 +147,6 @@ int* RemoveProjectIDFromArray(int Array[], int ProjectID)
 		else
 			newindex--;
 	}
-
 	return ProjectsIDs;
 }
 
@@ -165,7 +164,7 @@ int RemoveProjectFromUsers(Global* GlobalFile, int ProjectID)
 		{
 			if (watcher->ProjectIDS[i] == ProjectID);
 			{
-				watcher->ProjectIDS = RemoveProjectIDFromArray(watcher->ProjectIDS, ProjectID);
+				watcher->ProjectIDS = RemoveProjectIDFromArray(watcher->ProjectIDS, ProjectID, watcher->WatcherProjectsAmount);
 				watcher->WatcherProjectsAmount--;
 				DeletedFromArrays++;
 				break;
@@ -179,7 +178,8 @@ int RemoveProjectFromUsers(Global* GlobalFile, int ProjectID)
 		{
 			if (student->ProjectIDS[i] == ProjectID);
 			{
-				student->ProjectIDS = RemoveProjectIDFromArray(student->ProjectIDS, ProjectID);
+				student->ProjectIDS = RemoveProjectIDFromArray(student->ProjectIDS, ProjectID, student->StudentProjectsAmount);
+				student->StudentTasksAmount -= FindProject(GlobalFile->ProjectsList, ProjectID)->ProjectTasksAmount;
 				student->StudentProjectsAmount--;
 				DeletedFromArrays++;
 				break;
@@ -193,7 +193,7 @@ int RemoveProjectFromUsers(Global* GlobalFile, int ProjectID)
 // done by Alexey, ready for testing
 void RemoveProject(Global* GlobalFile, Project* project, char choice){
 	int i;
-	if (choice != 0){
+	if (choice == 0){
 		choice = 0;
 		printf("Are you sure you want to remove this project and all of its tasks (Y/N)?\n");
 		while (choice == 0){

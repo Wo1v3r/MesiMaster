@@ -26,7 +26,7 @@ MU_TEST(test_init_student){
 	mu_check(check->Group == 1);
 	mu_check(check->StudentProjectsAmount == 1);
 	mu_check(check->ProjectIDS[0] == 4000);
-	mu_check(check->StudentTasksAmount == 2);
+	mu_check(check->StudentTasksAmount == 3);
 	mu_check(strcmp(check->StudentMessages, "1000_SMess.txt") == 0);
 	freeStudents(check);
 }
@@ -355,11 +355,21 @@ MU_TEST(test_global_message){
 	freeMemory(global);
 }
 
-//NEED THE FINAL TXT FILES
 MU_TEST(test_remove_project){
 	Global* global = InitDataBases();
 	RemoveProject(global, global->ProjectsList, 'y');
-	//mu_check(strcmp(global->GlobalMessages, "This Message entered") == 0);
+	mu_check(FindProject(global->ProjectsList, 4000) == NULL);
+	mu_check(FindStudent(global->StudentList, 1000)->StudentProjectsAmount == 0);
+	mu_check(FindStudent(global->StudentList, 1000)->ProjectIDS == NULL);
+	mu_check(FindStudent(global->StudentList, 1000)->StudentTasksAmount == 0);
+	mu_check(FindStudent(global->StudentList, 1001)->StudentProjectsAmount == 0);
+	mu_check(FindStudent(global->StudentList, 1001)->ProjectIDS == NULL);
+	mu_check(FindStudent(global->StudentList, 1001)->StudentTasksAmount == 0);
+	mu_check(FindWatcher(global->WatchersList, 3000)->WatcherProjectsAmount == 1);
+	mu_check(FindWatcher(global->WatchersList, 3000)->ProjectIDS[0] == 4001);
+	mu_check(FindTask(global->TaskList, 6000) == NULL);
+	mu_check(FindTask(global->TaskList, 6001) == NULL);
+	mu_check(FindTask(global->TaskList, 6002) == NULL);
 	freeMemory(global);
 }
 
@@ -369,7 +379,7 @@ MU_TEST_SUITE(Admin_Suite){
 	MU_RUN_TEST(test_promote_user);
 	MU_RUN_TEST(test_add_new_quote);
 	MU_RUN_TEST(test_global_message);
-	//MU_RUN_TEST(test_remove_project);
+	MU_RUN_TEST(test_remove_project);
 }
 
 MU_TEST(test_leave_message_to_students){
