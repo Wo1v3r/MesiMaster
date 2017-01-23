@@ -223,12 +223,12 @@ int RemoveProject(Global* GlobalFile, Project* project, char choice){
 			case 'N':
 			case 'n':
 				return 0;
+				break;
 			default: 
-				printf("No such option!\n");
-				choice = 0;
+				Output("No such option!");
+				return 0;
 			}
 		}
-		system("pause");
 	}
 	else{
 		RemoveProjectFromUsers(GlobalFile, project->ProjectID);
