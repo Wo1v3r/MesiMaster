@@ -93,9 +93,13 @@ int ChangeTaskStatus(Global* GlobalFile, Project* project, int userID, int acces
 	else taskID = taskidtest;
 
 	//Making sure that task is in the relevant project:
+	if (project->ProjectTasksAmount == 0) {
+		if (!taskidtest) Output("Project has no tasks");
+		return 0;
+	}
 	task = findTaskInProject(GlobalFile, project, taskID);
 	if (!task){
-		if (!taskidtest) printf("Task does not belong to this project\n");
+		if (!taskidtest) Output("Task does not belong to this project");
 		return 0;
 	}
 	if (!taskidtest){
@@ -111,7 +115,7 @@ int ChangeTaskStatus(Global* GlobalFile, Project* project, int userID, int acces
 	else status = statustest;
 	
 	if (accessGroup == STUDENT && status == APPROVED) {
-		if (!taskidtest) printf("Student cannot set status to approved, please contact your watcher or admin\n");
+		if (!taskidtest) Output("Student cannot set status to approved, please contact your watcher or admin");
 		return 0;
 	}
 	if (status == NEW || status == ELICITATION || status == ANALYSIS || status == VandV || status == APPROVED)
@@ -127,10 +131,10 @@ int ChangeTaskStatus(Global* GlobalFile, Project* project, int userID, int acces
 	}
 	else
 	{
-		if (!taskidtest) puts("Incorrect status identificator, status not been changed.");
+		if (!taskidtest) Output("Incorrect status identificator, status not been changed.");
 		return 0;
 	}
-	if (!taskidtest)system("pause");
+	if (!taskidtest)Output("");
 	return 1;
 }
 
@@ -646,7 +650,7 @@ int CreateNewProject(Global* GlobalFile,int userID, AccessGroup userGroup,char* 
 int addUserToProject(Global *GlobalFile, Project *newProject , int userID , int watcherOrStudent)
 {	
 	BOOL flag = TRUE;
-	FILE *file = fopen(newProject->ProjectActivityLogs,"a");
+	FILE *file = NULL;
 	Student *student=NULL;
 	Watcher *watcher= NULL;
 	char choice;
@@ -679,7 +683,7 @@ int addUserToProject(Global *GlobalFile, Project *newProject , int userID , int 
 			}
 			for (i = 0; i < newProject->ProjectUsersAmount; i++) if (newProject->StudentsIDS[i] == ID){
 
-				fclose(file);
+				//fclose(file);
 				if(!userID) Output("User already in project");
 				return 0;
 			}
@@ -689,8 +693,9 @@ int addUserToProject(Global *GlobalFile, Project *newProject , int userID , int 
 				/// add project to student 
 				AddProjectIDToStudent(student, newProject->ProjectID);
 				if (!userID) printf("\nStudent with ID : %d was added to project!\n", ID);
+				file = fopen(newProject->ProjectActivityLogs, "a");
 				fprintf(file,"Student with ID : %d was added to project!\n", ID);
-
+				fclose(file);
 				
 				// add student to project
 				ProjectUsersIDNewSize = newProject->ProjectUsersAmount + 1;
@@ -704,7 +709,7 @@ int addUserToProject(Global *GlobalFile, Project *newProject , int userID , int 
 				return 1;
 			}
 			else{
-				if (!userID) puts("Student ID not found.");
+				if (!userID) Output("Student ID not found.");
 				return 0;
 			}
 			break;
@@ -717,7 +722,7 @@ int addUserToProject(Global *GlobalFile, Project *newProject , int userID , int 
 			}
 			for (i = 0; i < newProject->ProjectUsersAmount; i++) if (newProject->StudentsIDS[i] == ID){
 
-				fclose(file);
+				//fclose(file);
 				if(!userID)Output("User already in project");
 				return 0;
 			}
@@ -728,8 +733,9 @@ int addUserToProject(Global *GlobalFile, Project *newProject , int userID , int 
 				AddProjectIDToWatcher(watcher, newProject->ProjectID);
 
 				if (!userID) printf("\nWatcher with ID : %d was added to project!\n", ID);
+				file = fopen(newProject->ProjectActivityLogs, "a");
 				fprintf(file,"Watcher with ID : %d was added to project!\n", ID);
-
+				fclose(file);
 				// add watcher to project
 				ProjectUsersIDNewSize = newProject->ProjectUsersAmount + 1;
 				UsersID = (int*)malloc(ProjectUsersIDNewSize*sizeof(int));
@@ -746,7 +752,7 @@ int addUserToProject(Global *GlobalFile, Project *newProject , int userID , int 
 			}
 			break;
 		case '3':
-			if (!userID )puts("Choosen to return back");
+			if (!userID )Output("Choosen to return back");
 			flag = FALSE;
 			break;
 		default:
@@ -755,8 +761,6 @@ int addUserToProject(Global *GlobalFile, Project *newProject , int userID , int 
 		}
 
 	}
-
-	fclose(file);
 
 	return 1;
 }

@@ -89,6 +89,8 @@ int ProjectMenu(Global* GlobalFile , Project* project, int accessGroup, int user
 			break;
 		case 7:
 			PrintProjectMessages(project);
+			Output("");
+			break;
 		case 8:
 			switch (accessGroup){
 
@@ -239,7 +241,6 @@ int AdminMenu(Global* GlobalFile ,int adminID){
 			break;
 		case 7:
 			PrintProjectsList(GlobalFile, adminID, ADMIN);
-			system("pause");
 			break;
 		case 8:
 			printf("Enter Project ID:\n");
