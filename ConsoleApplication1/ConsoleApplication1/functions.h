@@ -35,9 +35,9 @@ int FindAccessGroup(int ID);  //Test Written - Jonathan
 Admin* FindAdminByUN(Global *g, char *username); //Test written - Isabelle
 Student* FindStudentByUN(Global *g, char *username); //Test written - Isabelle
 Watcher* FindWatcherByUN(Global *g, char *username); //Test written - Isabelle
-Admin *StudentToAdmin(Global *GlobalFile, Student *student);
+Admin *StudentToAdmin(Global *GlobalFile, Student *student); //Test written
 void UpdateDetails(Global* GlobalFile, int userID);
-Admin * WatcherToAdmin(Global *GlobalFile, Watcher *watcher);
+Admin * WatcherToAdmin(Global *GlobalFile, Watcher *watcher); //Test written
 void Output(char* message); // No test needed , prints and prompts for enter
 
 //Log functions
@@ -1464,6 +1464,7 @@ Admin *StudentToAdmin(Global *GlobalFile, Student *student)
 	newAdmin->Group = ADMIN;
 	
 	// delete old fields of student
+	RemoveUserFromProjects(GlobalFile, student->StudentID);
 	free(student->ProjectIDS);		// free array
 	GlobalFile->StudentList = RemoveStudentFromList(GlobalFile->StudentList, student->StudentID);		// remove student from list 
 
@@ -1483,6 +1484,7 @@ Admin * WatcherToAdmin(Global *GlobalFile, Watcher *watcher)
 	newAdmin->Group = ADMIN;
 
 	// delete old fields of student
+	RemoveUserFromProjects(GlobalFile, watcher->WatcherID);
 	free(watcher->ProjectIDS);		// free array
 	GlobalFile->WatchersList = RemoveWatcherFromList(GlobalFile->WatchersList, watcher->WatcherID);		// remove student from list 
 

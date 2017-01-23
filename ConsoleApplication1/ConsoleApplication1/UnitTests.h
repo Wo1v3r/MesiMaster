@@ -164,6 +164,41 @@ MU_TEST(test_FindStudentByUN){
 	freeMemory(global);
 }
 
+MU_TEST(test_watcher_to_admin){
+	Global* global = InitDataBases();
+	int oldRunID = global->AdminRunID;
+	int oldUsersnum = FindProject(global->ProjectsList, 4000)->ProjectUsersAmount;
+	Admin* newAd = WatcherToAdmin(global, FindWatcher(global->WatchersList, 3000));
+	mu_check(newAd != NULL);
+	mu_check(global->AdminRunID - 1 == oldRunID);
+	mu_check(FindWatcher(global->WatchersList, 3000) == NULL);
+	mu_check(newAd->AdminID == oldRunID);
+	mu_check(strcmp(newAd->AdminName,"Hadas") == 0);
+	mu_check(strcmp(newAd->AdminSurename, "Hasidim") == 0);
+	mu_check(strcmp(newAd->AdminUsername, "hHasidim") == 0);
+	mu_check(strcmp(newAd->AdminPassword, "pasS987") == 0);
+	mu_check(newAd->Group == ADMIN);
+	mu_check(oldUsersnum - FindProject(global->ProjectsList, 4000)->ProjectUsersAmount == 1);
+	freeMemory(global);
+}
+
+MU_TEST(test_student_to_admin){
+	Global* global = InitDataBases();
+	int oldRunID = global->AdminRunID;
+	int oldUsersnum = FindProject(global->ProjectsList, 4000)->ProjectUsersAmount;
+	Admin* newAd = StudentToAdmin(global, FindStudent(global->StudentList, 1000));
+	mu_check(newAd != NULL);
+	mu_check(global->AdminRunID - 1 == oldRunID);
+	mu_check(FindStudent(global->StudentList, 1000) == NULL);
+	mu_check(newAd->AdminID == oldRunID);
+	mu_check(strcmp(newAd->AdminName, "Isabelle") == 0);
+	mu_check(strcmp(newAd->AdminSurename, "Meif") == 0);
+	mu_check(strcmp(newAd->AdminUsername, "isabeme") == 0);
+	mu_check(strcmp(newAd->AdminPassword, "AAbb12") == 0);
+	mu_check(newAd->Group == ADMIN);
+	mu_check(oldUsersnum - FindProject(global->ProjectsList, 4000)->ProjectUsersAmount == 1);
+	freeMemory(global);
+}
 
 //Utilities suite
 
@@ -172,6 +207,8 @@ MU_TEST_SUITE(Utilities){
 	MU_RUN_TEST(test_FindAdminByUN);
 	MU_RUN_TEST(test_FindWatcherByUN);
 	MU_RUN_TEST(test_FindStudentByUN);
+	MU_RUN_TEST(test_watcher_to_admin);
+	MU_RUN_TEST(test_student_to_admin);
 }
 
 //Register suite tests:
