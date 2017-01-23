@@ -246,6 +246,7 @@ MU_TEST_SUITE(Utilities){
 	MU_RUN_TEST(test_FindStudentByUN);
 	MU_RUN_TEST(test_watcher_to_admin);
 	MU_RUN_TEST(test_student_to_admin);
+	MU_RUN_TEST(test_update_details);
 }
 
 //Register suite tests:
