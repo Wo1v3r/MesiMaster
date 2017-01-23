@@ -37,9 +37,10 @@ MU_TEST(test_init_projects){
 	mu_check(strcmp(check->ProjectName, "meistertask") == 0);
 	mu_check(strcmp(check->ProjectCreatorName, "Isabelle") == 0);
 	mu_check(strcmp(check->ProjectActivityLogs, "4000_ProjectActivityLog.txt") == 0);
-	mu_check(check->ProjectUsersAmount == 2);
+	mu_check(check->ProjectUsersAmount == 3);
 	mu_check(check->StudentsIDS[0] == 1000);
 	mu_check(check->StudentsIDS[1] == 1001);
+	mu_check(check->StudentsIDS[2] == 3000);
 	mu_check(check->ProjectTasksAmount == 3);
 	mu_check(check->TasksIDS[0] == 6000);
 	mu_check(check->TasksIDS[1] == 6001);
@@ -58,8 +59,9 @@ MU_TEST(test_init_watchers){
 	mu_check(strcmp(check->WatcherEmail, "hadas@sce.ac.il") == 0);
 	mu_check(check->Group == 3);
 	mu_check(check->WatcherReceiveChanges == 0);
-	mu_check(check->WatcherProjectsAmount == 1);
+	mu_check(check->WatcherProjectsAmount == 2);
 	mu_check(check->ProjectIDS[0] == 4001);
+	mu_check(check->ProjectIDS[1] == 4000);
 	freeWatchers(check);
 }
 
