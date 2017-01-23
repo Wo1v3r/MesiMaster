@@ -59,7 +59,7 @@ void LeaveMessageToStudent(Global* GlobalFile, Project* project, Watcher* watche
 void AddProjectMessage(Global* GlobalFile, Project* project, Watcher* watcher); //No test needed(writing to file)
 void PrintStudentActivityWatcher(Global *GlobalFile, Project *project); //No test needed(writing to console from file)
 BOOL ShowNotifications(Global *GlobalFile, Watcher *watcher, char choice); // Test written
-void ShowTasksByStatusWatcher(Global* GlobalFile, int WatcherID); //No test needed(printing to stdout)
+void ShowTasksByWatcher(Global* GlobalFile, int WatcherID); //No test needed(printing to stdout)
 
 //Admin Functions
 int RemoveProject(Global* GlobalFile, Project* project, char choice); //Test written
@@ -1664,7 +1664,7 @@ void PrintProjectMessages(Project *project)
 }
 
 // print all tasks in watchers projects
-void ShowTasksByStatusWatcher(Global* GlobalFile, int WatcherID){
+void ShowTasksByWatcher(Global* GlobalFile, int WatcherID){
 	int tasksCount = 0, i, j, status = -1, projectID, taskID;
 	Watcher* watcher = FindWatcher(GlobalFile->WatchersList, WatcherID);
 	Project* project=NULL;
@@ -1686,7 +1686,8 @@ void ShowTasksByStatusWatcher(Global* GlobalFile, int WatcherID){
 				task = findTaskInProject(GlobalFile, project, taskID);
 				if (task && task->TaskStatus != TRASH)
 				{
-					printf("ID: %d , Creator: %s , Task: %s, Status : %s\n", task->TaskID, task->TaskCreatorName, task->TaskName, task->TaskStatus);
+					printf("ID: %d , Creator: %s , Task: %s, Status : %s\n", task->TaskID, task->TaskCreatorName, task->TaskName,
+						convertStatusToString(task->TaskStatus));
 					tasksCount++;
 				}
 			}
