@@ -304,7 +304,7 @@ int WatcherMenu(Global* GlobalFile, int watcherID){
 			break;
 		case 3:
 			printf("Enter Project ID:\n");
-			scanf("%d\n", &projectID);
+			scanf("%d", &projectID);
 			project = FindProject(GlobalFile->ProjectsList, projectID);
 			if (project == NULL){
 				//Project not found 
