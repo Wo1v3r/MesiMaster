@@ -167,7 +167,7 @@ int RemoveProjectFromUsers(Global* GlobalFile, int ProjectID)
 	{
 		for (i = 0; i < watcher->WatcherProjectsAmount; i++)
 		{
-			if (watcher->ProjectIDS[i] == ProjectID);
+			if (watcher->ProjectIDS[i] == ProjectID)
 			{
 				watcher->ProjectIDS = RemoveProjectIDFromArray(watcher->ProjectIDS, ProjectID, watcher->WatcherProjectsAmount);
 				watcher->WatcherProjectsAmount--;
@@ -181,7 +181,7 @@ int RemoveProjectFromUsers(Global* GlobalFile, int ProjectID)
 	{
 		for (i = 0; i < student->StudentProjectsAmount; i++)
 		{
-			if (student->ProjectIDS[i] == ProjectID);
+			if (student->ProjectIDS[i] == ProjectID)
 			{
 				student->ProjectIDS = RemoveProjectIDFromArray(student->ProjectIDS, ProjectID, student->StudentProjectsAmount);
 				student->StudentTasksAmount -= FindProject(GlobalFile->ProjectsList, ProjectID)->ProjectTasksAmount;
@@ -223,12 +223,12 @@ int RemoveProject(Global* GlobalFile, Project* project, char choice){
 			case 'N':
 			case 'n':
 				return 0;
+				break;
 			default: 
-				printf("No such option!\n");
-				choice = 0;
+				Output("No such option!");
+				return 0;
 			}
 		}
-		system("pause");
 	}
 	else{
 		RemoveProjectFromUsers(GlobalFile, project->ProjectID);
