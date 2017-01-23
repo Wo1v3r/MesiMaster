@@ -248,6 +248,38 @@ MU_TEST(test_Add_Task_ID_To_Project){
 	freeMemory(global);
 }
 
+MU_TEST(test_Add_project_ID_To_watcher){
+	Global* global = InitDataBases();
+	Watcher *watcher = FindWatcher(global->WatchersList, 3001);
+	int oldProjnum = watcher->WatcherProjectsAmount;
+	int i;
+	for (i = 0; i < watcher->WatcherProjectsAmount; i++)
+		if (watcher->ProjectIDS[i] == 4000)
+			mu_fail("Shouldn't get here, project already in!");
+	AddProjectIDToWatcher(watcher, 4000);
+	mu_check(watcher->WatcherProjectsAmount == oldProjnum + 1);
+	for (i = 0; i < watcher->WatcherProjectsAmount; i++)
+		if (watcher->ProjectIDS[i] == 4000)
+			mu_check(watcher->ProjectIDS[i] == 4000);
+	freeMemory(global);
+}
+
+MU_TEST(test_Add_project_ID_To_student){
+	Global* global = InitDataBases();
+	Student *student = FindStudent(global->StudentList, 1000);
+	int oldProjnum = student->StudentProjectsAmount;
+	int i;
+	for (i = 0; i < student->StudentProjectsAmount; i++)
+		if (student->ProjectIDS[i] == 4001)
+			mu_fail("Shouldn't get here, project already in!");
+	AddProjectIDToStudent(student, 4001);
+	mu_check(student->StudentProjectsAmount == oldProjnum + 1);
+	for (i = 0; i < student->StudentProjectsAmount; i++)
+		if (student->ProjectIDS[i] == 4001)
+			mu_check(student->ProjectIDS[i] == 4001);
+	freeMemory(global);
+}
+
 //Utilities suite
 
 MU_TEST_SUITE(Utilities){
@@ -259,6 +291,8 @@ MU_TEST_SUITE(Utilities){
 	MU_RUN_TEST(test_student_to_admin);
 	MU_RUN_TEST(test_update_details);
 	MU_RUN_TEST(test_Add_Task_ID_To_Project);
+	MU_RUN_TEST(test_Add_project_ID_To_watcher);
+	MU_RUN_TEST(test_Add_project_ID_To_student);
 }
 
 //Register suite tests:
