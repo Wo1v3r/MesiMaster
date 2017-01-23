@@ -1255,8 +1255,10 @@ void ShowUserDetails(Global *GlobalFile)
 	printf("Input ID to see full details of user : ");
 	fflush(stdin);
 	scanf("%d",&ID);
-	if (ID < 1000 || ID >=4000)
+	if (ID < 1000 || ID >= 4000){
 		Output("incorrect ID , correct range 1000-3999");
+		return;
+	}
 	else if (ID >= 1000 && ID <= 1999)
 	{
 		student = FindStudent(GlobalFile->StudentList, ID);
@@ -1268,8 +1270,10 @@ void ShowUserDetails(Global *GlobalFile)
 			PrintProjectsByID(GlobalFile, student->ProjectIDS,student->StudentProjectsAmount,student->StudentName);
 			
 		}
-		else
+		else{
 			Output("Student with this id not found");
+			return;
+		}
 
 	}
 	else if (ID >= 2000 && ID <= 2999)
@@ -1280,8 +1284,10 @@ void ShowUserDetails(Global *GlobalFile)
 			printf("User data for user with ID %d", ID);
 			printf("\nUsername : %s\nPassword :%s\nName : %s\n%Surename\n\n", admin->AdminUsername, admin->AdminPassword, admin->AdminName, admin->AdminSurename);
 		}
-		else
+		else{
 			Output("Admin with this ID not found");
+			return;
+		}
 
 	}
 	else if (ID >= 3000 && ID <= 3999)
@@ -1292,10 +1298,12 @@ void ShowUserDetails(Global *GlobalFile)
 			printf("User data for user with ID %d\n", ID);
 			printf("Username : %s\nPassword :%s\nName : %s\n%Surename\nEmail : %s\nProjects Amount : %d\n\n", watcher->WatcherUsername, watcher->WatcherPassword, watcher->WatcherName, watcher->WatcherSurename, watcher->WatcherProjectsAmount);
 		}
-		else
+		else{
 			Output("Watcher with this ID not found");
+			return;
+		}
 	}
-
+	Output("");
 	//THIS INDUCES BUGS, REMOVING IT FOR NOW.. JONATHAN
 	//printf("Return to previous menu ( Y / N for Exit ) :");
 	//fflush(stdin);

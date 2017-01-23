@@ -234,7 +234,6 @@ int AdminMenu(Global* GlobalFile ,int adminID){
 			break;
 		case 5:
 			ShowUserDetails(GlobalFile);
-			Output("");
 			break;
 		case 6:
 			UpdateDetails(GlobalFile, adminID);
