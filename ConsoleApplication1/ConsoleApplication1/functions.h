@@ -167,7 +167,7 @@ int RemoveProjectFromUsers(Global* GlobalFile, int ProjectID)
 	{
 		for (i = 0; i < watcher->WatcherProjectsAmount; i++)
 		{
-			if (watcher->ProjectIDS[i] == ProjectID);
+			if (watcher->ProjectIDS[i] == ProjectID)
 			{
 				watcher->ProjectIDS = RemoveProjectIDFromArray(watcher->ProjectIDS, ProjectID, watcher->WatcherProjectsAmount);
 				watcher->WatcherProjectsAmount--;
@@ -181,7 +181,7 @@ int RemoveProjectFromUsers(Global* GlobalFile, int ProjectID)
 	{
 		for (i = 0; i < student->StudentProjectsAmount; i++)
 		{
-			if (student->ProjectIDS[i] == ProjectID);
+			if (student->ProjectIDS[i] == ProjectID)
 			{
 				student->ProjectIDS = RemoveProjectIDFromArray(student->ProjectIDS, ProjectID, student->StudentProjectsAmount);
 				student->StudentTasksAmount -= FindProject(GlobalFile->ProjectsList, ProjectID)->ProjectTasksAmount;

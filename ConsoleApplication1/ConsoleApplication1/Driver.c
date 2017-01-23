@@ -109,8 +109,7 @@ int ProjectMenu(Global* GlobalFile , Project* project, int accessGroup, int user
 				break;
 			}
 		default:
-			printf("No such option!\n");
-			system("pause");
+			Output("No such option!");
 			opt = -1;
 		}
 		opt = -1; //Reseting option before relaunching project menu
