@@ -326,8 +326,7 @@ int WatcherMenu(Global* GlobalFile, int watcherID){
 		case 7:
 			return 0;
 		default:
-			printf("No such option!\n");
-			system("pause");
+			Output("No such option!\n");
 			}
 		opt = -1;
 

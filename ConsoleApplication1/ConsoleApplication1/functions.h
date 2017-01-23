@@ -460,7 +460,7 @@ void UpdateDetails(Global* GlobalFile, int userID){
 		input = 'n';
 	}
 
-	Output("Details changed!\n");
+	Output("Done!\n");
 }
 
 
@@ -926,55 +926,6 @@ void PrintProjectsList(Global *GlobalFile, int UserID, AccessGroup group)
 	}
 	Output("");
 	return;
-	//// find user
-	//if (group == STUDENT)
-	//{
-	//	student = FindStudent(GlobalFile->StudentList, UserID);
-	//	if (student->StudentProjectsAmount == 0)
-	//	{
-	//		Output("Student not in any project");
-	//		return;
-	//	}
-	//	ProjectsIDS = student->ProjectIDS;
-
-	//	int arraySize = sizeof(ProjectsIDS) / sizeof(int);
-	//	puts("List of your projects :");
-	//	printf("ID\tName\tUsers\tTasks");
-	//	for (i = 0; i < arraySize; i++)
-	//	{
-	//		current = FindProject(GlobalFile->ProjectsList, student->ProjectIDS[i]);
-	//		if (current)
-	//			printf("%d\t%s\t%d\t%d",current->ProjectID,current->ProjectName,current->ProjectUsersAmount,current->ProjectTasksAmount);
-	//	}
-	//}// in case of watcher
-	//else if (group == WATCHER)
-	//{
-	//	watcher = FindWatcher(GlobalFile->WatchersList, UserID);
-	//	ProjectsIDS = watcher->ProjectIDS;
-	//	if (watcher->WatcherProjectsAmount == 0)
-	//	{
-	//		Output("Watcher not in any project");
-	//		return;
-	//	}
-
-	//	int arraySize = sizeof(ProjectsIDS) / sizeof(int);
-	//	puts("List of your projects :");
-	//	printf("ID\tName\tUsers\tTasks");
-	//	for (i = 0; i < arraySize; i++)
-	//	{
-	//		current = FindProject(GlobalFile->ProjectsList, watcher->ProjectIDS[i]);
-	//		if (current)
-	//			printf("%d\t%s\t%d\t%d", current->ProjectID, current->ProjectName, current->ProjectUsersAmount, current->ProjectTasksAmount);	
-	//	}
-	//}
-	//else
-	//{
-	//	Output("Incorrect access group");
-	//	return;
-	//}
-
-	//Output("");
-	//return;
 }
 
 // print users list by ID array in project, done,ready fro testing
@@ -1598,19 +1549,18 @@ BOOL ShowNotifications(Global *GlobalFile, Watcher *watcher, char choice)
 		choice = getchar();
 		if (choice == 'y' || choice == 'Y')
 		{
-			puts("New status : ON");
 			watcher->WatcherReceiveChanges = TRUE;
+			Output("New status : ON");
 			return TRUE;
 		}
 		else if (choice == 'n' || choice == 'N')
 		{
-			puts("New status : OFF");
 			watcher->WatcherReceiveChanges = FALSE;
+			Output("New status : OFF");
 			return TRUE;
 		}
-		puts("Incorrect choice, status not been changed");
+		Output("Incorrect choice, status not been changed");
 		return FALSE;
-		system("pause");
 	}
 	else{
 		if (choice == 'y' || choice == 'Y'){
@@ -1633,7 +1583,6 @@ void PrintProjectChanges(Global *GlobalFile, Project* project, Watcher *watcher)
 		puts("Last changes in this project : ");
 		PrintActivityLog(project->ProjectActivityLogs);
 	}
-	Output("");
 }
 //// watcher notifications end
 
@@ -1661,7 +1610,7 @@ void ShowMessagesToStudent(Global * Global, Student *student)
 	// once messages been printed to student, delete old file by creating new empty one
 	remove(student->StudentMessages);
 
-	system("pause");
+	Output("");
 }
 
 
