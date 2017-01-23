@@ -118,43 +118,7 @@ MU_TEST_SUITE(InitTest){
 
 
 //Utilities Suite Tests
-MU_TEST(test_update_details){
-	Global* g = InitDataBases();
-	//Trying to update details of Watcher,Student and Admin:, these all exist:
-	Student* student = FindStudentByUN(g, "isabeme");
-	Admin* admin = FindAdminByUN(g, "Dubi");
-	Watcher* watcher = FindWatcherByUN(g, "davidBI");
-	char tempPass[31], tempName[31], tempSurname[31];
 
-	//First trying to update a student with a bad password, password won't change:
-	strcpy(tempPass, student->StudentPassword);
-	strcpy(tempName, student->StudentName);
-	strcpy(tempSurname, student->StudentSurename);
-
-	UpdateDetails(g, student->StudentID, "abc", NULL, NULL, 1, 1, 1);
-
-	mu_check(strcmp(student->StudentPassword, tempPass) == 0); //Same pass as before updatedetails
-
-	//Trying to update a watcher, updating only name and surname:
-	strcpy(tempName, watcher->WatcherName);
-	strcpy(tempSurname, watcher->WatcherSurename);
-	UpdateDetails(g, watcher->WatcherID, "adb", "Mike", "Like",1,1,1); //By providing a bad pass
-
-	mu_check(strcmp(watcher->WatcherName, "Mike") == 0);
-	mu_check(strcmp(watcher->WatcherSurename, "Like") == 0);
-
-	//Trying to update an admin, changing all fields:
-	strcpy(tempPass, admin->AdminPassword);
-	strcpy(tempName, admin->AdminName);
-	strcpy(tempSurname, admin->AdminSurename);
-	UpdateDetails(g, admin->AdminID,  "R1s", "Robert", "Stir", 1, 1, 1); //Pass is valid 
-
-	mu_check(strcmp(admin->AdminPassword, "R1s") == 0);
-	mu_check(strcmp(admin->AdminName, "Robert") == 0);
-	mu_check(strcmp(admin->AdminSurename, "Stir") == 0);
-
-	freeMemory(g);
-}
 MU_TEST(test_find_accessgroup){
 	int studentID = 1000, adminID = 2000, watcherID = 3000, badID1 = 999, badID2 = 4000;
 	mu_check(FindAccessGroup(studentID) == 1);
@@ -200,6 +164,41 @@ MU_TEST(test_FindStudentByUN){
 	freeMemory(global);
 }
 
+MU_TEST(test_watcher_to_admin){
+	Global* global = InitDataBases();
+	int oldRunID = global->AdminRunID;
+	int oldUsersnum = FindProject(global->ProjectsList, 4000)->ProjectUsersAmount;
+	Admin* newAd = WatcherToAdmin(global, FindWatcher(global->WatchersList, 3000));
+	mu_check(newAd != NULL);
+	mu_check(global->AdminRunID - 1 == oldRunID);
+	mu_check(FindWatcher(global->WatchersList, 3000) == NULL);
+	mu_check(newAd->AdminID == oldRunID);
+	mu_check(strcmp(newAd->AdminName,"Hadas") == 0);
+	mu_check(strcmp(newAd->AdminSurename, "Hasidim") == 0);
+	mu_check(strcmp(newAd->AdminUsername, "hHasidim") == 0);
+	mu_check(strcmp(newAd->AdminPassword, "pasS987") == 0);
+	mu_check(newAd->Group == ADMIN);
+	mu_check(oldUsersnum - FindProject(global->ProjectsList, 4000)->ProjectUsersAmount == 1);
+	freeMemory(global);
+}
+
+MU_TEST(test_student_to_admin){
+	Global* global = InitDataBases();
+	int oldRunID = global->AdminRunID;
+	int oldUsersnum = FindProject(global->ProjectsList, 4000)->ProjectUsersAmount;
+	Admin* newAd = StudentToAdmin(global, FindStudent(global->StudentList, 1000));
+	mu_check(newAd != NULL);
+	mu_check(global->AdminRunID - 1 == oldRunID);
+	mu_check(FindStudent(global->StudentList, 1000) == NULL);
+	mu_check(newAd->AdminID == oldRunID);
+	mu_check(strcmp(newAd->AdminName, "Isabelle") == 0);
+	mu_check(strcmp(newAd->AdminSurename, "Meif") == 0);
+	mu_check(strcmp(newAd->AdminUsername, "isabeme") == 0);
+	mu_check(strcmp(newAd->AdminPassword, "AAbb12") == 0);
+	mu_check(newAd->Group == ADMIN);
+	mu_check(oldUsersnum - FindProject(global->ProjectsList, 4000)->ProjectUsersAmount == 1);
+	freeMemory(global);
+}
 
 //Utilities suite
 
@@ -208,7 +207,8 @@ MU_TEST_SUITE(Utilities){
 	MU_RUN_TEST(test_FindAdminByUN);
 	MU_RUN_TEST(test_FindWatcherByUN);
 	MU_RUN_TEST(test_FindStudentByUN);
-	MU_RUN_TEST(test_update_details);
+	MU_RUN_TEST(test_watcher_to_admin);
+	MU_RUN_TEST(test_student_to_admin);
 }
 
 //Register suite tests:
