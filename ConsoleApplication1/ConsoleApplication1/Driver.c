@@ -1,6 +1,8 @@
 //Jonathan
 #include "functions.h"
 #include "UnitTests.h"
+#define RED   "\x1B[31m"
+#define RESET "\x1B[0m"
 ////// Menus
 
 //Project Menu : Finished ,Ready for testing - Jonathan
@@ -341,7 +343,6 @@ void LoginMenu(Global* GlobalFile){
 	int menuReturn = 1 , accessGroup = 0, ID = 0, opt = -1;
 
 	while (opt == -1){
-
 		printf("Welcome to the MesiMaster:\n");
 		printf("##########################\n");
 		PrintGlobalMessages(GlobalFile);
@@ -412,7 +413,15 @@ void LoginMenu(Global* GlobalFile){
 }
 
 ///////////MAIN//////////
-
+void logo(){
+	printf(RED  "#     #                                                                   \n" RESET);
+	printf(RED  "##   ##  ######   ####   #  #    #    ##     ####   #####  ######  #####  \n" RESET);
+	printf(RED  "# # # #  #       #       #  ##  ##   #  #   #         #    #       #    # \n" RESET);
+	printf(RED  "#  #  #  #####    ####   #  # ## #  #    #   ####     #    #####   #    # \n" RESET);
+	printf(RED  "#     #  #            #  #  #    #  ######       #    #    #       #####  \n" RESET);
+	printf(RED  "#     #  #       #    #  #  #    #  #    #  #    #    #    #       #   #  \n" RESET);
+	printf(RED  "#     #  ######   ####   #  #    #  #    #   ####     #    ######  #    # \n\n" RESET);
+}
 
 int main()
 {
@@ -435,6 +444,8 @@ int main()
 		return;
 	}
 	system("cls");
+	logo();
+
 	Global *GlobalFile = (Global*)malloc(sizeof(Global));
 	GlobalFile = InitDataBases();
 	LoginMenu(GlobalFile);
