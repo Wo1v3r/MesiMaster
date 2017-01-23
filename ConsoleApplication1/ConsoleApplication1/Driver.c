@@ -35,6 +35,10 @@ int ProjectMenu(Global* GlobalFile , Project* project, int accessGroup, int user
 
 	while (opt == -1){
 		//These options are shared among watcher,user and admin:
+		printf("Project Menu\n");
+		printf("-------------------------------------------\n");
+		printRandQuote(GlobalFile);
+		printf("-------------------------------------------\n");
 		printf("0) Exit project menu\n");
 		printf("1) Create a new task\n");
 		printf("2) Print tasks list\n");
@@ -117,9 +121,10 @@ int StudentMenu(Global *GlobalFile, int studentID){
 	Student* student = FindStudent(GlobalFile->StudentList, studentID);
 	Project* project = NULL;
 	while (opt == -1){
-
-		printf("Welcome Student:\n");
-		printf("##########################\n");
+		printf("Student Menu:\n");
+		printf("-------------------------------------------\n");
+		printRandQuote(GlobalFile);
+		printf("-------------------------------------------\n");		
 		printf("Choose an option: (Int)\n\n");
 		printf("0) Exit Student Menu\n");
 		printf("1) Create new project\n");
@@ -189,6 +194,10 @@ int AdminMenu(Global* GlobalFile ,int adminID){
 	int opt = -1, projectID;
 	Project* project = NULL;
 	while (opt == -1){
+		printf("Admin Menu:\n");
+		printf("-------------------------------------------\n");
+		printRandQuote(GlobalFile);
+		printf("-------------------------------------------\n");
 		printf("0) Exit Admin Menu\n");
 		printf("1) Delete User\n");
 		printf("2) Add a new User\n");
@@ -267,6 +276,10 @@ int WatcherMenu(Global* GlobalFile, int watcherID){
 	int opt = -1, projectID;
 
 	while (opt == -1){
+		printf("Watcher Menu:\n");
+		printf("-------------------------------------------\n");
+		printRandQuote(GlobalFile);
+		printf("-------------------------------------------\n");
 		printf("0) Exit watcher menu\n");
 		printf("1) Print list of projects you're watching\n");
 		printf("2) Create a project\n");

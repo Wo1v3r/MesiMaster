@@ -1,7 +1,7 @@
 #ifndef _FUNCTIONS_
 #define _FUNCTIONS_
 #include "DataBase.h"
-
+#include "time.h"
 
 ///Functions Declarations///
 // 1) Please add function number if possible when re-doing the DFD
@@ -16,6 +16,7 @@ void PrintProjectDetails(Global* GlobalFile, Project* project); //No test needed
 void PrintProjectMessages(Project *project); //No test needed
 
 //Utilities
+void printRandQuote(Global* GlobalFile); //No test needed
 void ShowUserDetails(Global *GlobalFile); //No test needed
 void PrintUsersLists(Global* GlobalFile);//No test needed
 void PrintUsersByID(Global *GlobalFile, Project *project);//No test needed
@@ -2213,5 +2214,28 @@ void Output(char* message){
 	fflush(stdin);
 	gets(junk);
 	system("cls");
+}
+
+
+void printRandQuote(Global* GlobalFile){
+	//Calculating quotes amount:
+	int amount = 0, r;
+	Quote* current = GlobalFile->QuotesList;
+	srand(time(NULL));
+
+	while (current != NULL){
+		current = current->QuoteNext;
+		amount++;
+	}
+	r = rand() % amount;
+
+	current = GlobalFile->QuotesList;
+	amount = 0;
+	while (amount < r){
+		current = current->QuoteNext;
+		amount++;
+	}
+
+	printf("%s -%s\n", current->Quote, current->QuoteAuthor);
 }
 #endif
