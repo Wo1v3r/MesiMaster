@@ -43,18 +43,18 @@ int ProjectMenu(Global* GlobalFile , Project* project, int accessGroup, int user
 		printRandQuote(GlobalFile);
 		printf("-------------------------------------------\n");
 		printf("0) Exit project menu\n");
-		printf("1) Create a new task\n");
+		printf("1) Print Project Messages\n");
 		printf("2) Print tasks list\n");
 		printf("3) Print activity log\n");
 		printf("4) Print project details\n");
 		printf("5) Add users to Project\n");
 		printf("6) Change task status\n");
-		printf("7) Print Project Messages\n");
+		if (accessGroup != ADMIN) printf("7) Create a new task\n");
 
 		switch (accessGroup){
 
 		case ADMIN://This option is for admin only:
-			printf("8) Remove Project\n");
+			printf("7) Remove Project\n");
 			break;
 		case WATCHER: //These options are for watcher only:
 			printf("8) Leave a message to a student\n");
@@ -70,7 +70,8 @@ int ProjectMenu(Global* GlobalFile , Project* project, int accessGroup, int user
 			//Exit to upper menu
 			return 1;
 		case 1:
-			CreateNewTask(GlobalFile,project,userID,accessGroup,NULL);
+			PrintProjectMessages(project);
+			Output("");
 			break;
 		case 2:
 			PrintTasksList(GlobalFile, project);
@@ -82,25 +83,23 @@ int ProjectMenu(Global* GlobalFile , Project* project, int accessGroup, int user
 			PrintProjectDetails(GlobalFile, project);
 			break;
 		case 5:
-			addUserToProject(GlobalFile, project,0,0);
+			addUserToProject(GlobalFile, project, 0, 0);
 			Output("");
 			break;
 		case 6:
-			ChangeTaskStatus(GlobalFile, project, userID, accessGroup,0,0);
+			ChangeTaskStatus(GlobalFile, project, userID, accessGroup, 0, 0);
 			break;
 		case 7:
-			PrintProjectMessages(project);
-			Output("");
+			if (accessGroup == ADMIN)
+			{
+				if (RemoveProject(GlobalFile, project, 0)) return 1;
+			}
+			else CreateNewTask(GlobalFile, project, userID, accessGroup, NULL); 
 			break;
 		case 8:
-			switch (accessGroup){
+			if (accessGroup == WATCHER){
 
-			case ADMIN:
-				if (RemoveProject(GlobalFile, project, 0)) return 1;
-				break;
-			case WATCHER:
 				LeaveMessageToStudent(GlobalFile,project,watcher);
-				break;
 			}
 			break;
 		case 9:
@@ -109,8 +108,7 @@ int ProjectMenu(Global* GlobalFile , Project* project, int accessGroup, int user
 				break;
 			}
 		default:
-			printf("No such option!\n");
-			system("pause");
+			Output("No such option!\n");
 			opt = -1;
 		}
 		opt = -1; //Reseting option before relaunching project menu
