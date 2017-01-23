@@ -382,10 +382,9 @@ void LoginMenu(Global* GlobalFile){
 			menuReturn = 1;
 			break;
 		case 0: //User tried to enter a wrong password three times in a row, exiting the program
-			printf("You failed to log in 3 times in a row, exiting the program, a report was sent to the system\n");
+			Output("You failed to log in 3 times in a row, exiting the program, a report was sent to the system\n");
 			Exit(GlobalFile);
-			system("pause");
-			break;
+			return;
 		case 1:
 			menuReturn = StudentMenu(GlobalFile, ID);
 			break;
