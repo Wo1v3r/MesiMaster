@@ -123,6 +123,7 @@ int StudentMenu(Global *GlobalFile, int studentID){
 	Student* student = FindStudent(GlobalFile->StudentList, studentID);
 	Project* project = NULL;
 	while (opt == -1){
+		system("cls");
 		printf("Student Menu:\n");
 		printf("-------------------------------------------\n");
 		printRandQuote(GlobalFile);
@@ -396,6 +397,7 @@ void LoginMenu(Global* GlobalFile){
 		}
 		if (menuReturn){
 			//If user chose to exit to upper menu,Setting opt to -1 to reset the menu
+			Save(GlobalFile);
 			system("cls");
 			opt = -1;
 		}
