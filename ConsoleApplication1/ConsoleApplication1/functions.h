@@ -698,7 +698,7 @@ int addUserToProject(Global *GlobalFile, Project *newProject , int userID , int 
 				for (i = 0; i < ProjectUsersIDNewSize - 1; i++)
 					UsersID[i] = newProject->StudentsIDS[i];
 				UsersID[i] = ID;
-
+				student->StudentTasksAmount += newProject->ProjectTasksAmount;
 				newProject->StudentsIDS = UsersID;
 				newProject->ProjectUsersAmount++;
 				return 1;
