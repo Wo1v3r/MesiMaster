@@ -375,7 +375,7 @@ void PrintActivityLog(char* filePath){
 	while (fgets(BUFFER, 400, file)) printf("%s\n", BUFFER);
 	fclose(file);
 
-	Output("Activity log printed!");
+	Output("");
 }
 
 void PrintProjectDetails(Global* GlobalFile, Project* project){
