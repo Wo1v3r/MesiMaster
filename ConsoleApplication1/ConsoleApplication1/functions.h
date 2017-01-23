@@ -1486,6 +1486,7 @@ void PromoteUserToAdmin(Global *GlobalFile, int ID)
 	}
 	char choice;
 	BOOL flag = TRUE;
+	Admin *admin = NULL;
 	Student *student = NULL;
 	Watcher *watcher = NULL;
 	AccessGroup group = BAD;
@@ -1525,16 +1526,21 @@ void PromoteUserToAdmin(Global *GlobalFile, int ID)
 				puts("Watcher with this id not found");
 			break;
 		case ADMIN:
-			puts("User with this ID is admin already");
+			admin = FindAdmin(GlobalFile->AdminsList, ID);
+			if (admin)
+				puts("User with this ID is admin already");
+			else
+				puts("The ID entered isn't exist!");		
 		}
 		if (flag == FALSE)
 			return;
 		printf("Want to promote another user? ( Y/ N ) :");
+		fflush(stdin);
 		choice = getchar();
 		if (choice == 'n' || choice == 'N')
 			flag = FALSE;
+		ID = 0;
 	}
-
 	system("pause");
 }
 
