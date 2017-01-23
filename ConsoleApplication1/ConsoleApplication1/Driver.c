@@ -170,7 +170,7 @@ int StudentMenu(Global *GlobalFile, int studentID){
 			ShowTasksByStatus(GlobalFile, studentID);
 			break;
 		case 5:
-			UpdateDetails(GlobalFile,studentID); // 19
+			UpdateDetails(GlobalFile,studentID,NULL,NULL,NULL,0,0,0); // 19
 			break;
 		case 6:
 			PrintStudentLog(student); // 11
@@ -235,7 +235,7 @@ int AdminMenu(Global* GlobalFile ,int adminID){
 			ShowUserDetails(GlobalFile);
 			break;
 		case 6:
-			UpdateDetails(GlobalFile, adminID);
+			UpdateDetails(GlobalFile, adminID,NULL,NULL,NULL,0,0,0);
 			break;
 		case 7:
 			PrintProjectsList(GlobalFile, adminID, ADMIN);
@@ -314,7 +314,7 @@ int WatcherMenu(Global* GlobalFile, int watcherID){
 			ProjectMenu(GlobalFile, project, WATCHER, watcherID);
 			break;
 		case 4:
-			UpdateDetails(GlobalFile, watcherID);
+			UpdateDetails(GlobalFile, watcherID,NULL,NULL,NULL,0,0,0);
 			break;
 		case 5:
 			ShowNotifications(GlobalFile, watcher, 0);
@@ -396,7 +396,7 @@ void LoginMenu(Global* GlobalFile){
 			break;
 		}
 		if (menuReturn){
-			//If user chose to exit to upper menu,Setting opt to -1 to reset the menu
+			//If user chose to exit .to upper menu,Setting opt to -1 to reset the menu
 			Save(GlobalFile);
 			system("cls");
 			opt = -1;

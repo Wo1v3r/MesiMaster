@@ -36,7 +36,8 @@ Admin* FindAdminByUN(Global *g, char *username); //Test written - Isabelle
 Student* FindStudentByUN(Global *g, char *username); //Test written - Isabelle
 Watcher* FindWatcherByUN(Global *g, char *username); //Test written - Isabelle
 Admin *StudentToAdmin(Global *GlobalFile, Student *student);
-void UpdateDetails(Global* GlobalFile, int userID);
+void UpdateDetails(Global* GlobalFile, int userID, char* testpass, char* testname, char* testlastname
+									 , int testchangepass, int testchangename, int testchangelastname);
 Admin * WatcherToAdmin(Global *GlobalFile, Watcher *watcher);
 void Output(char* message); // No test needed , prints and prompts for enter
 
@@ -405,13 +406,14 @@ int FindAccessGroup(int ID){
 }
 
 // Update few field of user, done, ready for testing
-void UpdateDetails(Global* GlobalFile, int userID){
+void UpdateDetails(Global* GlobalFile, int userID,char* testpass, char* testname, char* testlastname
+	,int testchangepass, int testchangename, int testchangelastname){
 	//Finding the user and its' struct:
 	Watcher* watcher = NULL;
 	Admin* admin = NULL;
 	Student* student = NULL;
 	BOOL passCorrectness;
-	char *name, *surname, input,*password,tempPass[31];
+	char *name, *surname, input, *password, tempPass[31], tempname[31], tempsurname[31];
 	int AG = FindAccessGroup(userID);
 
 	switch (AG){
@@ -431,44 +433,59 @@ void UpdateDetails(Global* GlobalFile, int userID){
 
 	case WATCHER:
 		watcher = FindWatcher(GlobalFile->WatchersList, userID);
-		name = student->StudentName;
-		surname = student->StudentSurename;
+		name = watcher->WatcherName;
+		surname = watcher->WatcherSurename;
 		password = watcher->WatcherPassword;
 		break;
 	}
-
-	fflush(stdin);
-	printf("\nDo you want to change your first name?(y/n)\n");
-	input = getchar();
-	if (input == 'y') {
-		printf("Enter new first name:\n");
-		scanf("%s", &name);
-		input = 'n';
+	if (!testchangename){
+		fflush(stdin);
+		printf("\nDo you want to change your first name?(y/n)\n");
+		input = getchar();
+		if (input == 'y') {
+			printf("Enter new first name:\n");
+			scanf("%s", &tempname);
+			strcpy(name, tempname);
+			input = 'n';
+		}
 	}
+	else if (testname) strcpy(name, testname);
 
-	fflush(stdin);
-	printf("Do you want to change your last name?(y/n)\n");
-	input = getchar();
-	if (input == 'y') {
-		printf("Enter new last name:\n");
-		scanf("%s", &surname);
-		input = 'n';
+	if (!testchangelastname){
+		fflush(stdin);
+		printf("Do you want to change your last name?(y/n)\n");
+		input = getchar();
+		if (input == 'y') {
+			printf("Enter new last name:\n");
+			scanf("%s", &tempsurname);
+			strcpy(surname, tempsurname);
+			input = 'n';
+		}
 	}
+	else if (testlastname) strcpy(surname, testlastname);
 
-	fflush(stdin);
-	printf("Do you want to change your password?(y/n)\n");
-	input = getchar();
-	if (input == 'y') {
-		printf("Enter new password:\n");
-		scanf("%s", &tempPass);
-		passCorrectness = CheckPassword(tempPass);
+	if (!testchangepass){
+		fflush(stdin);
+		printf("Do you want to change your password?(y/n)\n");
+		input = getchar();
+		if (input == 'y') {
+			printf("Enter new password:\n");
+			scanf("%s", &tempPass);
+			passCorrectness = CheckPassword(tempPass);
+			if (passCorrectness)
+				strcpy(password, tempPass);
+			else Output("Password is invalid, Keeping old password");
+			input = 'n';
+		}
+	}
+	else if (testpass){
+		passCorrectness = CheckPassword(testpass);
 		if (passCorrectness)
-			strcpy(password,tempPass);
-		else Output("Password is invalid, Keeping old password");
-		input = 'n';
+			strcpy(password, testpass);
 	}
 
-	Output("Done!\n");
+
+	if (!testname && !testpass && !testlastname) Output("Done!\n");
 }
 
 
