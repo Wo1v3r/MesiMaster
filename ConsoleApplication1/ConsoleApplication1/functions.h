@@ -61,7 +61,7 @@ BOOL ShowNotifications(Global *GlobalFile, Watcher *watcher, char choice); // Te
 void ShowTasksByStatusWatcher(Global* GlobalFile, int WatcherID); //No test needed(printing to stdout)
 
 //Admin Functions
-void RemoveProject(Global* GlobalFile, Project* project, char choice); //Test written
+int RemoveProject(Global* GlobalFile, Project* project, char choice); //Test written
 void AddGlobalMessage(Global* GlobalFile, char* msg); //Test written
 void AddNewQuote(Global* GlobalFile, char* quote, char* creator); //Test written
 void ManageQuotes(Global *GlobalFile); //No test needed(switch case function)
@@ -196,7 +196,7 @@ int RemoveProjectFromUsers(Global* GlobalFile, int ProjectID)
 }
 
 // done by Alexey, ready for testing
-void RemoveProject(Global* GlobalFile, Project* project, char choice){
+int RemoveProject(Global* GlobalFile, Project* project, char choice){
 	int i;
 	if (choice == 0){
 		choice = 0;
@@ -217,11 +217,14 @@ void RemoveProject(Global* GlobalFile, Project* project, char choice){
 				// remove project from GLobal list
 				GlobalFile->ProjectsList = RemoveProjectFromList(GlobalFile->ProjectsList, project->ProjectID);
 				//delete // Need to implement functions that will remove this project id from all the users, from all the lists etc
+				Output("Project removed!!");
+				return 0;
 				break;
 			case 'N':
 			case 'n':
-				break;
-			default: printf("No such option!\n");
+				return 1;
+			default: 
+				printf("No such option!\n");
 				choice = 0;
 			}
 		}
