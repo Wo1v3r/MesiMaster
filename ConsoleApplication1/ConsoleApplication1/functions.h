@@ -698,7 +698,7 @@ int addUserToProject(Global *GlobalFile, Project *newProject , int userID , int 
 				for (i = 0; i < ProjectUsersIDNewSize - 1; i++)
 					UsersID[i] = newProject->StudentsIDS[i];
 				UsersID[i] = ID;
-
+				student->StudentTasksAmount += newProject->ProjectTasksAmount;
 				newProject->StudentsIDS = UsersID;
 				newProject->ProjectUsersAmount++;
 				return 1;
@@ -789,9 +789,6 @@ int CreateNewTask(Global *GlobalFile, Project *project,int UserID,AccessGroup gr
 	Task *newTask = (Task*)malloc(sizeof(Task));	//new task pointer
 
 	newTask->TaskID = GlobalFile->TaskRunID;		// set Task Run ID
-
-	GlobalFile->TaskRunID++;						// increase run id by 1
-
 	if (taskName) strcpy(newTask->TaskName, taskName);
 	else{
 		fflush(stdin);
@@ -818,21 +815,21 @@ int CreateNewTask(Global *GlobalFile, Project *project,int UserID,AccessGroup gr
 	if (group == STUDENT && student)
 	{
 		strcpy(newTask->TaskCreatorName, student->StudentName);			// copy creator name to task
-		student->StudentTasksAmount++;
-
 		// add log to student
-		sprintf(log, "%s created task : %s", student->StudentUsername, newTask->TaskName);
+		sprintf(log, "%s created task : %s\n", student->StudentUsername, newTask->TaskName);
 		printLogToFile(student->StudentActivityLog, log);
 	}
 	else if (group == WATCHER && watcher)
 		strcpy(newTask->TaskCreatorName, watcher->WatcherName);			// copy creator name to task
-	
-
 	newTask->TaskStatus = NEW;								// initialize status
-	
+	int i;
+	for (i = 0; i < project->ProjectUsersAmount; i++)
+		if (FindAccessGroup(project->StudentsIDS[i]) == STUDENT)
+			if (FindStudent(GlobalFile->StudentList, project->StudentsIDS[i]) != NULL)
+				FindStudent(GlobalFile->StudentList, project->StudentsIDS[i])->StudentTasksAmount++;
 	// add ID of new task to array TasksIDs in project
 	AddTaskIDToProject(project, newTask->TaskID);
-
+	GlobalFile->TaskRunID++;						// increase run id by 1
 	// add new task to global list of Tasks
 	GlobalFile->TaskList = AddTask(GlobalFile->TaskList, newTask);
 	printf("%s created task \"%s\"\n",newTask->TaskCreatorName, newTask->TaskName);
