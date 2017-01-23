@@ -96,7 +96,7 @@ int ProjectMenu(Global* GlobalFile , Project* project, int accessGroup, int user
 			switch (accessGroup){
 
 			case ADMIN:
-				if (RemoveProject(GlobalFile, project, 0)) return;
+				if (RemoveProject(GlobalFile, project, 0)) return 1;
 				break;
 			case WATCHER:
 				LeaveMessageToStudent(GlobalFile,project,watcher);
