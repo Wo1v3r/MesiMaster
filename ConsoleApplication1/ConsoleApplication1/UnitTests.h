@@ -237,6 +237,17 @@ MU_TEST(test_student_to_admin){
 	freeMemory(global);
 }
 
+MU_TEST(test_Add_Task_ID_To_Project){
+	Global* global = InitDataBases();
+	Project *project = FindProject(global->ProjectsList, 4000);
+	int oldTasknum = project->ProjectTasksAmount;
+	mu_check(findTaskInProject(global, project, 6003) == NULL);
+	AddTaskIDToProject(project, 6003);
+	mu_check(findTaskInProject(global, project, 6003) != NULL);
+	mu_check(project->ProjectTasksAmount == oldTasknum + 1);
+	freeMemory(global);
+}
+
 //Utilities suite
 
 MU_TEST_SUITE(Utilities){
@@ -247,6 +258,7 @@ MU_TEST_SUITE(Utilities){
 	MU_RUN_TEST(test_watcher_to_admin);
 	MU_RUN_TEST(test_student_to_admin);
 	MU_RUN_TEST(test_update_details);
+	MU_RUN_TEST(test_Add_Task_ID_To_Project);
 }
 
 //Register suite tests:
