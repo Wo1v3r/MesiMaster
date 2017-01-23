@@ -118,7 +118,44 @@ MU_TEST_SUITE(InitTest){
 
 
 //Utilities Suite Tests
+MU_TEST(test_update_details){
+	Global* g = InitDataBases();
+	//Trying to update details of Watcher,Student and Admin:, these all exist:
+	Student* student = FindStudentByUN(g, "isabeme");
+	Admin* admin = FindAdminByUN(g, "Dubi");
+	Watcher* watcher = FindWatcherByUN(g, "davidBI");
+	char tempPass[31], tempName[31], tempSurname[31];
 
+	//First trying to update a student with a bad password, password won't change:
+	strcpy(tempPass, student->StudentPassword);
+	strcpy(tempName, student->StudentName);
+	strcpy(tempSurname, student->StudentSurename);
+
+	UpdateDetails(g, student->StudentID, "abc", NULL, NULL, 1, 1, 1);
+
+	mu_check(strcmp(student->StudentPassword, tempPass) == 0); //Same pass as before updatedetails
+
+	//Trying to update a watcher, updating only name and surname:
+	strcpy(tempName, watcher->WatcherName);
+	strcpy(tempSurname, watcher->WatcherSurename);
+	UpdateDetails(g, watcher->WatcherID, "adb", "Mike", "Like", 1, 1, 1); //By providing a bad pass
+
+	mu_check(strcmp(watcher->WatcherName, "Mike") == 0);
+	mu_check(strcmp(watcher->WatcherSurename, "Like") == 0);
+
+	//Trying to update an admin, changing all fields:
+	strcpy(tempPass, admin->AdminPassword);
+	strcpy(tempName, admin->AdminName);
+	strcpy(tempSurname, admin->AdminSurename);
+	UpdateDetails(g, admin->AdminID, "R1s", "Robert", "Stir", 1, 1, 1); //Pass is valid 
+
+	mu_check(strcmp(admin->AdminPassword, "R1s") == 0);
+	mu_check(strcmp(admin->AdminName, "Robert") == 0);
+	mu_check(strcmp(admin->AdminSurename, "Stir") == 0);
+
+	freeMemory(g);
+
+}
 MU_TEST(test_find_accessgroup){
 	int studentID = 1000, adminID = 2000, watcherID = 3000, badID1 = 999, badID2 = 4000;
 	mu_check(FindAccessGroup(studentID) == 1);
@@ -173,7 +210,7 @@ MU_TEST(test_watcher_to_admin){
 	mu_check(global->AdminRunID - 1 == oldRunID);
 	mu_check(FindWatcher(global->WatchersList, 3000) == NULL);
 	mu_check(newAd->AdminID == oldRunID);
-	mu_check(strcmp(newAd->AdminName,"Hadas") == 0);
+	mu_check(strcmp(newAd->AdminName, "Hadas") == 0);
 	mu_check(strcmp(newAd->AdminSurename, "Hasidim") == 0);
 	mu_check(strcmp(newAd->AdminUsername, "hHasidim") == 0);
 	mu_check(strcmp(newAd->AdminPassword, "pasS987") == 0);
@@ -216,9 +253,9 @@ MU_TEST_SUITE(Utilities){
 MU_TEST(test_student_register){
 	//int StudentRegister(Global *g, char* nameTest, char* unTest, char* passTest, char* emailTest, char* departmentTest, char yearTest)
 	Global* global = InitDataBases();
-	
+
 	//Trying to register a student with a bad password:
-	mu_check(StudentRegister(global, "Jonathan","Leon", "Johnleon24", "aab", "johnleon24@gmail.com", "Software", '2') == 0);
+	mu_check(StudentRegister(global, "Jonathan", "Leon", "Johnleon24", "aab", "johnleon24@gmail.com", "Software", '2') == 0);
 
 	//Trying to register a student with a taken username:
 	mu_check(StudentRegister(global, "Jonathan", "Leon", "johnnyL", "A1b", "johnleon24@gmail.com", "Software", '2') == 0);
@@ -475,7 +512,7 @@ MU_TEST(test_create_task){
 	mu_check((taskID = CreateNewTask(global, project, noSuchUserID, STUDENT, taskName)) == 0); //No such user
 	mu_check((taskID = CreateNewTask(global, project, studentID, BAD, taskName)) == 0); //No such user acces group
 	mu_check((taskID = CreateNewTask(global, project, studentID, STUDENT, taskName)) != 0); // Should pass and create new task
-	
+
 	//Checking if that task was created successfuly:
 	mu_check(findTaskInProject(global, project, taskID) != NULL); //That task should exist
 
@@ -483,7 +520,7 @@ MU_TEST(test_create_task){
 }
 
 MU_TEST(test_add_user_to_project){
-	int addStudent = 1, addWatcher = 2, Exit = 3, studentID = 1003, watcherID = 3000,doesNotExist = 1535;
+	int addStudent = 1, addWatcher = 2, Exit = 3, studentID = 1003, watcherID = 3000, doesNotExist = 1535;
 	Global* global = InitDataBases();
 	Project* project = FindProject(global->ProjectsList, 4000); //That project exists
 	//Trying to exit, should return 1:
@@ -601,7 +638,7 @@ MU_TEST(test_FindTask_structures)
 	//Loading file:
 	Global* global = InitDataBases();
 	mu_check(FindTask(global->TaskList, taskID) != NULL);//Check that the task was found
-	mu_check(FindTask(global->TaskList, taskID) ->TaskID == taskID); //Check that the task is actually the right one
+	mu_check(FindTask(global->TaskList, taskID)->TaskID == taskID); //Check that the task is actually the right one
 	mu_check(FindTask(global->TaskList, badID) == NULL); //Check that bad id not found
 	freeMemory(global);
 }
@@ -704,7 +741,7 @@ MU_TEST(test_AddProject)
 	Project * test_proj = (Project*)malloc(sizeof(Project));
 	test_proj->ProgramChanges = 0;
 	test_proj->ProjectID = 4999;
-	strcpy(test_proj->ProjectActivityLogs, "4999_ProjectActivityLog.txt"); 
+	strcpy(test_proj->ProjectActivityLogs, "4999_ProjectActivityLog.txt");
 	strcpy(test_proj->ProjectCreatorName, "izzie");
 	strcpy(test_proj->ProjectMessages, "4999_PMess.txt");
 	strcpy(test_proj->ProjectName, "Mesimaster");
@@ -762,7 +799,7 @@ MU_TEST(test_RemoveProjectFromList)
 	Project * emptyList = NULL; //should do nothing but dont crash
 	int testID = 4000; //Should delete
 	int badId = 9999; //Should do nothing (non existing item) , should not crash
-	
+
 	global->ProjectsList = RemoveProjectFromList(global->ProjectsList, testID);
 	mu_check(FindProject(global->ProjectsList, testID) == NULL); //check that realy removed - item is really not in the list
 	global->ProjectsList = RemoveProjectFromList(global->ProjectsList, badId); //check deleting non exosting item
