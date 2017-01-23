@@ -218,11 +218,11 @@ int RemoveProject(Global* GlobalFile, Project* project, char choice){
 				GlobalFile->ProjectsList = RemoveProjectFromList(GlobalFile->ProjectsList, project->ProjectID);
 				//delete // Need to implement functions that will remove this project id from all the users, from all the lists etc
 				Output("Project removed!!");
-				return 0;
+				return 1;
 				break;
 			case 'N':
 			case 'n':
-				return 1;
+				return 0;
 			default: 
 				printf("No such option!\n");
 				choice = 0;
