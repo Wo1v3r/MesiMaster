@@ -1,2 +1,2 @@
-4000 meistertask Isabelle 4000_ProjectActivityLog.txt 2 1000 1001 3 6000 6001 6002 4000_ProjectMessages.txt
+4000 meistertask Isabelle 4000_ProjectActivityLog.txt 3 1000 1001 3000 3 6000 6001 6002 4000_ProjectMessages.txt
 4001 yesodot&more Johnathan 4001_ProjectActivityLog.txt 3 1002 1003 3000 3 6003 6004 6005 4001_ProjectMessages.txt
