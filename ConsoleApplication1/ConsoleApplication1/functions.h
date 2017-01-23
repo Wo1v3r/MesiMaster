@@ -202,6 +202,7 @@ void RemoveProject(Global* GlobalFile, Project* project, char choice){
 		choice = 0;
 		printf("Are you sure you want to remove this project and all of its tasks (Y/N)?\n");
 		while (choice == 0){
+			fflush(stdin);
 			choice = getchar();
 			switch (choice){
 			case 'Y':

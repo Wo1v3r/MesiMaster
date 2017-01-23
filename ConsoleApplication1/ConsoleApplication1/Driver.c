@@ -102,7 +102,6 @@ int ProjectMenu(Global* GlobalFile , Project* project, int accessGroup, int user
 				break;
 			}
 			break;
-
 		case 9:
 			if (accessGroup == WATCHER){ //The last option is only for watcher
 				AddProjectMessage(GlobalFile, project, watcher);
