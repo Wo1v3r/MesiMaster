@@ -30,7 +30,7 @@ void RemoveUserFromProjects(Global *GlobalFile, int UserID);
 int *RemoveUserIDFromProject(Project* project, int ID);
 void AddProjectIDToStudent(Student * Student, int ProjectID);
 void AddProjectIDToWatcher(Watcher * Watcher, int ProjectID);
-void AddTaskIDToProject(Project* project, int TaskID);
+void AddTaskIDToProject(Project* project, int TaskID); //Test written
 int FindAccessGroup(int ID);  //Test Written - Jonathan
 Admin* FindAdminByUN(Global *g, char *username); //Test written - Isabelle
 Student* FindStudentByUN(Global *g, char *username); //Test written - Isabelle
@@ -801,8 +801,7 @@ void AddTaskIDToProject(Project* project, int TaskID)
 
 	free(project->TasksIDS);											// free old array memory
 	project->TasksIDS = newArrayIDs;									// set new array pointer to student
-
-
+	project->ProjectTasksAmount = TaskIDSNewSize;
 }
 
 // 53 - create new task from project menu, done, ready for testing
