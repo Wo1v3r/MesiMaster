@@ -278,6 +278,7 @@ int WatcherMenu(Global* GlobalFile, int watcherID){
 	int opt = -1, projectID;
 
 	while (opt == -1){
+		system("cls");
 		printf("Watcher Menu:\n");
 		printf("-------------------------------------------\n");
 		printRandQuote(GlobalFile);
@@ -297,7 +298,6 @@ int WatcherMenu(Global* GlobalFile, int watcherID){
 			return 1;
 		case 1:
 			PrintProjectsListWatcher(GlobalFile, watcherID, WATCHER);
-			system("pause");
 			break;
 		case 2:
 			CreateNewProject(GlobalFile, watcherID, WATCHER,NULL);
@@ -319,6 +319,7 @@ int WatcherMenu(Global* GlobalFile, int watcherID){
 			break;
 		case 5:
 			ShowNotifications(GlobalFile, watcher, 0);
+
 			break;
 		case 6:
 			ShowTasksByStatusWatcher(GlobalFile, watcherID);

@@ -912,6 +912,7 @@ void PrintProjectsList(Global *GlobalFile, int UserID, AccessGroup group)
 				current->ProjectUsersAmount,
 				current->ProjectTasksAmount);
 			current = current->ProjectNext;
+			printf("\n");
 		}
 	}
 	else{
@@ -922,6 +923,8 @@ void PrintProjectsList(Global *GlobalFile, int UserID, AccessGroup group)
 				current->ProjectName,
 				current->ProjectUsersAmount,
 				current->ProjectTasksAmount);
+			printf("\n");
+
 		}
 	}
 	Output("");
@@ -944,7 +947,6 @@ void PrintUsersByID(Global *GlobalFile, Project *project)
 		if (student)
 			printf("%-20s%-20s%-20s%-20s%-25s\n", student->StudentUsername, student->StudentName, student->StudentSurename, student->StudentDepartment, student->StudentEmail);
 	}
-	system("pause");
 }
 
 // print list of projects with details in which watcher is watching, done, ready for testing
@@ -958,7 +960,7 @@ void PrintProjectsListWatcher(Global *GlobalFile, int UserID, AccessGroup group)
 
 	if (GlobalFile->ProjectsList == NULL)
 	{
-		puts("No Projects in database");
+		Output("No Projects in database");
 		return;
 	}
 
@@ -969,7 +971,7 @@ void PrintProjectsListWatcher(Global *GlobalFile, int UserID, AccessGroup group)
 		ProjectsIDS = watcher->ProjectIDS;
 		if (watcher->WatcherProjectsAmount == 0)
 		{
-			puts("Watcher not in any project");
+			Output("Watcher not in any project");
 			return;
 		}
 
@@ -988,10 +990,11 @@ void PrintProjectsListWatcher(Global *GlobalFile, int UserID, AccessGroup group)
 	}
 	else
 	{
-		puts("Incorrect access group");
+		Output("Incorrect access group");
 		return;
 	}
-	system("pause");
+
+	Output("\n");
 }
 
 // print activity log of student in project, receive student, done, ready for testing
