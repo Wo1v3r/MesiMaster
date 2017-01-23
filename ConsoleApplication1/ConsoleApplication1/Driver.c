@@ -1,7 +1,7 @@
 //Jonathan
 #include "functions.h"
 #include "UnitTests.h"
-#define RED   "\x1B[31m"
+#define GRN   "\x1B[32m"
 #define RESET "\x1B[0m"
 ////// Menus
 
@@ -414,13 +414,13 @@ void LoginMenu(Global* GlobalFile){
 
 ///////////MAIN//////////
 void logo(){
-	printf(RED  "#     #                                                                   \n" RESET);
-	printf(RED  "##   ##  ######   ####   #  #    #    ##     ####   #####  ######  #####  \n" RESET);
-	printf(RED  "# # # #  #       #       #  ##  ##   #  #   #         #    #       #    # \n" RESET);
-	printf(RED  "#  #  #  #####    ####   #  # ## #  #    #   ####     #    #####   #    # \n" RESET);
-	printf(RED  "#     #  #            #  #  #    #  ######       #    #    #       #####  \n" RESET);
-	printf(RED  "#     #  #       #    #  #  #    #  #    #  #    #    #    #       #   #  \n" RESET);
-	printf(RED  "#     #  ######   ####   #  #    #  #    #   ####     #    ######  #    # \n\n" RESET);
+	printf(GRN  "#     #                                                                   \n" RESET);
+	printf(GRN  "##   ##  ######   ####   #  #    #    ##     ####   #####  ######  #####  \n" RESET);
+	printf(GRN  "# # # #  #       #       #  ##  ##   #  #   #         #    #       #    # \n" RESET);
+	printf(GRN  "#  #  #  #####    ####   #  # ## #  #    #   ####     #    #####   #    # \n" RESET);
+	printf(GRN  "#     #  #            #  #  #    #  ######       #    #    #       #####  \n" RESET);
+	printf(GRN  "#     #  #       #    #  #  #    #  #    #  #    #    #    #       #   #  \n" RESET);
+	printf(GRN  "#     #  ######   ####   #  #    #  #    #   ####     #    ######  #    # \n\n" RESET);
 }
 
 int main()
