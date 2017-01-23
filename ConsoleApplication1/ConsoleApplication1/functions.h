@@ -679,7 +679,7 @@ int addUserToProject(Global *GlobalFile, Project *newProject , int userID , int 
 			for (i = 0; i < newProject->ProjectUsersAmount; i++) if (newProject->StudentsIDS[i] == ID){
 
 				fclose(file);
-				Output("User already in project");
+				if(!userID) Output("User already in project");
 				return 0;
 			}
 			student = FindStudent(GlobalFile->StudentList, ID);
@@ -717,7 +717,7 @@ int addUserToProject(Global *GlobalFile, Project *newProject , int userID , int 
 			for (i = 0; i < newProject->ProjectUsersAmount; i++) if (newProject->StudentsIDS[i] == ID){
 
 				fclose(file);
-				Output("User already in project");
+				if(!userID)Output("User already in project");
 				return 0;
 			}
 			watcher = FindWatcher(GlobalFile->WatchersList, ID);

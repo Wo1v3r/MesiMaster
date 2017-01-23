@@ -436,7 +436,7 @@ MU_TEST(test_create_task){
 }
 
 MU_TEST(test_add_user_to_project){
-	int addStudent = 1, addWatcher = 2, Exit = 3, studentID = 1000, watcherID = 3000,doesNotExist = 1535;
+	int addStudent = 1, addWatcher = 2, Exit = 3, studentID = 1003, watcherID = 3000,doesNotExist = 1535;
 	Global* global = InitDataBases();
 	Project* project = FindProject(global->ProjectsList, 4000); //That project exists
 	//Trying to exit, should return 1:
