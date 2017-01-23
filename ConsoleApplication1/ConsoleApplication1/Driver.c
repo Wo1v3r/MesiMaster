@@ -37,6 +37,7 @@ int ProjectMenu(Global* GlobalFile , Project* project, int accessGroup, int user
 
 	while (opt == -1){
 		//These options are shared among watcher,user and admin:
+		system("cls");
 		printf("Project Menu\n");
 		printf("-------------------------------------------\n");
 		printRandQuote(GlobalFile);
@@ -95,7 +96,7 @@ int ProjectMenu(Global* GlobalFile , Project* project, int accessGroup, int user
 			switch (accessGroup){
 
 			case ADMIN:
-				RemoveProject(GlobalFile, project, 0);
+				if (RemoveProject(GlobalFile, project, 0)) return;
 				break;
 			case WATCHER:
 				LeaveMessageToStudent(GlobalFile,project,watcher);
