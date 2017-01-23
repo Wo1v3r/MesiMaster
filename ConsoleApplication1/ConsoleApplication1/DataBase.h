@@ -443,8 +443,8 @@ void freeMemory(Global *GlobalDB){
 	free(GlobalDB);
 }
 
-// this functions will save all databases to files, deallocate memory and close program
-void Exit(Global *GlobalDB){
+
+void Save(Global *GlobalDB){
 	saveAdmins(GlobalDB->AdminsList);
 	saveStudents(GlobalDB->StudentList);
 	saveWatchers(GlobalDB->WatchersList);
@@ -452,6 +452,11 @@ void Exit(Global *GlobalDB){
 	saveQuotes(GlobalDB->QuotesList);
 	saveTasks(GlobalDB->TaskList);
 	saveGlobal(GlobalDB);
+}
+
+// this functions will save all databases to files, deallocate memory and close program
+void Exit(Global *GlobalDB){
+	Save(GlobalDB);
 	freeMemory(GlobalDB);
 }
 
