@@ -248,69 +248,35 @@ MU_TEST(test_Add_Task_ID_To_Project){
 	freeMemory(global);
 }
 
-MU_TEST(test_RemoveProjectIDFromArray)
-{
-	//checks that the function actually removes a value from an array
-	int *projIDs = (int*)malloc(4 * sizeof(int)), i, flag = 0;
-	projIDs[0] = 4000;
-	projIDs[1] = 4001;
-	projIDs[2] = 4002;
-	projIDs[3] = 4003;
-	projIDs = RemoveProjectIDFromArray(projIDs, 4001, 4);
-	for (i = 0; i < 3; i++)
-		if (projIDs[i] == 4001)
-			flag = 1;
-	mu_check(flag == 0);
-	free(projIDs);
-}
-
-MU_TEST(test_RemoveProjectFromUsers)
-{
-	//improve
+MU_TEST(test_Add_project_ID_To_watcher){
 	Global* global = InitDataBases();
-	int projDel = RemoveProjectFromUsers(global, 4000);
-	mu_check(projDel == 3);
+	Watcher *watcher = FindWatcher(global->WatchersList, 3001);
+	int oldProjnum = watcher->WatcherProjectsAmount;
+	int i;
+	for (i = 0; i < watcher->WatcherProjectsAmount; i++)
+		if (watcher->ProjectIDS[i] == 4000)
+			mu_fail("Shouldn't get here, project already in!");
+	AddProjectIDToWatcher(watcher, 4000);
+	mu_check(watcher->WatcherProjectsAmount == oldProjnum + 1);
+	for (i = 0; i < watcher->WatcherProjectsAmount; i++)
+		if (watcher->ProjectIDS[i] == 4000)
+			mu_check(watcher->ProjectIDS[i] == 4000);
 	freeMemory(global);
 }
 
-MU_TEST(test_RemoveUserIDFromProject)
-{
-	//checks that the function actually removes a value from an array
-	Project *mock = (Project*)malloc(sizeof(Project));
-	int i, flag = 0;
-	mock->ProjectUsersAmount = 4;
-	mock->StudentsIDS = (int*)malloc(4 * sizeof(int));
-	mock->StudentsIDS[0] = 1000;
-	mock->StudentsIDS[1] = 1001;
-	mock->StudentsIDS[2] = 1002;
-	mock->StudentsIDS[3] = 1003;
-	mock->StudentsIDS = RemoveUserIDFromProject(mock, 1002);
-	for (i = 0; i < 3; i++)
-		if (mock->StudentsIDS[i] == 1002)
-			flag = 1;
-	mu_check(flag == 0);
-	free(mock->StudentsIDS);
-	free(mock);
-}
-
-MU_TEST(test_RemoveUserFromProjects)
-{
+MU_TEST(test_Add_project_ID_To_student){
 	Global* global = InitDataBases();
-	Project *current = global->ProjectsList;
-	int i, flag = 0;
-	RemoveUserFromProjects(global, 1000);
-	while (current)
-	{
-		for (i = 0; i < current->ProjectUsersAmount; i++)
-		{
-			if (current->StudentsIDS[i] == 1000)
-			{
-				flag = 1;
-			}
-		}
-		current = current->ProjectNext;
-	}
-	mu_check(flag == 0);
+	Student *student = FindStudent(global->StudentList, 1000);
+	int oldProjnum = student->StudentProjectsAmount;
+	int i;
+	for (i = 0; i < student->StudentProjectsAmount; i++)
+		if (student->ProjectIDS[i] == 4001)
+			mu_fail("Shouldn't get here, project already in!");
+	AddProjectIDToStudent(student, 4001);
+	mu_check(student->StudentProjectsAmount == oldProjnum + 1);
+	for (i = 0; i < student->StudentProjectsAmount; i++)
+		if (student->ProjectIDS[i] == 4001)
+			mu_check(student->ProjectIDS[i] == 4001);
 	freeMemory(global);
 }
 
@@ -325,10 +291,8 @@ MU_TEST_SUITE(Utilities){
 	MU_RUN_TEST(test_student_to_admin);
 	MU_RUN_TEST(test_update_details);
 	MU_RUN_TEST(test_Add_Task_ID_To_Project);
-	MU_RUN_TEST(test_RemoveProjectIDFromArray);
-	MU_RUN_TEST(test_RemoveProjectFromUsers);
-	MU_RUN_TEST(test_RemoveUserIDFromProject);
-	MU_RUN_TEST(test_RemoveUserFromProjects);
+	MU_RUN_TEST(test_Add_project_ID_To_watcher);
+	MU_RUN_TEST(test_Add_project_ID_To_student);
 }
 
 //Register suite tests:
