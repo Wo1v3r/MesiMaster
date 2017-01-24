@@ -239,6 +239,7 @@ int RemoveProject(Global* GlobalFile, Project* project, char choice){
 		free(project->TasksIDS);
 		GlobalFile->ProjectsList = RemoveProjectFromList(GlobalFile->ProjectsList, project->ProjectID);
 	}
+	return 1;
 }
 
 // choose student id in project and send message to him, done, ready for testing
@@ -1270,7 +1271,6 @@ void ShowUserDetails(Global *GlobalFile)
 	Admin *admin = NULL;
 	PrintUsersLists(GlobalFile);
 	
-	char choice;
 	int ID;
 	printf("Input ID to see full details of user : ");
 	fflush(stdin);
