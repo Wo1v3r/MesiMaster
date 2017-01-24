@@ -1728,6 +1728,7 @@ int AdminRegister(Global *GlobalFile,char* nameTest, char* surnameTest , char* u
 			if (!nameTest) {
 				printf("This username already exists in the system. \n Press 1 to try again, press 2 to go back to the next menu.\n");
 				scanf("%d", &choice);
+				if (choice == 2) return 0;
 			}
 			else return 0;//For tests
 		}
@@ -1925,8 +1926,9 @@ int StudentRegister(Global *g,char* nameTest,char* surnameTest, char* unTest, ch
 		if (CheckIfUserExists(g, newStudent->StudentUsername) == TRUE)
 		{
 			if (!nameTest){
-				printf("This username already exists in the system. \n Press 1 to try again, press 2 to go back to the next menu.\n");
+				printf("This username already exists in the system. \n Press 1 to try again, press 2 to go back to the last menu.\n");
 				scanf("%d", &choice);
+				if (choice == 2) return -1;
 			}
 			else return 0;
 		}
@@ -1934,8 +1936,8 @@ int StudentRegister(Global *g,char* nameTest,char* surnameTest, char* unTest, ch
 
 	if (choice != 1 && choice != 0)
 	{
-		if (!nameTest) printf("You did not press 1 to continue. Going back to last menu.\n");
-		return 0;
+		if (!nameTest) Output("Invalid input. Going back to last menu.\n");
+		return -1;
 	}
 	//Initializing password
 	do{
@@ -2018,14 +2020,15 @@ int WatcherRegister(Global *g,char* nameTest, char* surnameTest, char* unTest, c
 			if (nameTest) return 0;
 			printf("This username already exists in the system. \n Press 1 to try again, press 2 to go back to the last menu.\n");
 			scanf("%d", &choice);
+			if (choice == 2) return -1;
 		}
 	} while (CheckIfUserExists(g, newWatcher->WatcherUsername) == TRUE && choice == 1);
 
 	if (choice != 1 && choice != 0)
 	{
 
-		if (!nameTest) printf("You did not press 1 to continue. Going back to last menu.\n");
-		return 0;
+		if (!nameTest) Output("Invalid input. Going back to last menu.\n");
+		return -1;
 	}
 	//Initializing password
 	do{
