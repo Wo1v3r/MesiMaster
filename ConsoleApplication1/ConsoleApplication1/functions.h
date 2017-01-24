@@ -24,10 +24,10 @@ int PrintTasksList(Global* GlobalFile, Project* Project);//No test needed
 void PrintTasksByID(Task *head, int indexes[], int size, char *creator);//No test needed
 void PrintProjectsList(Global *GlobalFile, int UserID, AccessGroup group);//No test needed
 void PrintProjectsByID(Global *GlobalFile, int indexes[], int size, char *creator);//No test needed
-int* RemoveProjectIDFromArray(int Array[], int ProjectID);
-int RemoveProjectFromUsers(Global* GlobalFile, int ProjectID);
-void RemoveUserFromProjects(Global *GlobalFile, int UserID);
-int *RemoveUserIDFromProject(Project* project, int ID);
+int* RemoveProjectIDFromArray(int Array[], int ProjectID);//Test written - Isabelle
+int RemoveProjectFromUsers(Global* GlobalFile, int ProjectID);//Test written - Isabelle
+void RemoveUserFromProjects(Global *GlobalFile, int UserID);//Test written - Isabelle
+int *RemoveUserIDFromProject(Project* project, int ID);//Test written - Isabelle
 void AddProjectIDToStudent(Student * Student, int ProjectID); //Test written
 void AddProjectIDToWatcher(Watcher * Watcher, int ProjectID); //Test written
 void AddTaskIDToProject(Project* project, int TaskID); //Test written
