@@ -1802,7 +1802,7 @@ int AddNewUser(Global *GlobalFile)
 	}
 	else
 	{	//Back to last menu
-		return 0;
+		return -1;
 	}
 
 
