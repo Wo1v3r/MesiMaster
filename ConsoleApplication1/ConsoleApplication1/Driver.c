@@ -6,7 +6,7 @@
 ////// Menus
 
 //Project Menu : Finished ,Ready for testing - Jonathan
-int ProjectMenu(Global* GlobalFile , Project* project, int accessGroup, int userID){
+int ProjectMenu(Global* GlobalFile, Project* project, int accessGroup, int userID){
 	//Showing project menu of projectID project based on the accessgroup of the user:
 	Student* student = NULL;
 	Admin* admin = NULL;
@@ -61,7 +61,7 @@ int ProjectMenu(Global* GlobalFile , Project* project, int accessGroup, int user
 			printf("9) Add a project message\n");
 			break;
 		}
-		
+
 		scanf("%d", &opt);
 
 		switch (opt){
@@ -94,12 +94,12 @@ int ProjectMenu(Global* GlobalFile , Project* project, int accessGroup, int user
 			{
 				if (RemoveProject(GlobalFile, project, 0)) return 1;
 			}
-			else CreateNewTask(GlobalFile, project, userID, accessGroup, NULL); 
+			else CreateNewTask(GlobalFile, project, userID, accessGroup, NULL);
 			break;
 		case 8:
 			if (accessGroup == WATCHER){
 
-				LeaveMessageToStudent(GlobalFile,project,watcher);
+				LeaveMessageToStudent(GlobalFile, project, watcher);
 			}
 			break;
 		case 9:
@@ -127,7 +127,7 @@ int StudentMenu(Global *GlobalFile, int studentID){
 		printf("Student Menu:\n");
 		printf("-------------------------------------------\n");
 		printRandQuote(GlobalFile);
-		printf("-------------------------------------------\n");		
+		printf("-------------------------------------------\n");
 		printf("Choose an option: (Int)\n\n");
 		printf("0) Exit Student Menu\n");
 		printf("1) Create new project\n");
@@ -139,15 +139,15 @@ int StudentMenu(Global *GlobalFile, int studentID){
 		printf("7) Show messages from watchers\n");
 		printf("8) Exit Mesimaster\n");
 
-		scanf("%d",&opt);
+		scanf("%d", &opt);
 		switch (opt){
 		case 0:
 			return 1;
 		case 1:
-			CreateNewProject(GlobalFile,studentID,STUDENT,NULL); //3
+			CreateNewProject(GlobalFile, studentID, STUDENT, NULL); //3
 			break;
 		case 2:
-			PrintProjectsList(GlobalFile,studentID,STUDENT); // 13
+			PrintProjectsList(GlobalFile, studentID, STUDENT); // 13
 			break;
 
 		case 3:
@@ -164,13 +164,13 @@ int StudentMenu(Global *GlobalFile, int studentID){
 				ProjectMenu(GlobalFile, project, STUDENT, studentID);
 			else{
 				Output("The student doesn't belong to this project\n");
-			}	
+			}
 			break;
 		case 4:
 			ShowTasksByStatus(GlobalFile, studentID);
 			break;
 		case 5:
-			UpdateDetails(GlobalFile,studentID,NULL,NULL,NULL,0,0,0); // 19
+			UpdateDetails(GlobalFile, studentID, NULL, NULL, NULL, 0, 0, 0); // 19
 			break;
 		case 6:
 			PrintStudentLog(student); // 11
@@ -192,7 +192,7 @@ int StudentMenu(Global *GlobalFile, int studentID){
 
 }
 
-int AdminMenu(Global* GlobalFile ,int adminID){
+int AdminMenu(Global* GlobalFile, int adminID){
 	Admin* admin = FindAdmin(GlobalFile->AdminsList, adminID);
 	int opt = -1, projectID;
 	Project* project = NULL;
@@ -235,7 +235,7 @@ int AdminMenu(Global* GlobalFile ,int adminID){
 			ShowUserDetails(GlobalFile);
 			break;
 		case 6:
-			UpdateDetails(GlobalFile, adminID,NULL,NULL,NULL,0,0,0);
+			UpdateDetails(GlobalFile, adminID, NULL, NULL, NULL, 0, 0, 0);
 			break;
 		case 7:
 			PrintProjectsList(GlobalFile, adminID, ADMIN);
@@ -251,7 +251,7 @@ int AdminMenu(Global* GlobalFile ,int adminID){
 			}
 			ProjectMenu(GlobalFile, project, ADMIN, adminID);
 			break;
-		case 9: 
+		case 9:
 			AddGlobalMessage(GlobalFile, "");
 			break;
 		case 10:
@@ -299,7 +299,7 @@ int WatcherMenu(Global* GlobalFile, int watcherID){
 			PrintProjectsListWatcher(GlobalFile, watcherID, WATCHER);
 			break;
 		case 2:
-			CreateNewProject(GlobalFile, watcherID, WATCHER,NULL);
+			CreateNewProject(GlobalFile, watcherID, WATCHER, NULL);
 			break;
 		case 3:
 			printf("Enter Project ID:\n");
@@ -310,11 +310,11 @@ int WatcherMenu(Global* GlobalFile, int watcherID){
 				printf("No project of that ID\n");
 				break;
 			}
-			
+
 			ProjectMenu(GlobalFile, project, WATCHER, watcherID);
 			break;
 		case 4:
-			UpdateDetails(GlobalFile, watcherID,NULL,NULL,NULL,0,0,0);
+			UpdateDetails(GlobalFile, watcherID, NULL, NULL, NULL, 0, 0, 0);
 			break;
 		case 5:
 			ShowNotifications(GlobalFile, watcher, 0);
@@ -327,7 +327,7 @@ int WatcherMenu(Global* GlobalFile, int watcherID){
 			return 0;
 		default:
 			Output("No such option!\n");
-			}
+		}
 		opt = -1;
 
 	}
@@ -337,9 +337,9 @@ int WatcherMenu(Global* GlobalFile, int watcherID){
 
 
 
-void LoginMenu(Global* GlobalFile){
+int LoginMenu(Global* GlobalFile){
 
-	int menuReturn = 1 , accessGroup = 0, ID = 0, opt = -1;
+	int menuReturn = 1, accessGroup = 0, ID = 0, opt = -1;
 
 	while (opt == -1){
 		printf("Welcome to the MesiMaster:\n");
@@ -347,16 +347,26 @@ void LoginMenu(Global* GlobalFile){
 		PrintGlobalMessages(GlobalFile);
 		printf("##########################\n");
 		printf("Choose an option: (Int)\n\n");
-		printf("0) Exit MesiMaster\n");
+		printf("0) Run Tests\n");
 		printf("1) Login with an existing user\n");
 		printf("2) Register a new user\n");
+		printf("3) Exit Mesimaster\n");
 
 		scanf("%d", &opt);
 		switch (opt){
 		case 0:
-			Output("Thank you for using MesiMaster, have a fruitful day!\n\n");
-			Exit(GlobalFile);
-			return;
+			MU_RUN_SUITE(Utilities);
+			MU_RUN_SUITE(InitTest);
+			MU_RUN_SUITE(Login_Suite);
+			MU_RUN_SUITE(Admin_Suite);
+			MU_RUN_SUITE(Watcher_Suite);
+			MU_RUN_SUITE(Project_Suite);
+			MU_RUN_SUITE(Structures_Suite);
+			MU_RUN_SUITE(Register_Suite);
+			MU_RUN_SUITE(Login_func_Suite);
+			MU_REPORT();
+			Output("Tests over,relaunching program");
+			return 1;
 		case 1:
 			system("cls");
 			ID = Login(GlobalFile, NULL, NULL); //If ID = -1 means there was a problem with the login
@@ -365,50 +375,52 @@ void LoginMenu(Global* GlobalFile){
 			system("cls");
 			ID = Register(GlobalFile); //If ID = 0 means there was problem with the register
 			break;
-
-		default:
-			//Dosomething
-			printf("No such option!");
-			system("pause");
-			opt = -1;
-		}
-
-		//If an ID was found, launching the relevant menu, if it returns 1 it means user exited back to login menu, doing the loop again.
-		system("cls");
-		if (ID == -1) accessGroup = -1; // When went back to this menu from register instead of registering a user
-		else if (ID) accessGroup = FindAccessGroup(ID);
-		switch (accessGroup){
-		case -1:
-			menuReturn = 1;
-			break;
-		case 0: //User tried to enter a wrong password three times in a row, exiting the program
-			Output("You failed to log in 3 times in a row, exiting the program, a report was sent to the system\n");
-			Exit(GlobalFile);
-			return;
-		case 1:
-			menuReturn = StudentMenu(GlobalFile, ID);
-			break;
-		case 2:
-			menuReturn = AdminMenu(GlobalFile, ID);
-			break;
 		case 3:
-			menuReturn = WatcherMenu(GlobalFile, ID);
-			break;
-		}
-		if (menuReturn){
-			//If user chose to exit .to upper menu,Setting opt to -1 to reset the menu
-			Save(GlobalFile);
-			system("cls");
-			opt = -1;
-		}
-		else{
-			//If user chose to exit completely, exiting mesimaster:
 			Output("Thank you for using MesiMaster, have a fruitful day!\n\n");
 			Exit(GlobalFile);
-			return;
+			return 0;
+		default:
+			//Dosomething
+			Output("No such option!");
+			opt = -1;
 		}
-
 	}
+	//If an ID was found, launching the relevant menu, if it returns 1 it means user exited back to login menu, doing the loop again.
+	system("cls");
+	if (ID == -1) accessGroup = -1; // When went back to this menu from register instead of registering a user
+	else if (ID) accessGroup = FindAccessGroup(ID);
+	switch (accessGroup){
+	case -1:
+		menuReturn = 1;
+		break;
+	case 0: //User tried to enter a wrong password three times in a row, exiting the program
+		Output("You failed to log in 3 times in a row, exiting the program, a report was sent to the system\n");
+		Exit(GlobalFile);
+		return 0;
+	case 1:
+		menuReturn = StudentMenu(GlobalFile, ID);
+		break;
+	case 2:
+		menuReturn = AdminMenu(GlobalFile, ID);
+		break;
+	case 3:
+		menuReturn = WatcherMenu(GlobalFile, ID);
+		break;
+	}
+	if (menuReturn){
+		//If user chose to exit .to upper menu,Setting opt to -1 to reset the menu
+		Save(GlobalFile);
+		system("cls");
+		return 1;
+	}
+	else{
+		//If user chose to exit completely, exiting mesimaster:
+		Output("Thank you for using MesiMaster, have a fruitful day!\n\n");
+		Exit(GlobalFile);
+		return 0;
+	}
+
+
 }
 
 ///////////MAIN//////////
@@ -425,28 +437,28 @@ void logo(){
 int main()
 {
 	int tests = 0;
-	printf("Would you like to run the tests?(1 = yes)\n");
-	scanf("%d", &tests);
-	system("cls");
-	if (tests == 1){
-		MU_RUN_SUITE(Utilities);
-		MU_RUN_SUITE(InitTest);
-		MU_RUN_SUITE(Login_Suite);
-		MU_RUN_SUITE(Admin_Suite);
-		MU_RUN_SUITE(Watcher_Suite);
-		MU_RUN_SUITE(Project_Suite);
-		MU_RUN_SUITE(Structures_Suite);
-		MU_RUN_SUITE(Register_Suite);
-		MU_RUN_SUITE(Login_func_Suite);
-		MU_REPORT();
-		Output("Tests over, closing program, relaunch to choose between tests\mesimaster");
-		return;
-	}
+	//printf("Would you like to run the tests?(1 = yes)\n");
+	//scanf("%d", &tests);
+	//system("cls");
+	//if (tests == 1){
+	//	MU_RUN_SUITE(Utilities);
+	//	MU_RUN_SUITE(InitTest);
+	//	MU_RUN_SUITE(Login_Suite);
+	//	MU_RUN_SUITE(Admin_Suite);
+	//	MU_RUN_SUITE(Watcher_Suite);
+	//	MU_RUN_SUITE(Project_Suite);
+	//	MU_RUN_SUITE(Structures_Suite);
+	//	MU_RUN_SUITE(Register_Suite);
+	//	MU_RUN_SUITE(Login_func_Suite);
+	//	MU_REPORT();
+	//	Output("Tests over, closing program, relaunch to choose between tests\mesimaster");
+	//	return;
+	//}
 	system("cls");
 	logo();
 
 	Global *GlobalFile = (Global*)malloc(sizeof(Global));
 	GlobalFile = InitDataBases();
-	LoginMenu(GlobalFile);
+	while(LoginMenu(GlobalFile));
 	return 1;
 }
