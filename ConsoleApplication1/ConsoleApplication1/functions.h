@@ -1116,7 +1116,7 @@ void AddNewQuote(Global* GlobalFile, char* quote, char* creator){
 		do
 		{
 			fflush(stdin);
-			scanf("%s", &tempQuote);
+			gets(tempQuote);
 		} while (strlen(tempQuote) > 255);
 
 		strcpy(newQuote->Quote, tempQuote);
@@ -1182,6 +1182,7 @@ void ManageQuotes(Global *GlobalFile)
 	
 	while (flag)
 	{
+		system("cls");
 		puts("1. Print all Quotes in database");
 		puts("2. Add new Quote");
 		puts("3. Remove quote by ID");
