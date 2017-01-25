@@ -848,9 +848,11 @@ int CreateNewTask(Global *GlobalFile, Project *project,int UserID,AccessGroup gr
 	newTask->TaskStatus = NEW;								// initialize status
 	int i;
 	for (i = 0; i < project->ProjectUsersAmount; i++)
+	{
 		if (FindAccessGroup(project->StudentsIDS[i]) == STUDENT)
 			if (FindStudent(GlobalFile->StudentList, project->StudentsIDS[i]) != NULL)
 				FindStudent(GlobalFile->StudentList, project->StudentsIDS[i])->StudentTasksAmount++;
+	}
 	// add ID of new task to array TasksIDs in project
 	AddTaskIDToProject(project, newTask->TaskID);
 	GlobalFile->TaskRunID++;						// increase run id by 1
@@ -867,7 +869,7 @@ int CreateNewTask(Global *GlobalFile, Project *project,int UserID,AccessGroup gr
 	system("pause");
 	}
 
-	project->ProjectTasksAmount++;
+	//project->ProjectTasksAmount++;
 	return newTask->TaskID;
 }
 
