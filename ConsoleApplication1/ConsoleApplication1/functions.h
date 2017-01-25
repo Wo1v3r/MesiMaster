@@ -246,36 +246,35 @@ int RemoveProject(Global* GlobalFile, Project* project, char choice){
 void LeaveMessageToStudent(Global* GlobalFile, Project* project, Watcher* watcher){
 	int studentID;
 	Student* student;
-	char* Message;
+	char Message[31];
 	printf("Please choose a studentID of the student you want to leave a message for (message will be shown once)\n");
 	scanf("%d", &studentID);
 	if (isStudentInProject(project, studentID)){
 		student = FindStudent(GlobalFile->StudentList, studentID);
 		if (!student) return; //If for some reason student is not in the global file, exiting function
-			printf("Enter the message you want to leave (Between 5 to 30):\n");
+		printf("Enter the message you want to leave (Between 5 to 30):\n");
 		do
 		scanf("%s", &Message);
 		while (strlen(Message) < 5 || strlen(Message) > 30);
-		strcpy(student->StudentMessages, Message);
+		//strcpy(student->StudentMessages, Message); // Wrong! changes the file path of the student messages
 
 		// add message to student message file 
 		FILE *file = fopen(student->StudentMessages, "a");
 		fprintf(file, "%s %s\n", watcher->WatcherUsername, Message);
 		fclose(file);
 	}
-
-	system("pause");
+	Output("");
 }
 
 // added option to delete all messages from message.txt of project
 void AddProjectMessage(Global* GlobalFile, Project* project, Watcher* watcher){
-	char* Message = "",choice;
+	char Message[31],choice;
 	printf("Enter the message you want to leave (Between 5 to 30):\n");
 	do
 	scanf("%s", &Message);
 	while (strlen(Message) < 5 || strlen(Message) > 30);
 
-	strcpy(project->ProjectMessages, Message);
+	//strcpy(project->ProjectMessages, Message); // Wrong! changes the file path
 
 	// add message to project activity and Messages logs
 	char log[120];
@@ -291,7 +290,7 @@ void AddProjectMessage(Global* GlobalFile, Project* project, Watcher* watcher){
 		FILE *file = fopen(project->ProjectMessages, "w");
 		fclose(file);
 	}
-	system("pause");
+	Output("");
 }
 
 //Allow to student print tasks in him project by status,  done by Johnatan, ready for testing ( added checking if project !=NULL)
@@ -925,9 +924,11 @@ void PrintProjectsList(Global *GlobalFile, int UserID, AccessGroup group)
 	}
 
 	puts("List of your projects:");
+	printf("\n");
 	printf("%-10s%-25s%-10s%-10s\n","ID","Name","Users","Tasks");
 	if (adminFlag){
 		while (current != NULL){
+			printf("\n");
 			printf("%-10d%-25s%-10d%-10d\n",
 				current->ProjectID,
 				current->ProjectName,
@@ -1638,7 +1639,7 @@ void ShowMessagesToStudent(Global * Global, Student *student)
 		while (!feof(file))
 		{
 			fscanf(file,"%s %s", &username, &message);
-			printf("User : %s, Message :%s", &username, &message);
+			printf("User : %s, Message : %s\n", &username, &message);
 		}
 		fclose(file);
 	}
