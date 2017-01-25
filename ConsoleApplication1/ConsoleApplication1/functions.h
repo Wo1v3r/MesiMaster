@@ -247,14 +247,19 @@ void LeaveMessageToStudent(Global* GlobalFile, Project* project, Watcher* watche
 	int studentID;
 	Student* student;
 	char Message[31];
+	system("cls");
 	printf("Please choose a studentID of the student you want to leave a message for (message will be shown once)\n");
 	scanf("%d", &studentID);
+	getc(stdin);
 	if (isStudentInProject(project, studentID)){
 		student = FindStudent(GlobalFile->StudentList, studentID);
 		if (!student) return; //If for some reason student is not in the global file, exiting function
-		printf("Enter the message you want to leave (Between 5 to 30):\n");
 		do
-		scanf("%s", &Message);
+		{
+			system("cls");
+			printf("Enter the message you want to leave (Between 5 to 30):\n");
+			gets(Message);
+		}
 		while (strlen(Message) < 5 || strlen(Message) > 30);
 		//strcpy(student->StudentMessages, Message); // Wrong! changes the file path of the student messages
 
@@ -1636,13 +1641,17 @@ void ShowMessagesToStudent(Global * Global, Student *student)
 
 	FILE *file = fopen(student->StudentMessages, "r");
 	char username[31], message[31];
+	int scanfReturn = 1;
 	if (file)
 	{
 		puts("You have one or more messages from watchers");
 		while (!feof(file))
 		{
-			fscanf(file,"%s %s", &username, &message);
+			scanfReturn = fscanf(file,"%s ", &username);
+			if (scanfReturn < 1) break;
+			fgets(message,sizeof(message),file);
 			printf("User : %s, Message : %s\n", &username, &message);
+
 		}
 		fclose(file);
 	}
