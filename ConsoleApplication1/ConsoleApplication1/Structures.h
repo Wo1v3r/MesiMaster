@@ -1,4 +1,3 @@
-// Alexey
 #ifndef _STRUCTURES_
 #define _STRUCTURES_
 #define _CRT_SECURE_NO_WARNINGS

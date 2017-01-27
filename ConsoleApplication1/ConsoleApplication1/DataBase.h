@@ -1,6 +1,5 @@
 #ifndef _STRUCTURES_
 #define _STRUCTURES
-//Liran
 #include "Structures.h"
 
 /// Define path's

@@ -79,7 +79,6 @@ int Login(Global *g, char* UN, char* PW); //TW
 BOOL CheckPassword(char* pass); //TW
 BOOL CheckIfUserExists(Global *g, char *username); //TW
 
-//
 
 int ChangeTaskStatus(Global* GlobalFile, Project* project, int userID, int accessGroup, int statustest, int taskidtest){
 	int taskID, status;
