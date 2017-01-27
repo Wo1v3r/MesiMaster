@@ -108,6 +108,7 @@ int ChangeTaskStatus(Global* GlobalFile, Project* project, int userID, int acces
 		printf("Available Status:\n");
 		printf("[0] New , [1] Elicitation, [2] Analysis, [3] VandV ");
 		if (accessGroup != STUDENT) printf(" [4] Approved"); //Student can't change to approved
+		printf(" [5] Trash ");
 		printf("\n");
 		printf("Enter an integer of your choice:\n");
 		scanf("%d", &status);
@@ -118,7 +119,7 @@ int ChangeTaskStatus(Global* GlobalFile, Project* project, int userID, int acces
 		if (!taskidtest) Output("Student cannot set status to approved, please contact your watcher or admin");
 		return 0;
 	}
-	if (status == NEW || status == ELICITATION || status == ANALYSIS || status == VandV || status == APPROVED)
+	if (status == NEW || status == ELICITATION || status == ANALYSIS || status == VandV || status == APPROVED || status == TRASH)
 	{
 		task->TaskStatus = (STATUS)status;
 		if (student)
