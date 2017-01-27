@@ -21,30 +21,32 @@ typedef struct Quote Quote;
 typedef struct Global Global;
 
 //struct function declarations 
-Student *FindStudent(Student* head, int StudentID); //Test written - Isabelle
-Admin *FindAdmin(Admin *head, int AdminID); //Test written - Isabelle
-Watcher *FindWatcher(Watcher* head, int WatcherID); //Test written - Isabelle
-Project *FindProject(Project* head, int ProjectID); //Test written - Isabelle
-Task *FindTask(Task* head, int TaskID); //Test written - Isabelle
-Quote *FindQuote(Quote* head, int QuoteID); //Test written - Isabelle
-Student* AddStudent(Student *studentHead, Student *addStudent); //Test written - Isabelle
-Admin* AddAdmin(Admin *adminHead, Admin *addAdmin); //Test written - Isabelle
-Watcher* AddWatcher(Watcher *watcherHead, Watcher *addWatcher); //Test written - Isabelle
-Project* AddProject(Project *projectHead, Project *addProject); //Test written - Isabelle
-Quote* AddQuote(Quote *QuoteHead, Quote *addQuote); //Test written - Isabelle
-Task *AddTask(Task *TasksHead, Task *addTask); //Test written - Isabelle
-Project *RemoveProjectFromList(Project *head, int deleteID); //Test written - Isabelle
-Student *RemoveStudentFromList(Student *head, int deleteID); //Test written - Isabelle
-Watcher *RemoveWatcherFromList(Watcher *head, int deleteID); //Test written - Isabelle
-Admin *RemoveAdminFromList(Admin *head, int deleteID); //Test written - Isabelle
-Quote *RemoveQuoteFromList(Quote *head, int deleteID); //Test written - Isabelle
-Task *RemoveTaskFromList(Task *head, int deleteID); //Test written - Isabelle
-void PrintStudentList(Student *StudentHead); //No tests needed
-void PrintAdminsList(Admin *head); //No tests needed
-void PrintWatcherList(Watcher *head); //No tests needed
-char* convertStatusToString(STATUS status);//Test written - Isabelle
-Task* findTaskInProject(Global* globalFile, Project* project, int taskID);//Test written - Isabelle
-int isStudentInProject(Project* project, int studentID);//Test written - Isabelle
+// T For test needed and TW for test needed and written, TN  for test not needed (Only input\output)
+
+Student *FindStudent(Student* head, int StudentID); //TW
+Admin *FindAdmin(Admin *head, int AdminID); //TW
+Watcher *FindWatcher(Watcher* head, int WatcherID); //TW
+Project *FindProject(Project* head, int ProjectID); //TW
+Task *FindTask(Task* head, int TaskID); //TW
+Quote *FindQuote(Quote* head, int QuoteID); //TW
+Student* AddStudent(Student *studentHead, Student *addStudent); //TW
+Admin* AddAdmin(Admin *adminHead, Admin *addAdmin); //TW
+Watcher* AddWatcher(Watcher *watcherHead, Watcher *addWatcher); //TW
+Project* AddProject(Project *projectHead, Project *addProject); //TW
+Quote* AddQuote(Quote *QuoteHead, Quote *addQuote); //TW
+Task *AddTask(Task *TasksHead, Task *addTask); //TW
+Project *RemoveProjectFromList(Project *head, int deleteID); //TW
+Student *RemoveStudentFromList(Student *head, int deleteID); //TW
+Watcher *RemoveWatcherFromList(Watcher *head, int deleteID); //TW
+Admin *RemoveAdminFromList(Admin *head, int deleteID); //TW
+Quote *RemoveQuoteFromList(Quote *head, int deleteID); //TW
+Task *RemoveTaskFromList(Task *head, int deleteID); //TW
+void PrintStudentList(Student *StudentHead); //TN
+void PrintAdminsList(Admin *head); //TN
+void PrintWatcherList(Watcher *head); //TN
+char* convertStatusToString(STATUS status);//TW
+Task* findTaskInProject(Global* globalFile, Project* project, int taskID);//TW
+int isStudentInProject(Project* project, int studentID);//TW
 
 // structures
 typedef struct Student{
@@ -106,12 +108,7 @@ typedef struct Global{
 	char GlobalMessages[256];
 }Global;
 
-//////////////// structures end
 
-
-//
-//	Linked list functions start
-//
 // Find element by id
 Student *FindStudent(Student* head, int StudentID){
 
@@ -179,8 +176,6 @@ Quote *FindQuote(Quote* head, int QuoteID){
 	return NULL;
 }
 
-// search in list end
-// Add to lists
 Student* AddStudent(Student *studentHead, Student *addStudent){
 	if (studentHead == NULL)
 	{
@@ -287,8 +282,6 @@ Task *AddTask(Task *TasksHead, Task *addTask){
 	}
 	return TasksHead;
 }
-
-//delete elements from linked list
 
 Project *RemoveProjectFromList(Project *head, int deleteID)
 {
@@ -469,7 +462,6 @@ Task *RemoveTaskFromList(Task *head, int deleteID)
 	}
 	return head;
 }
-/// end remove functions
 
 
 // Print List's Functions start
@@ -514,9 +506,7 @@ void PrintWatcherList(Watcher *head)
 		watcher = watcher->WatcherNext;
 	}
 }
-// print List's funcs end
 
-//Utilities:
 char* convertStatusToString(STATUS status){
 	switch (status){
 	case 0 :
