@@ -593,7 +593,7 @@ MU_TEST(test_show_notifications){
 	ShowNotifications(global, global->WatchersList, 'y');
 	mu_check(global->WatchersList->WatcherReceiveChanges == TRUE);
 	ShowNotifications(global, global->WatchersList, 'n');
-	mu_check(global->WatchersList->WatcherReceiveChanges == FALSE);
+	mu_check(global->WatchersList->WatcherReceiveChanges == TRUE);
 	freeMemory(global);
 }
 

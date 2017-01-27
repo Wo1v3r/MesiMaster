@@ -274,10 +274,13 @@ void LeaveMessageToStudent(Global* GlobalFile, Project* project, Watcher* watche
 // added option to delete all messages from message.txt of project
 void AddProjectMessage(Global* GlobalFile, Project* project, Watcher* watcher){
 	char Message[31],choice;
+	fflush(stdin);
 	printf("Enter the message you want to leave (Between 5 to 30):\n");
-	do
-	scanf("%s", &Message);
-	while (strlen(Message) < 5 || strlen(Message) > 30);
+	do{
+		gets(Message);
+		if (strlen(Message) < 5 || strlen(Message) > 30)
+			printf("Wrong input!\n");
+	}while (strlen(Message) < 5 || strlen(Message) > 30);
 
 	//strcpy(project->ProjectMessages, Message); // Wrong! changes the file path
 
@@ -1496,7 +1499,7 @@ Admin *StudentToAdmin(Global *GlobalFile, Student *student)
 	return newAdmin;
 }
 // promote Watcher to be Admin
-Admin * WatcherToAdmin(Global *GlobalFile, Watcher *watcher)
+Admin *WatcherToAdmin(Global *GlobalFile, Watcher *watcher)
 {
 	Admin *newAdmin = (Admin*)malloc(sizeof(Admin));
 	// copy fields from user to new admin
@@ -1598,27 +1601,46 @@ BOOL ShowNotifications(Global *GlobalFile, Watcher *watcher, char choice)
 		choice = getchar();
 		if (choice == 'y' || choice == 'Y')
 		{
-			watcher->WatcherReceiveChanges = TRUE;
-			Output("New status : ON");
-			return TRUE;
+			if (watcher->WatcherReceiveChanges == FALSE){
+				watcher->WatcherReceiveChanges = TRUE;
+				Output("New status : ON");
+				return TRUE;
+			}
+			else{
+				watcher->WatcherReceiveChanges = FALSE;
+				Output("New status : OFF");
+				return FALSE;
+			}
 		}
 		else if (choice == 'n' || choice == 'N')
 		{
-			watcher->WatcherReceiveChanges = FALSE;
-			Output("New status : OFF");
-			return TRUE;
+			Output("No change was made.");
+			if (watcher->WatcherReceiveChanges == FALSE)
+				return FALSE;
+			else
+				return TRUE;
 		}
 		Output("Incorrect choice, status not been changed");
 		return FALSE;
 	}
 	else{
-		if (choice == 'y' || choice == 'Y'){
-			watcher->WatcherReceiveChanges = TRUE;
-			return TRUE;
+		if (choice == 'y' || choice == 'Y')
+		{
+			if (watcher->WatcherReceiveChanges == FALSE){
+				watcher->WatcherReceiveChanges = TRUE;
+				return TRUE;
+			}
+			else{
+				watcher->WatcherReceiveChanges = FALSE;
+				return FALSE;
+			}
 		}
-		else if (choice == 'n' || choice == 'N'){
-			watcher->WatcherReceiveChanges = FALSE;
-			return FALSE;
+		else if (choice == 'n' || choice == 'N')
+		{
+			if (watcher->WatcherReceiveChanges == FALSE)
+				return FALSE;
+			else
+				return TRUE;
 		}
 	}
 	return FALSE;
