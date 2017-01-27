@@ -3,7 +3,17 @@
 #include "UnitTests.h"
 #define GRN   "\x1B[32m"
 #define RESET "\x1B[0m"
-////// Menus
+////// Logo:
+
+void logo(){
+	printf(GRN  "#     #                                                                   \n" RESET);
+	printf(GRN  "##   ##  ######   ####   #  #    #    ##     ####   #####  ######  #####  \n" RESET);
+	printf(GRN  "# # # #  #       #       #  ##  ##   #  #   #         #    #       #    # \n" RESET);
+	printf(GRN  "#  #  #  #####    ####   #  # ## #  #    #   ####     #    #####   #    # \n" RESET);
+	printf(GRN  "#     #  #            #  #  #    #  ######       #    #    #       #####  \n" RESET);
+	printf(GRN  "#     #  #       #    #  #  #    #  #    #  #    #    #    #       #   #  \n" RESET);
+	printf(GRN  "#     #  ######   ####   #  #    #  #    #   ####     #    ######  #    # \n\n" RESET);
+}
 
 //Project Menu : Finished ,Ready for testing - Jonathan
 int ProjectMenu(Global* GlobalFile, Project* project, int accessGroup, int userID){
@@ -266,8 +276,6 @@ int AdminMenu(Global* GlobalFile, int adminID){
 		system("cls");
 		opt = -1;
 	}
-
-
 	return 0;
 }
 
@@ -290,7 +298,6 @@ int WatcherMenu(Global* GlobalFile, int watcherID){
 		printf("5) Show project notifications\n");
 		printf("6) Show tasks in projects watched\n");
 		printf("7) Exit MesiMaster \n");
-
 		scanf("%d", &opt);
 		switch (opt){
 		case 0:
@@ -342,6 +349,8 @@ int LoginMenu(Global* GlobalFile){
 	int menuReturn = 1, accessGroup = 0, ID = 0, opt = -1;
 
 	while (opt == -1){
+		system("cls");
+		logo();
 		printf("Welcome to the MesiMaster:\n");
 		printf("##########################\n");
 		PrintGlobalMessages(GlobalFile);
@@ -424,21 +433,10 @@ int LoginMenu(Global* GlobalFile){
 }
 
 ///////////MAIN//////////
-void logo(){
-	printf(GRN  "#     #                                                                   \n" RESET);
-	printf(GRN  "##   ##  ######   ####   #  #    #    ##     ####   #####  ######  #####  \n" RESET);
-	printf(GRN  "# # # #  #       #       #  ##  ##   #  #   #         #    #       #    # \n" RESET);
-	printf(GRN  "#  #  #  #####    ####   #  # ## #  #    #   ####     #    #####   #    # \n" RESET);
-	printf(GRN  "#     #  #            #  #  #    #  ######       #    #    #       #####  \n" RESET);
-	printf(GRN  "#     #  #       #    #  #  #    #  #    #  #    #    #    #       #   #  \n" RESET);
-	printf(GRN  "#     #  ######   ####   #  #    #  #    #   ####     #    ######  #    # \n\n" RESET);
-}
+
 
 int main()
 {
-	int tests = 0;
-	system("cls");
-	logo();
 	Global *GlobalFile = (Global*)malloc(sizeof(Global));
 	GlobalFile = InitDataBases();
 	while (LoginMenu(GlobalFile));
