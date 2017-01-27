@@ -841,8 +841,10 @@ int CreateNewTask(Global *GlobalFile, Project *project, int UserID, AccessGroup 
 		sprintf(log, "%s created task : %s\n", student->StudentUsername, newTask->TaskName);
 		printLogToFile(student->StudentActivityLog, log);
 	}
-	else if (group == WATCHER && watcher)
+	else if (group == WATCHER && watcher){
 		strcpy(newTask->TaskCreatorName, watcher->WatcherName);			// copy creator name to task
+		sprintf(log, "%s created task : %s\n", watcher->WatcherName, newTask->TaskName);
+	}
 	newTask->TaskStatus = NEW;								// initialize status
 	int i;
 	for (i = 0; i < project->ProjectUsersAmount; i++)
