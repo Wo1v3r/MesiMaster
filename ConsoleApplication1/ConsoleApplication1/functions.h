@@ -272,21 +272,6 @@ void LeaveMessageToStudent(Global* GlobalFile, Project* project, Watcher* watche
 void AddProjectMessage(Global* GlobalFile, Project* project, Watcher* watcher){
 	char Message[31], choice;
 	fflush(stdin);
-	printf("Enter the message you want to leave (Between 5 to 30):\n");
-	do{
-		gets(Message);
-		if (strlen(Message) < 5 || strlen(Message) > 30)
-			printf("Wrong input!\n");
-	} while (strlen(Message) < 5 || strlen(Message) > 30);
-
-	//strcpy(project->ProjectMessages, Message); // Wrong! changes the file path
-
-	// add message to project activity and Messages logs
-	char log[120];
-	sprintf(log, "%s added message : %s", watcher->WatcherUsername, Message);
-	printLogToFile(project->ProjectMessages, log);
-	printLogToFile(project->ProjectActivityLogs, log);
-
 	puts("If you want to delete all messages from this project, press Y now :");
 	choice = getchar();
 	// create new empty file
@@ -294,7 +279,21 @@ void AddProjectMessage(Global* GlobalFile, Project* project, Watcher* watcher){
 	{
 		FILE *file = fopen(project->ProjectMessages, "w");
 		fclose(file);
+		printf("Messages deleted!\n");
 	}
+	fflush(stdin);
+	printf("Enter the message you want to leave (Between 5 to 30):\n");
+	do{
+		gets(Message);
+		if (strlen(Message) < 5 || strlen(Message) > 30)
+			printf("Wrong input!\n");
+	} while (strlen(Message) < 5 || strlen(Message) > 30);
+	// add message to project activity and Messages logs
+	char log[120];
+	sprintf(log, "%s added message : %s", watcher->WatcherUsername, Message);
+	printLogToFile(project->ProjectMessages, log);
+	printLogToFile(project->ProjectActivityLogs, log);
+	printf("Message added!\n");
 	Output("");
 }
 
