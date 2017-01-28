@@ -125,7 +125,7 @@ int ChangeTaskStatus(Global* GlobalFile, Project* project, int userID, int acces
 		{
 			char log[256];
 			sprintf(log, "%s changed status for task ID : to new status : %s", student->StudentUsername, convertStatusToString(task->TaskStatus));
-			printLogToFile(project->ProjectActivityLogs, log);
+			if (!taskidtest) printLogToFile(project->ProjectActivityLogs, log);
 		}
 
 	}
@@ -595,15 +595,19 @@ int CreateNewProject(Global* GlobalFile, int userID, AccessGroup userGroup, char
 	// create file name ID_ProjectActivityLog.txt and put name to ProjectActivityLog field
 	char ActivityFileName[50];
 	sprintf(ActivityFileName, "%d_ProjectActivityLog.txt", newProject->ProjectID);
-	FILE *ProjActivityLog = fopen(ActivityFileName, "w");
-	fclose(ProjActivityLog);
+	if (!projectName){
+		FILE *ProjActivityLog = fopen(ActivityFileName, "w");
+		fclose(ProjActivityLog);
+	}
 	strcpy(newProject->ProjectActivityLogs, ActivityFileName);
 
 	// create file name ID_ProjectMessages.txt and put name to ProjectMessages field
 	char MessagesFileName[50];
 	sprintf(MessagesFileName, "%d_ProjectMessages.txt", newProject->ProjectID);
-	FILE *ProjMsgs = fopen(MessagesFileName, "w");
-	fclose(ProjMsgs);
+	if (!projectName){
+		FILE *ProjMsgs = fopen(MessagesFileName, "w");
+		fclose(ProjMsgs);
+	}
 	strcpy(newProject->ProjectMessages, MessagesFileName);
 
 	// add new project to list of projects Global
@@ -620,7 +624,7 @@ int CreateNewProject(Global* GlobalFile, int userID, AccessGroup userGroup, char
 	// print log to project activity file
 
 	sprintf(logText, "%s created this project with id [%d]\n", newProject->ProjectCreatorName, newProject->ProjectID);
-	printLogToFile(newProject->ProjectActivityLogs, logText);
+	if (!projectName) printLogToFile(newProject->ProjectActivityLogs, logText);
 
 	//---------------------
 
@@ -628,7 +632,7 @@ int CreateNewProject(Global* GlobalFile, int userID, AccessGroup userGroup, char
 	if (Student)
 	{
 		sprintf(logText, "Created project \" %s \" with id [%d]\n", newProject->ProjectName, newProject->ProjectID);
-		printLogToFile(Student->StudentActivityLog, logText);
+		if (!projectName) printLogToFile(Student->StudentActivityLog, logText);
 
 	}
 	//---------------------
@@ -711,11 +715,12 @@ int addUserToProject(Global *GlobalFile, Project *newProject, int userID, int wa
 			{
 				/// add project to student 
 				AddProjectIDToStudent(student, newProject->ProjectID);
-				if (!userID) printf("\nStudent with ID : %d was added to project!\n", ID);
-				file = fopen(newProject->ProjectActivityLogs, "a");
-				fprintf(file, "Student with ID : %d was added to project!\n", ID);
-				fclose(file);
-
+				if (!userID){
+					printf("\nStudent with ID : %d was added to project!\n", ID);
+					file = fopen(newProject->ProjectActivityLogs, "a");
+					fprintf(file, "Student with ID : %d was added to project!\n", ID);
+					fclose(file);
+				}
 				// add student to project
 				ProjectUsersIDNewSize = newProject->ProjectUsersAmount + 1;
 				UsersID = (int*)malloc(ProjectUsersIDNewSize*sizeof(int));
@@ -751,10 +756,12 @@ int addUserToProject(Global *GlobalFile, Project *newProject, int userID, int wa
 				/// add project to watcher 
 				AddProjectIDToWatcher(watcher, newProject->ProjectID);
 
-				if (!userID) printf("\nWatcher with ID : %d was added to project!\n", ID);
-				file = fopen(newProject->ProjectActivityLogs, "a");
-				fprintf(file, "Watcher with ID : %d was added to project!\n", ID);
-				fclose(file);
+				if (!userID){
+					printf("\nWatcher with ID : %d was added to project!\n", ID);
+					file = fopen(newProject->ProjectActivityLogs, "a");
+					fprintf(file, "Watcher with ID : %d was added to project!\n", ID);
+					fclose(file);
+				}
 				// add watcher to project
 				ProjectUsersIDNewSize = newProject->ProjectUsersAmount + 1;
 				UsersID = (int*)malloc(ProjectUsersIDNewSize*sizeof(int));
@@ -839,7 +846,7 @@ int CreateNewTask(Global *GlobalFile, Project *project, int UserID, AccessGroup 
 		strcpy(newTask->TaskCreatorName, student->StudentName);			// copy creator name to task
 		// add log to student
 		sprintf(log, "%s created task : %s\n", student->StudentUsername, newTask->TaskName);
-		printLogToFile(student->StudentActivityLog, log);
+		if(!taskName) printLogToFile(student->StudentActivityLog, log);
 	}
 	else if (group == WATCHER && watcher){
 		strcpy(newTask->TaskCreatorName, watcher->WatcherName);			// copy creator name to task
@@ -861,7 +868,7 @@ int CreateNewTask(Global *GlobalFile, Project *project, int UserID, AccessGroup 
 	printf("%s created task \"%s\"\n", newTask->TaskCreatorName, newTask->TaskName);
 
 	// add creation of task to project log
-	printLogToFile(project->ProjectActivityLogs, log);
+	if(!taskName) printLogToFile(project->ProjectActivityLogs, log);
 	if (!taskName){
 		// switch flag for watcher subscribes
 		if (project->ProgramChanges == FALSE)
