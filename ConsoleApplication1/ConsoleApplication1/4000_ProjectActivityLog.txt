@@ -1,0 +1,13 @@
+Isabelle created this project with id [4000]
+
+Student with ID : 1001 was added to project!
+Watcher with ID : 3000 was added to project!
+isabeme created task : do something please #1
+
+isabeme changed status for task ID : to new status : Analysis
+isabeme created task : do something please #2
+
+alexsi created task : do something please #3
+
+Hadas created task : do something please #7
+

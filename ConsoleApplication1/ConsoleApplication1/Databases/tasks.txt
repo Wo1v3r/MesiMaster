@@ -1,6 +1,6 @@
 6000
 do something please #1
-0 Isabelle
+2 Isabelle
 6001
 do something please #2
 0 Isabelle
@@ -8,14 +8,14 @@ do something please #2
 do something please #3
 0 Alexey
 6003
-please do something #4
-0 Johnathan
+do something please #4
+0 Johnny
 6004
-please do something #5
-0 Liran
+do something please #5
+0 Johnny
 6005
-please do something #6
-0 Liran
+do something please #6
+1 Liran
 6006
-new task test
-2 Isabelle
+do something please #7
+3 Hadas

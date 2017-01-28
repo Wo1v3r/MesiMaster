@@ -1,0 +1,12 @@
+Johnny created this project with id [4001]
+
+Student with ID : 1003 was added to project!
+Watcher with ID : 3001 was added to project!
+Student with ID : 1000 was added to project!
+johnnyL created task : do something please #4
+
+johnnyL created task : do something please #5
+
+liranRo created task : do something please #6
+
+liranRo changed status for task ID : to new status : Elicitation

@@ -1,2 +1,2 @@
-3000 hHasidim pasS987 Hadas Hasidim hadas@sce.ac.il 3 0 3 4001 4000 4002
-3001 davidBI EErrDD1 David Ben davidBI@sce.ac.il 3 0 0 
+3000 hHasidim pasS987 Hadas Hasidim hadas@sce.ac.il 3 0 1 4000
+3001 davidBI EEff1 David Ben-Yishay david@sce.ac.il 3 0 1 4001

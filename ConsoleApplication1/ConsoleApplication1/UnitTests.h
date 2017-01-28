@@ -9,15 +9,15 @@ MU_TEST(test_init_student){
 	mu_check(strcmp(check->StudentPassword, "AAbb12") == 0);
 	mu_check(strcmp(check->StudentName, "Isabelle") == 0);
 	mu_check(strcmp(check->StudentSurename, "Meif") == 0);
-	mu_check(strcmp(check->StudentEmail, "isabeme@sce.ac.il") == 0);
+	mu_check(strcmp(check->StudentEmail, "isa@sce.ac.il") == 0);
 	mu_check(strcmp(check->StudentDepartment, "Chemistry") == 0);
 	mu_check(check->StudentYear == 'b');
 	mu_check(strcmp(check->StudentActivityLog, "1000_SLog.txt") == 0);
 	mu_check(check->Group == 1);
 	mu_check(check->StudentProjectsAmount == 2);
 	mu_check(check->ProjectIDS[0] == 4000);
-	mu_check(check->ProjectIDS[1] == 4002);
-	mu_check(check->StudentTasksAmount == 4);
+	mu_check(check->ProjectIDS[1] == 4001);
+	mu_check(check->StudentTasksAmount == 7);
 	mu_check(strcmp(check->StudentMessages, "1000_SMess.txt") == 0);
 	freeStudents(check);
 }
@@ -32,10 +32,11 @@ MU_TEST(test_init_projects){
 	mu_check(check->StudentsIDS[0] == 1000);
 	mu_check(check->StudentsIDS[1] == 1001);
 	mu_check(check->StudentsIDS[2] == 3000);
-	mu_check(check->ProjectTasksAmount == 3);
+	mu_check(check->ProjectTasksAmount == 4);
 	mu_check(check->TasksIDS[0] == 6000);
 	mu_check(check->TasksIDS[1] == 6001);
 	mu_check(check->TasksIDS[2] == 6002);
+	mu_check(check->TasksIDS[3] == 6006);
 	mu_check(strcmp(check->ProjectMessages, "4000_ProjectMessages.txt") == 0);
 	freeProjects(check);
 }
@@ -50,10 +51,8 @@ MU_TEST(test_init_watchers){
 	mu_check(strcmp(check->WatcherEmail, "hadas@sce.ac.il") == 0);
 	mu_check(check->Group == 3);
 	mu_check(check->WatcherReceiveChanges == 0);
-	mu_check(check->WatcherProjectsAmount == 3);
-	mu_check(check->ProjectIDS[0] == 4001);
-	mu_check(check->ProjectIDS[1] == 4000);
-	mu_check(check->ProjectIDS[2] == 4002);
+	mu_check(check->WatcherProjectsAmount == 1);
+	mu_check(check->ProjectIDS[0] == 4000);
 	freeWatchers(check);
 }
 
@@ -72,7 +71,7 @@ MU_TEST(test_init_tasks){
 	Task *check = initTasks();
 	mu_check(check->TaskID == 6000);
 	mu_check(strcmp(check->TaskName, "do something please #1") == 0);
-	mu_check(check->TaskStatus == 0);
+	mu_check(check->TaskStatus == 2);
 	mu_check(strcmp(check->TaskCreatorName, "Isabelle") == 0);
 	freeTasks(check);
 }
@@ -88,12 +87,12 @@ MU_TEST(test_init_quotes){
 MU_TEST(test_init_global){
 	Global *check = initGlobal();
 	mu_check(check->StudentRunID == 1004);
-	mu_check(check->AdminRunID == 2003);
+	mu_check(check->AdminRunID == 2001);
 	mu_check(check->WatcherRunID == 3002);
-	mu_check(check->ProjectRunID == 4003);
+	mu_check(check->ProjectRunID == 4002);
 	mu_check(check->QuoteRunID == 5026);
 	mu_check(check->TaskRunID == 6007);
-	mu_check(strcmp(check->GlobalMessages, "Good Luck on the exams everyone!") == 0);
+	mu_check(strcmp(check->GlobalMessages, "EMPTY") == 0);
 	free(check);
 }
 
@@ -262,13 +261,13 @@ MU_TEST(test_Add_project_ID_To_student){
 	int oldProjnum = student->StudentProjectsAmount;
 	int i;
 	for (i = 0; i < student->StudentProjectsAmount; i++)
-		if (student->ProjectIDS[i] == 4001)
+		if (student->ProjectIDS[i] == 4002)
 			mu_fail("Shouldn't get here, project already in!");
-	AddProjectIDToStudent(student, 4001);
+	AddProjectIDToStudent(student, 4002);
 	mu_check(student->StudentProjectsAmount == oldProjnum + 1);
 	for (i = 0; i < student->StudentProjectsAmount; i++)
-		if (student->ProjectIDS[i] == 4001)
-			mu_check(student->ProjectIDS[i] == 4001);
+		if (student->ProjectIDS[i] == 4002)
+			mu_check(student->ProjectIDS[i] == 4002);
 	freeMemory(global);
 }
 
@@ -430,9 +429,9 @@ MU_TEST(test_login){
 	//admin check
 	mu_check(Login(global, "Dubi", "purr") == 2000);
 	//watcher check
-	mu_check(Login(global, "davidBI", "EErrDD1") == 3001);
+	mu_check(Login(global, "davidBI", "EEff1") == 3001);
 	//student check
-	mu_check(Login(global, "johnnyL", "eLr45e") == 1002);
+	mu_check(Login(global, "johnnyL", "CCdd1") == 1002);
 	//bad check username
 	mu_check(Login(global, "asdbfdgsdfg", "asd") == -1);
 	//bad check password
@@ -548,14 +547,13 @@ MU_TEST(test_remove_project){
 	RemoveProject(global, global->ProjectsList, 'y');
 	mu_check(FindProject(global->ProjectsList, 4000) == NULL);
 	mu_check(FindStudent(global->StudentList, 1000)->StudentProjectsAmount == 1);
-	mu_check(FindStudent(global->StudentList, 1000)->ProjectIDS[0] == 4002);
-	mu_check(FindStudent(global->StudentList, 1000)->StudentTasksAmount == 1);
+	mu_check(FindStudent(global->StudentList, 1000)->ProjectIDS[0] == 4001);
+	mu_check(FindStudent(global->StudentList, 1000)->StudentTasksAmount == 3);
 	mu_check(FindStudent(global->StudentList, 1001)->StudentProjectsAmount == 0);
 	mu_check(FindStudent(global->StudentList, 1001)->ProjectIDS == NULL);
 	mu_check(FindStudent(global->StudentList, 1001)->StudentTasksAmount == 0);
-	mu_check(FindWatcher(global->WatchersList, 3000)->WatcherProjectsAmount == 2);
-	mu_check(FindWatcher(global->WatchersList, 3000)->ProjectIDS[0] == 4001);
-	mu_check(FindWatcher(global->WatchersList, 3000)->ProjectIDS[1] == 4002);
+	mu_check(FindWatcher(global->WatchersList, 3000)->WatcherProjectsAmount == 0);
+	mu_check(FindWatcher(global->WatchersList, 3000)->ProjectIDS == NULL);
 	mu_check(FindTask(global->TaskList, 6000) == NULL);
 	mu_check(FindTask(global->TaskList, 6001) == NULL);
 	mu_check(FindTask(global->TaskList, 6002) == NULL);
