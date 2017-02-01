@@ -1,0 +1,7 @@
+Created project " meistertask " with id [4000]
+
+isabeme created task : do something please #1
+
+isabeme created task : do something please #2
+
+
